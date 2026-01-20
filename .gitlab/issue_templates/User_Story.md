@@ -1,4 +1,4 @@
-/label ~"UserStory"
+/label ~"issue::UserStory"
 
 ## User Story
 
