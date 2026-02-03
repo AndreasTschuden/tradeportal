@@ -1,0 +1,23 @@
+name: tradeportal
+ 
+services:
+  postgres:
+    image: postgres
+    container_name: tradeportal-postgres
+    environment:
+      POSTGRES_DB: tradeportal
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: IchMagWale09
+    ports:
+      - "5432:5432"
+    volumes:
+      - tradeportal_postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+ 
+volumes:
+  tradeportal_postgres_data:
