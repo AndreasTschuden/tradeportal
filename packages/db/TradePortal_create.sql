@@ -1,29 +1,29 @@
 -- Created by Redgate Data Modeler (https://datamodeler.redgate-platform.com)
--- Last modification date: 2026-02-10 22:56:59.056
+-- Last modification date: 2026-02-11 14:28:21.051
 
 -- tables
 -- Table: account
 CREATE TABLE account (
     id text  NOT NULL,
-    account_id text  NOT NULL,
-    provider_id text  NOT NULL,
-    user_id text  NOT NULL,
-    access_token text  NULL,
-    refresh_token text  NULL,
-    id_token text  NULL,
-    access_token_expires_at timestamptz  NULL,
-    refresh_token_expires_at timestamptz  NULL,
+    "accountId" text  NOT NULL,
+    "providerId" text  NOT NULL,
+    "userId" text  NOT NULL,
+    "accessToken" text  NULL,
+    "refreshToken" text  NULL,
+    "idToken" text  NULL,
+    "accessTokenExpiresAt" timestamptz  NULL,
+    "refreshTokenExpiresAt" timestamptz  NULL,
     scope text  NULL,
     password text  NULL,
-    created_at timestamptz  NOT NULL DEFAULT now(),
-    updated_at timestamptz  NOT NULL DEFAULT now(),
-    CONSTRAINT ak_accounts_provider UNIQUE (provider_id) NOT DEFERRABLE  INITIALLY IMMEDIATE,
+    "createdAt" timestamptz  NOT NULL DEFAULT now(),
+    "updatedAt" timestamptz  NOT NULL DEFAULT now(),
+    CONSTRAINT ak_accounts_provider UNIQUE ("providerId") NOT DEFERRABLE  INITIALLY IMMEDIATE,
     CONSTRAINT accounts_pk PRIMARY KEY (id)
 );
 
 -- Table: admins
 CREATE TABLE admins (
-    id text NOT NULL, -- will come from user id
+    id text  NOT NULL,
     user_id text  NOT NULL,
     name text  NOT NULL,
     role text  NOT NULL,
@@ -32,9 +32,9 @@ CREATE TABLE admins (
 
 -- Table: categories
 CREATE TABLE categories (
-    id int GENERATED ALWAYS AS IDENTITY NOT NULL,
+    id int  NOT NULL,
     name text  NOT NULL,
-    description text NULL,
+    description text  NULL,
     CONSTRAINT categories_pk PRIMARY KEY (id)
 );
 
@@ -47,16 +47,16 @@ CREATE TABLE categories_products (
 
 -- Table: companies
 CREATE TABLE companies (
-    id text DEFAULT gen_random_uuid() NOT NULL,
-    owner_id text  NOT NULL, -- will come from user id
+    id text  NOT NULL,
+    owner_id text  NOT NULL,
     company_name text  NOT NULL,
     Certificate_of_Incorporation text  NULL,
-    is_verified boolean DEFAULT false NOT NULL,
+    is_verified boolean  NOT NULL,
     approved_by text  NULL,
     email text  NOT NULL,
     phone_number text  NULL,
-    created_at timestamptz DEFAULT now() NOT NULL,
-    updated_at timestamptz DEFAULT now() NOT NULL,
+    created_at timestamptz  NOT NULL,
+    updated_at timestamptz  NOT NULL,
     deleted_at timestamptz  NULL,
     founded_at date  NULL,
     website text  NULL,
@@ -70,8 +70,8 @@ CREATE TABLE companies (
 
 -- Table: customers
 CREATE TABLE customers (
-    id text NOT NULL, --will come from the user table
-    name text NOT NULL,
+    id text  NOT NULL,
+    name text  NOT NULL,
     address text  NOT NULL,
     profile_picture text  NULL,
     phone text  NOT NULL,
@@ -81,23 +81,23 @@ CREATE TABLE customers (
     region text  NOT NULL,
     postal_code text  NOT NULL,
     country text  NOT NULL,
-    created_at timestamptz DEFAULT now() NOT NULL,
-    updated_at timestamptz DEFAULT now() NOT NULL,
+    created_at timestamptz  NOT NULL,
+    updated_at timestamptz  NOT NULL,
     CONSTRAINT customer_email UNIQUE (email) NOT DEFERRABLE  INITIALLY IMMEDIATE,
     CONSTRAINT customers_pk PRIMARY KEY (id)
 );
 
 -- Table: orders
 CREATE TABLE orders (
-    id text DEFAULT gen_random_uuid() NOT NULL,
+    id text  NOT NULL,
     customers_id text  NOT NULL,
     order_date date  NOT NULL,
     shipped_date date  NULL,
     shipper text  NOT NULL,
     tracking_number text  NOT NULL,
     status text  NOT NULL,
-    created_at timestamptz DEFAULT now() NOT NULL,
-    updated_at timestamptz DEFAULT now() NOT NULL,
+    created_at timestamptz  NOT NULL,
+    updated_at timestamptz  NOT NULL,
     CONSTRAINT orders_pk PRIMARY KEY (id)
 );
 
@@ -113,13 +113,13 @@ CREATE TABLE orders_products (
 
 -- Table: products
 CREATE TABLE products (
-    id text DEFAULT gen_random_uuid() NOT NULL,
+    id text  NOT NULL,
     name text  NOT NULL,
     unit_price numeric(12,2)  NOT NULL,
     specifications jsonb  NOT NULL,
     companies_id text  NOT NULL,
-    created_at timestamptz DEFAULT now() NOT NULL,
-    updated_at timestamptz DEFAULT now() NOT NULL,
+    created_at timestamptz  NOT NULL,
+    updated_at timestamptz  NOT NULL,
     stock int  NOT NULL,
     isActive boolean  NOT NULL,
     CONSTRAINT products_pk PRIMARY KEY (id)
@@ -127,14 +127,14 @@ CREATE TABLE products (
 
 -- Table: reviews
 CREATE TABLE reviews (
-    id text DEFAULT gen_random_uuid() NOT NULL,
+    id text  NOT NULL,
     products_id text  NOT NULL,
     customers_id text  NOT NULL,
     stars smallint  NOT NULL,
     comment text  NULL,
     report_points int  NOT NULL,
-    created_at timestamptz DEFAULT now() NOT NULL,
-    updated_at timestamptz DEFAULT now() NOT NULL,
+    created_at timestamptz  NOT NULL,
+    updated_at timestamptz  NOT NULL,
     reviewer_comment text  NULL,
     CONSTRAINT reviews_pk PRIMARY KEY (id)
 );
@@ -142,37 +142,37 @@ CREATE TABLE reviews (
 -- Table: session
 CREATE TABLE session (
     id text  NOT NULL,
-    expires_at timestamptz  NOT NULL,
+    "expiresAt" timestamptz  NOT NULL,
     token text  NOT NULL,
-    created_at timestamptz  NOT NULL DEFAULT now(),
-    updated_at timestamptz  NOT NULL DEFAULT now(),
-    ip_address text  NULL,
-    user_agent text  NULL,
-    user_id text  NOT NULL,
+    "createdAt" timestamptz  NOT NULL DEFAULT now(),
+    "updatedAt" timestamptz  NOT NULL DEFAULT now(),
+    "ipAddress" text  NULL,
+    "userAgent" text  NULL,
+    "userId" text  NOT NULL,
     CONSTRAINT ak_sessions_token UNIQUE (token) NOT DEFERRABLE  INITIALLY IMMEDIATE,
     CONSTRAINT sessions_pk PRIMARY KEY (id)
 );
 
-CREATE INDEX idx_sessions_user_id on session (user_id ASC);
+CREATE INDEX idx_sessions_user_id on session ("userId" ASC);
 
 -- Table: shopping_cart_products
 CREATE TABLE shopping_cart_products (
     customers_id text  NOT NULL,
     products_id text  NOT NULL,
-    updated_at timestamptz DEFAULT now() NOT NULL,
+    updated_at timestamptz  NOT NULL,
     CONSTRAINT shopping_cart_products_pk PRIMARY KEY (customers_id,products_id)
 );
 
 -- Table: transactions
 CREATE TABLE transactions (
-    id text DEFAULT gen_random_uuid() NOT NULL,
+    id text  NOT NULL,
     customers_id text  NOT NULL,
     companies_id text  NOT NULL,
     amount numeric(12,2)  NOT NULL,
     currency varchar(3)  NOT NULL,
     isRefund boolean  NOT NULL,
     orders_id text  NOT NULL,
-    created_at timestamptz DEFAULT now() NOT NULL,
+    created_at timestamptz  NOT NULL,
     CONSTRAINT transactions_pk PRIMARY KEY (id)
 );
 
@@ -181,10 +181,10 @@ CREATE TABLE "user" (
     id text  NOT NULL,
     name text  NOT NULL,
     email text  NOT NULL,
-    email_verified boolean  NOT NULL DEFAULT false,
+    "emailVerified" boolean  NOT NULL DEFAULT false,
     image text  NULL,
-    created_at timestamptz  NOT NULL DEFAULT now(),
-    updated_at timestamptz  NOT NULL DEFAULT now(),
+    "createdAt" timestamptz  NOT NULL DEFAULT now(),
+    "updatedAt" timestamptz  NOT NULL DEFAULT now(),
     CONSTRAINT ak_users_email UNIQUE (email) NOT DEFERRABLE  INITIALLY IMMEDIATE,
     CONSTRAINT users_pk PRIMARY KEY (id)
 );
@@ -194,9 +194,9 @@ CREATE TABLE verification (
     id text  NOT NULL,
     identifier text  NOT NULL,
     value text  NOT NULL,
-    expires_at timestamptz  NOT NULL,
-    created_at timestamptz  NOT NULL DEFAULT now(),
-    updated_at timestamptz  NOT NULL DEFAULT now(),
+    "expiresAt" timestamptz  NOT NULL,
+    "createdAt" timestamptz  NOT NULL DEFAULT now(),
+    "updatedAt" timestamptz  NOT NULL DEFAULT now(),
     CONSTRAINT verifications_pk PRIMARY KEY (id)
 );
 
@@ -245,7 +245,7 @@ ALTER TABLE transactions ADD CONSTRAINT Table_16_customers
 
 -- Reference: accounts_users (table: account)
 ALTER TABLE account ADD CONSTRAINT accounts_users
-    FOREIGN KEY (user_id)
+    FOREIGN KEY ("userId")
     REFERENCES "user" (id)  
     NOT DEFERRABLE 
     INITIALLY IMMEDIATE
@@ -325,7 +325,7 @@ ALTER TABLE reviews ADD CONSTRAINT reviews_products
 
 -- Reference: sessions_users (table: session)
 ALTER TABLE session ADD CONSTRAINT sessions_users
-    FOREIGN KEY (user_id)
+    FOREIGN KEY ("userId")
     REFERENCES "user" (id)  
     NOT DEFERRABLE 
     INITIALLY IMMEDIATE
@@ -359,7 +359,7 @@ ALTER TABLE transactions ADD CONSTRAINT transactions_orders
 
 --set indexes
 --Indexes for Foreign Keys
-CREATE INDEX idx_account_user_id ON account(user_id);
+CREATE INDEX idx_account_user_id ON account("userId");
 CREATE INDEX idx_admins_user_id ON admins(user_id);
 CREATE INDEX idx_companies_owner_id ON companies(owner_id);
 CREATE INDEX idx_companies_approved_by ON companies(approved_by);

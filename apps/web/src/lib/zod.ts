@@ -1,6 +1,91 @@
 import * as z from "zod"; //pnpm install zod
 
-// const Player = z.object({ 
-//   username: z.string(),
-//   xp: z.number()
-// });
+export type SignInFormData = z.infer<typeof signinUser>;
+export type SignUpFormData = z.infer<typeof signupUser>;
+
+const forbidden =
+  /^(?!.*(?:Fuck|Motherfucker|Cunt|Gash|Japs eye|Punani|Pussy hole|Cocksucker|Cum|Nonce|Prickteaser|Raped|Slut|Ching Chong|Chinky|Coon|Darky|Gippo|Golliwog|Golly|Half-caste|Jungle Bunny|Kike|Negro|Nigga|Nigger|Nig-nog|Paki|Pikey|Raghead|Sambo|Spade|Spic|Uncle Tom|Wog|Yid|Batty Boy|Butt Bandit|Chick with a Dick|Dyke|Faggot|Fudge Packer|Gender Bender|He-She|Muff Diver|Rugmuncher|Shemale|Shirt Lifter|Tranny|Kike|Yid|Cripple|Mong|Retard|Schizo|Spastic|Window Licker|Behnchod|Chooray|Chamaar|Habshi|habshan|Machod)).*/i;
+// courtesy of ofcom: https://www.ofcom.org.uk/siteassets/resources/documents/research-and-data/tv-radio-and-on-demand-research/tv-research/offensive-language-quick-reference-guide.pdf?msclkid=02d6a4f0c17211ecbdb00c07c1588af4&v=326908 - is false if contains
+
+const passwd =
+  /^(?:(?=.*\d)(?=.*[A-Z])(?=.*[a-z])|(?=.*\d)(?=.*[^A-Za-z0-9])(?=.*[a-z])|(?=.*[^A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z])|(?=.*\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]))(?!.*(.)\1{2,})[A-Za-z0-9!~<>,;:_=?*+#."&§%°()\|\[\]\-\$\^\@\/]{12,128}$/;
+// 12 to 128 character password requiring at least 3 out 4 (uppercase and lowercase letters, numbers and special characters) and no more than 2 equal characters in a row
+export const signupUser = z
+  .object({
+    email: z.string().email("Email is not valid"),
+
+    firstname: z
+      .string()
+      .min(4, "The firstname must be at least 4 chars long")
+      .max(16, "The firstname cant be longer than 16 chars")
+      .regex(forbidden, "The name contains profanities"),
+
+    lastname: z
+      .string()
+      .min(4, "The lastname must be at least 4 chars long")
+      .max(16, "The lastname cant be longer than 16 chars")
+      .regex(forbidden, "The name contains profanities"),
+
+    password: z
+      .string()
+      .regex(
+        passwd,
+        "Password must be: 12–128 Chars & must have ≥3 out of 4: upper-/lowercase, number, special chars & max 2 of the same chars in a row.",
+      ),
+
+    confirmPassword: z.string().min(1, "Please confirm your password"),
+
+    // --- Neue Felder ---
+
+    address: z
+      .string()
+      .min(5, "Address must be at least 5 characters")
+      .max(100, "Address is too long"),
+
+    phone: z
+      .string()
+      .min(6, "Phone number is too short")
+      .max(25, "Phone number is too long")
+      .regex(/^[0-9+()\-\s]+$/, "Phone number is not valid"),
+
+    gender: z
+      .union([z.literal("male"), z.literal("female"), z.literal("diverse")])
+      .refine((val) => !!val, {
+        message: "Please select a gender",
+      }),
+
+    city: z
+      .string()
+      .min(2, "City must be at least 2 characters")
+      .max(50, "City is too long"),
+
+    region: z
+      .string()
+      .min(2, "Region must be at least 2 characters")
+      .max(50, "Region is too long"),
+
+    postal_code: z
+      .string()
+      .min(3, "Postal code is too short")
+      .max(12, "Postal code is too long")
+      .regex(/^[A-Za-z0-9\s\-]+$/, "Postal code format is not valid"),
+
+    country: z
+      .string()
+      .min(2, "Country must be at least 2 characters")
+      .max(56, "Country is too long"),
+  })
+  .superRefine((data, ctx) => {
+    if (data.password !== data.confirmPassword) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["confirmPassword"],
+        message: "Passwords don't match",
+      });
+    }
+  });
+
+export const signinUser = z.object({
+  email: z.string().email("Email is not valid"),
+  password: z.string().min(1, "Password is required"),
+});
