@@ -7,68 +7,23 @@ datasource db {
   provider = "postgresql"
 }
 
-model User {
-  id             String      @id(map: "users_pk")
-  name           String
-  email          String      @unique(map: "ak_users_email")
-  email_verified Boolean     @default(false)
-  image          String?
-  created_at     DateTime    @default(now()) @db.Timestamptz(6)
-  updated_at     DateTime    @default(now()) @db.Timestamptz(6)
-  account        Account[]
-  admins         admins[]
-  companies      companies[]
-  customers      customers?
-  session        Session[]
+model account {
+  id                    String    @id(map: "accounts_pk")
+  accountId             String
+  providerId            String    @unique(map: "ak_accounts_provider")
+  userId                String
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime? @db.Timestamptz(6)
+  refreshTokenExpiresAt DateTime? @db.Timestamptz(6)
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt             DateTime  @default(now()) @db.Timestamptz(6)
+  user                  user      @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounts_users")
 
-  @@map("user")
-}
-
-model Session {
-  id         String   @id(map: "sessions_pk")
-  expires_at DateTime @db.Timestamptz(6)
-  token      String   @unique(map: "ak_sessions_token")
-  created_at DateTime @default(now()) @db.Timestamptz(6)
-  updated_at DateTime @default(now()) @db.Timestamptz(6)
-  ip_address String?
-  user_agent String?
-  user_id    String
-  user       User     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "sessions_users")
-
-  @@index([user_id], map: "idx_sessions_user_id")
-  @@map("session")
-}
-
-model Account {
-  id                       String    @id(map: "accounts_pk")
-  account_id               String
-  provider_id              String    @unique(map: "ak_accounts_provider")
-  user_id                  String
-  access_token             String?
-  refresh_token            String?
-  id_token                 String?
-  access_token_expires_at  DateTime? @db.Timestamptz(6)
-  refresh_token_expires_at DateTime? @db.Timestamptz(6)
-  scope                    String?
-  password                 String?
-  created_at               DateTime  @default(now()) @db.Timestamptz(6)
-  updated_at               DateTime  @default(now()) @db.Timestamptz(6)
-  user                     User      @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounts_users")
-
-  @@index([user_id], map: "idx_account_user_id")
-  @@map("account")
-}
-
-model Verification {
-  id         String   @id(map: "verifications_pk")
-  identifier String
-  value      String
-  expires_at DateTime @db.Timestamptz(6)
-  created_at DateTime @default(now()) @db.Timestamptz(6)
-  updated_at DateTime @default(now()) @db.Timestamptz(6)
-
-  @@index([identifier], map: "idx_verifications_identifier")
-  @@map("verification")
+  @@index([userId], map: "idx_account_user_id")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -77,14 +32,14 @@ model admins {
   user_id   String
   name      String
   role      String
-  user      User        @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "admins_user")
+  user      user        @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "admins_user")
   companies companies[]
 
   @@index([user_id], map: "idx_admins_user_id")
 }
 
 model categories {
-  id                  Int                   @id(map: "categories_pk") @default(autoincrement())
+  id                  Int                   @id(map: "categories_pk")
   name                String                @unique(map: "idx_categories_name")
   description         String?
   categories_products categories_products[]
@@ -101,16 +56,16 @@ model categories_products {
 }
 
 model companies {
-  id                           String         @id(map: "companies_pk") @default(dbgenerated("gen_random_uuid()"))
+  id                           String         @id(map: "companies_pk")
   owner_id                     String
   company_name                 String
   certificate_of_incorporation String?
-  is_verified                  Boolean        @default(false)
+  is_verified                  Boolean
   approved_by                  String?
   email                        String         @unique(map: "company_email")
   phone_number                 String?
-  created_at                   DateTime       @default(now()) @db.Timestamptz(6)
-  updated_at                   DateTime       @default(now()) @db.Timestamptz(6)
+  created_at                   DateTime       @db.Timestamptz(6)
+  updated_at                   DateTime       @db.Timestamptz(6)
   deleted_at                   DateTime?      @db.Timestamptz(6)
   founded_at                   DateTime?      @db.Date
   website                      String?
@@ -119,7 +74,7 @@ model companies {
   head_of_company              String?
   employee_count               Int?
   admins                       admins?        @relation(fields: [approved_by], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "companies_admins")
-  user                         User           @relation(fields: [owner_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "companies_user")
+  user                         user           @relation(fields: [owner_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "companies_user")
   products                     products[]
   transactions                 transactions[]
 
@@ -139,9 +94,9 @@ model customers {
   region                 String
   postal_code            String
   country                String
-  created_at             DateTime                 @default(now()) @db.Timestamptz(6)
-  updated_at             DateTime                 @default(now()) @db.Timestamptz(6)
-  user                   User                     @relation(fields: [id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customers_user")
+  created_at             DateTime                 @db.Timestamptz(6)
+  updated_at             DateTime                 @db.Timestamptz(6)
+  user                   user                     @relation(fields: [id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customers_user")
   orders                 orders[]
   reviews                reviews[]
   shopping_cart_products shopping_cart_products[]
@@ -153,15 +108,15 @@ model customers {
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model orders {
-  id              String            @id(map: "orders_pk") @default(dbgenerated("gen_random_uuid()"))
+  id              String            @id(map: "orders_pk")
   customers_id    String
   order_date      DateTime          @db.Date
   shipped_date    DateTime?         @db.Date
   shipper         String
   tracking_number String
   status          String
-  created_at      DateTime          @default(now()) @db.Timestamptz(6)
-  updated_at      DateTime          @default(now()) @db.Timestamptz(6)
+  created_at      DateTime          @db.Timestamptz(6)
+  updated_at      DateTime          @db.Timestamptz(6)
   customers       customers         @relation(fields: [customers_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "orders_customers")
   orders_products orders_products[]
   transactions    transactions[]
@@ -190,13 +145,13 @@ model orders_products {
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model products {
-  id                     String                   @id(map: "products_pk") @default(dbgenerated("gen_random_uuid()"))
+  id                     String                   @id(map: "products_pk")
   name                   String
   unit_price             Decimal                  @db.Decimal(12, 2)
   specifications         Json
   companies_id           String
-  created_at             DateTime                 @default(now()) @db.Timestamptz(6)
-  updated_at             DateTime                 @default(now()) @db.Timestamptz(6)
+  created_at             DateTime                 @db.Timestamptz(6)
+  updated_at             DateTime                 @db.Timestamptz(6)
   stock                  Int
   isactive               Boolean
   categories_products    categories_products[]
@@ -213,14 +168,14 @@ model products {
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model reviews {
-  id               String    @id(map: "reviews_pk") @default(dbgenerated("gen_random_uuid()"))
+  id               String    @id(map: "reviews_pk")
   products_id      String
   customers_id     String
   stars            Int       @db.SmallInt
   comment          String?
   report_points    Int
-  created_at       DateTime  @default(now()) @db.Timestamptz(6)
-  updated_at       DateTime  @default(now()) @db.Timestamptz(6)
+  created_at       DateTime  @db.Timestamptz(6)
+  updated_at       DateTime  @db.Timestamptz(6)
   reviewer_comment String?
   customers        customers @relation(fields: [customers_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "reviews_customers")
   products         products  @relation(fields: [products_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "reviews_products")
@@ -232,10 +187,24 @@ model reviews {
   @@index([products_id, stars], map: "idx_reviews_products_stars")
 }
 
+model session {
+  id        String   @id(map: "sessions_pk")
+  expiresAt DateTime @db.Timestamptz(6)
+  token     String   @unique(map: "ak_sessions_token")
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @db.Timestamptz(6)
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      user     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "sessions_users")
+
+  @@index([userId], map: "idx_sessions_user_id")
+}
+
 model shopping_cart_products {
   customers_id String
   products_id  String
-  updated_at   DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at   DateTime  @db.Timestamptz(6)
   customers    customers @relation(fields: [customers_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "shopping_carts_products_customers")
   products     products  @relation(fields: [products_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "shopping_carts_products_products")
 
@@ -246,14 +215,14 @@ model shopping_cart_products {
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model transactions {
-  id           String    @id(map: "transactions_pk") @default(dbgenerated("gen_random_uuid()"))
+  id           String    @id(map: "transactions_pk")
   customers_id String
   companies_id String
   amount       Decimal   @db.Decimal(12, 2)
   currency     String    @db.VarChar(3)
   isrefund     Boolean
   orders_id    String
-  created_at   DateTime  @default(now()) @db.Timestamptz(6)
+  created_at   DateTime  @db.Timestamptz(6)
   companies    companies @relation(fields: [companies_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "table_16_companies")
   customers    customers @relation(fields: [customers_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "table_16_customers")
   orders       orders    @relation(fields: [orders_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "transactions_orders")
@@ -264,4 +233,30 @@ model transactions {
   @@index([customers_id, created_at(sort: Desc)], map: "idx_transactions_customer_date")
   @@index([customers_id], map: "idx_transactions_customers_id")
   @@index([orders_id], map: "idx_transactions_orders_id")
+}
+
+model user {
+  id            String      @id(map: "users_pk")
+  name          String
+  email         String      @unique(map: "ak_users_email")
+  emailVerified Boolean     @default(false)
+  image         String?
+  createdAt     DateTime    @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime    @default(now()) @db.Timestamptz(6)
+  account       account[]
+  admins        admins[]
+  companies     companies[]
+  customers     customers?
+  session       session[]
+}
+
+model verification {
+  id         String   @id(map: "verifications_pk")
+  identifier String
+  value      String
+  expiresAt  DateTime @db.Timestamptz(6)
+  createdAt  DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt  DateTime @default(now()) @db.Timestamptz(6)
+
+  @@index([identifier], map: "idx_verifications_identifier")
 }
