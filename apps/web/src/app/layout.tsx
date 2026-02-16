@@ -25,6 +25,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <script src="https://js.stripe.com/clover/stripe.js" async></script>
+      </head>
       <body className={inter.variable}>
         <ReCaptchaProvider>{children}</ReCaptchaProvider>
       </body>

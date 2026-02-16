@@ -13,8 +13,19 @@ CREATE TABLE account (
     "idToken" text  NULL,
     "accessTokenExpiresAt" timestamptz  NULL,
     "refreshTokenExpiresAt" timestamptz  NULL,
+    "accountId" text  NOT NULL,
+    "providerId" text  NOT NULL,
+    "userId" text  NOT NULL,
+    "accessToken" text  NULL,
+    "refreshToken" text  NULL,
+    "idToken" text  NULL,
+    "accessTokenExpiresAt" timestamptz  NULL,
+    "refreshTokenExpiresAt" timestamptz  NULL,
     scope text  NULL,
     password text  NULL,
+    "createdAt" timestamptz  NOT NULL DEFAULT now(),
+    "updatedAt" timestamptz  NOT NULL DEFAULT now(),
+    CONSTRAINT ak_accounts_provider UNIQUE ("providerId") NOT DEFERRABLE  INITIALLY IMMEDIATE,
     "createdAt" timestamptz  NOT NULL DEFAULT now(),
     "updatedAt" timestamptz  NOT NULL DEFAULT now(),
     CONSTRAINT ak_accounts_provider UNIQUE ("providerId") NOT DEFERRABLE  INITIALLY IMMEDIATE,
@@ -34,6 +45,7 @@ CREATE TABLE admins (
 CREATE TABLE categories (
     id int  NOT NULL GENERATED ALWAYS AS IDENTITY,
     name text  NOT NULL,
+    description text  NULL,
     description text  NULL,
     CONSTRAINT categories_pk PRIMARY KEY (id)
 );
@@ -55,6 +67,7 @@ CREATE TABLE companies (
     company_name text  NOT NULL,
     Certificate_of_Incorporation text  NULL,
     is_verified boolean  NOT NULL,
+    is_verified boolean  NOT NULL,
     approved_by text  NULL,
     email text  NOT NULL,
     phone_number text  NULL,
@@ -73,6 +86,8 @@ CREATE TABLE companies (
 
 -- Table: customers
 CREATE TABLE customers (
+    id text  NOT NULL,
+    name text  NOT NULL,
     id text  NOT NULL,
     name text  NOT NULL,
     address text  NOT NULL,
@@ -146,7 +161,13 @@ CREATE TABLE reviews (
 CREATE TABLE session (
     id text  NOT NULL,
     "expiresAt" timestamptz  NOT NULL,
+    "expiresAt" timestamptz  NOT NULL,
     token text  NOT NULL,
+    "createdAt" timestamptz  NOT NULL DEFAULT now(),
+    "updatedAt" timestamptz  NOT NULL DEFAULT now(),
+    "ipAddress" text  NULL,
+    "userAgent" text  NULL,
+    "userId" text  NOT NULL,
     "createdAt" timestamptz  NOT NULL DEFAULT now(),
     "updatedAt" timestamptz  NOT NULL DEFAULT now(),
     "ipAddress" text  NULL,
@@ -156,6 +177,7 @@ CREATE TABLE session (
     CONSTRAINT sessions_pk PRIMARY KEY (id)
 );
 
+CREATE INDEX idx_sessions_user_id on session ("userId" ASC);
 CREATE INDEX idx_sessions_user_id on session ("userId" ASC);
 
 -- Table: shopping_cart_products
@@ -185,7 +207,10 @@ CREATE TABLE "user" (
     name text  NOT NULL,
     email text  NOT NULL,
     "emailVerified" boolean  NOT NULL DEFAULT false,
+    "emailVerified" boolean  NOT NULL DEFAULT false,
     image text  NULL,
+    "createdAt" timestamptz  NOT NULL DEFAULT now(),
+    "updatedAt" timestamptz  NOT NULL DEFAULT now(),
     "createdAt" timestamptz  NOT NULL DEFAULT now(),
     "updatedAt" timestamptz  NOT NULL DEFAULT now(),
     CONSTRAINT ak_users_email UNIQUE (email) NOT DEFERRABLE  INITIALLY IMMEDIATE,
@@ -197,6 +222,9 @@ CREATE TABLE verification (
     id text  NOT NULL,
     identifier text  NOT NULL,
     value text  NOT NULL,
+    "expiresAt" timestamptz  NOT NULL,
+    "createdAt" timestamptz  NOT NULL DEFAULT now(),
+    "updatedAt" timestamptz  NOT NULL DEFAULT now(),
     "expiresAt" timestamptz  NOT NULL,
     "createdAt" timestamptz  NOT NULL DEFAULT now(),
     "updatedAt" timestamptz  NOT NULL DEFAULT now(),
@@ -248,6 +276,7 @@ ALTER TABLE transactions ADD CONSTRAINT Table_16_customers
 
 -- Reference: accounts_users (table: account)
 ALTER TABLE account ADD CONSTRAINT accounts_users
+    FOREIGN KEY ("userId")
     FOREIGN KEY ("userId")
     REFERENCES "user" (id)  
     NOT DEFERRABLE 
@@ -329,6 +358,7 @@ ALTER TABLE reviews ADD CONSTRAINT reviews_products
 -- Reference: sessions_users (table: session)
 ALTER TABLE session ADD CONSTRAINT sessions_users
     FOREIGN KEY ("userId")
+    FOREIGN KEY ("userId")
     REFERENCES "user" (id)  
     NOT DEFERRABLE 
     INITIALLY IMMEDIATE
@@ -362,6 +392,7 @@ ALTER TABLE transactions ADD CONSTRAINT transactions_orders
 
 --set indexes
 --Indexes for Foreign Keys
+CREATE INDEX idx_account_user_id ON account("userId");
 CREATE INDEX idx_account_user_id ON account("userId");
 CREATE INDEX idx_admins_user_id ON admins(user_id);
 CREATE INDEX idx_companies_owner_id ON companies(owner_id);
