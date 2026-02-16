@@ -1,49 +1,16 @@
 generator client {
-  provider        = "prisma-client"
-  output          = "../src/generated/prisma"
-  previewFeatures = ["partialIndexes"]
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
 }
 
-model User {
-  id            String      @id(map: "users_pk")
-  name          String
-  email         String      @unique(map: "ak_users_email")
-  emailVerified Boolean     @default(false)
-  image         String?
-  createdAt     DateTime    @default(now()) @db.Timestamptz(6)
-  updatedAt     DateTime    @default(now()) @db.Timestamptz(6)
-  account       Account[]
-  admins        admins[]
-  companies     companies[]
-  customers     customers?
-  session       Session[]
-
-  @@map("user")
-}
-
-model Session {
-  id        String   @id(map: "sessions_pk")
-  expiresAt DateTime @db.Timestamptz(6)
-  token     String   @unique(map: "ak_sessions_token")
-  createdAt DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime @default(now()) @db.Timestamptz(6)
-  ipAddress String?
-  userAgent String?
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "sessions_users")
-
-  @@index([userId], map: "idx_sessions_user_id")
-  @@map("session")
-}
-
-model Account {
+model account {
   id                    String    @id(map: "accounts_pk")
   accountId             String
-  providerId            String    @unique(map: "ak_accounts_provider")
+  providerId            String
   userId                String
   accessToken           String?
   refreshToken          String?
@@ -54,22 +21,9 @@ model Account {
   password              String?
   createdAt             DateTime  @default(now()) @db.Timestamptz(6)
   updatedAt             DateTime  @default(now()) @db.Timestamptz(6)
-  user                  User      @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounts_users")
+  user                  user      @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounts_users")
 
   @@index([userId], map: "idx_account_user_id")
-  @@map("account")
-}
-
-model Verification {
-  id         String   @id(map: "verifications_pk")
-  identifier String
-  value      String
-  expiresAt  DateTime @db.Timestamptz(6)
-  createdAt  DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt  DateTime @default(now()) @db.Timestamptz(6)
-
-  @@index([identifier], map: "idx_verifications_identifier")
-  @@map("verification")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -78,7 +32,7 @@ model admins {
   user_id   String
   name      String
   role      String
-  user      User        @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "admins_user")
+  user      user        @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "admins_user")
   companies companies[]
 
   @@index([user_id], map: "idx_admins_user_id")
@@ -123,7 +77,7 @@ model companies {
   head_of_company              String?
   employee_count               Int?
   admins                       admins?        @relation(fields: [approved_by], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "companies_admins")
-  user                         User           @relation(fields: [owner_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "companies_user")
+  user                         user           @relation(fields: [owner_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "companies_user")
   products                     products[]
   transactions                 transactions[]
 
@@ -145,7 +99,7 @@ model customers {
   country                String
   created_at             DateTime                 @default(now()) @db.Timestamptz(6)
   updated_at             DateTime                 @default(now()) @db.Timestamptz(6)
-  user                   User                     @relation(fields: [id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customers_user")
+  user                   user                     @relation(fields: [id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "customers_user")
   orders                 orders[]
   reviews                reviews[]
   shopping_cart_products shopping_cart_products[]
@@ -193,7 +147,6 @@ model orders_products {
   @@index([products_id], map: "idx_orders_products_products_id")
 }
 
-/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model products {
   id                     String                   @id(map: "products_pk") @default(dbgenerated("gen_random_uuid()"))
   name                   String
@@ -212,7 +165,6 @@ model products {
   @@index([companies_id], map: "idx_products_companies_id")
   @@index([companies_id, isactive], map: "idx_products_company_active")
   @@index([name], map: "idx_products_name")
-  @@index([companies_id], map: "idx_products_active_only", where: raw("(isactive = true)"))
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -234,6 +186,20 @@ model reviews {
   @@index([products_id, created_at(sort: Desc)], map: "idx_reviews_products_created_at")
   @@index([products_id], map: "idx_reviews_products_id")
   @@index([products_id, stars], map: "idx_reviews_products_stars")
+}
+
+model session {
+  id        String   @id(map: "sessions_pk")
+  expiresAt DateTime @db.Timestamptz(6)
+  token     String   @unique(map: "ak_sessions_token")
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @db.Timestamptz(6)
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      user     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "sessions_users")
+
+  @@index([userId], map: "idx_sessions_user_id")
 }
 
 model shopping_cart_products {
@@ -268,4 +234,30 @@ model transactions {
   @@index([customers_id, created_at(sort: Desc)], map: "idx_transactions_customer_date")
   @@index([customers_id], map: "idx_transactions_customers_id")
   @@index([orders_id], map: "idx_transactions_orders_id")
+}
+
+model user {
+  id            String      @id(map: "users_pk")
+  name          String
+  email         String      @unique(map: "ak_users_email")
+  emailVerified Boolean     @default(false)
+  image         String?
+  createdAt     DateTime    @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime    @default(now()) @db.Timestamptz(6)
+  account       account[]
+  admins        admins[]
+  companies     companies[]
+  customers     customers?
+  session       session[]
+}
+
+model verification {
+  id         String   @id(map: "verifications_pk")
+  identifier String
+  value      String
+  expiresAt  DateTime @db.Timestamptz(6)
+  createdAt  DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt  DateTime @default(now()) @db.Timestamptz(6)
+
+  @@index([identifier], map: "idx_verifications_identifier")
 }
