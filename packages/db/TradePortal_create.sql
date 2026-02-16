@@ -17,7 +17,6 @@ CREATE TABLE account (
     password text  NULL,
     "createdAt" timestamptz  NOT NULL DEFAULT now(),
     "updatedAt" timestamptz  NOT NULL DEFAULT now(),
-    CONSTRAINT ak_accounts_provider UNIQUE ("providerId") NOT DEFERRABLE  INITIALLY IMMEDIATE,
     CONSTRAINT accounts_pk PRIMARY KEY (id)
 );
 
@@ -472,3 +471,27 @@ FOR EACH ROW EXECUTE FUNCTION set_updated_at();
 --run sql script in dbeaver (after restarting that connection as well)
 --npx prisma db pull
 --npx prisma generate
+
+-- 1.) Clear public schema
+-- DO $$ DECLARE
+--     r RECORD;
+-- BEGIN
+--     -- Löscht alle Tabellen in public Schema
+--     FOR r IN (SELECT tablename FROM pg_tables WHERE schemaname = 'public') LOOP
+--         EXECUTE 'DROP TABLE IF EXISTS ' || quote_ident(r.tablename) || ' CASCADE';
+--     END LOOP;
+-- END $$;
+
+
+--2.) Clear all tables in public schema
+-- DO
+-- $$
+-- DECLARE
+--     r RECORD;
+-- BEGIN
+--     -- Für alle Tabellen im Schema public
+--     FOR r IN (SELECT tablename FROM pg_tables WHERE schemaname = 'public') LOOP
+--         EXECUTE 'TRUNCATE TABLE public.' || quote_ident(r.tablename) || ' CASCADE;';
+--     END LOOP;
+-- END;
+-- $$;
