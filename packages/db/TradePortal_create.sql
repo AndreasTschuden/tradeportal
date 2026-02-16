@@ -1,5 +1,5 @@
 -- Created by Redgate Data Modeler (https://datamodeler.redgate-platform.com)
--- Last modification date: 2026-02-11 14:28:21.051
+-- Last modification date: 2026-02-14 02:23:11.241
 
 -- tables
 -- Table: account
@@ -23,7 +23,7 @@ CREATE TABLE account (
 
 -- Table: admins
 CREATE TABLE admins (
-    id text  NOT NULL,
+    id text DEFAULT gen_random_uuid() NOT NULL,
     user_id text  NOT NULL,
     name text  NOT NULL,
     role text  NOT NULL,
@@ -32,7 +32,7 @@ CREATE TABLE admins (
 
 -- Table: categories
 CREATE TABLE categories (
-    id int  NOT NULL,
+    id int  NOT NULL GENERATED ALWAYS AS IDENTITY,
     name text  NOT NULL,
     description text  NULL,
     CONSTRAINT categories_pk PRIMARY KEY (id)
@@ -47,16 +47,19 @@ CREATE TABLE categories_products (
 
 -- Table: companies
 CREATE TABLE companies (
-    id text  NOT NULL,
+    id text DEFAULT gen_random_uuid() NOT NULL,
     owner_id text  NOT NULL,
+    stripe_account_id text  NOT NULL,
+    onboarding_started_at timestamptz  NOT NULL,
+    onboarding_completed_at timestamptz  NULL,
     company_name text  NOT NULL,
     Certificate_of_Incorporation text  NULL,
     is_verified boolean  NOT NULL,
     approved_by text  NULL,
     email text  NOT NULL,
     phone_number text  NULL,
-    created_at timestamptz  NOT NULL,
-    updated_at timestamptz  NOT NULL,
+    created_at timestamptz DEFAULT now() NOT NULL,
+    updated_at timestamptz DEFAULT now() NOT NULL,
     deleted_at timestamptz  NULL,
     founded_at date  NULL,
     website text  NULL,
@@ -74,30 +77,30 @@ CREATE TABLE customers (
     name text  NOT NULL,
     address text  NOT NULL,
     profile_picture text  NULL,
-    phone text  NOT NULL,
+    phone text  NULL,
     email text  NOT NULL,
     gender text  NOT NULL,
     city text  NOT NULL,
     region text  NOT NULL,
     postal_code text  NOT NULL,
     country text  NOT NULL,
-    created_at timestamptz  NOT NULL,
-    updated_at timestamptz  NOT NULL,
+    created_at timestamptz DEFAULT now() NOT NULL,
+    updated_at timestamptz DEFAULT now() NOT NULL,
     CONSTRAINT customer_email UNIQUE (email) NOT DEFERRABLE  INITIALLY IMMEDIATE,
     CONSTRAINT customers_pk PRIMARY KEY (id)
 );
 
 -- Table: orders
 CREATE TABLE orders (
-    id text  NOT NULL,
+    id text DEFAULT gen_random_uuid() NOT NULL,
     customers_id text  NOT NULL,
     order_date date  NOT NULL,
     shipped_date date  NULL,
     shipper text  NOT NULL,
     tracking_number text  NOT NULL,
     status text  NOT NULL,
-    created_at timestamptz  NOT NULL,
-    updated_at timestamptz  NOT NULL,
+    created_at timestamptz DEFAULT now() NOT NULL,
+    updated_at timestamptz DEFAULT now() NOT NULL,
     CONSTRAINT orders_pk PRIMARY KEY (id)
 );
 
@@ -108,33 +111,33 @@ CREATE TABLE orders_products (
     unit_price numeric(12,2)  NOT NULL,
     quantity int  NOT NULL,
     discount numeric(3,2)  NOT NULL,
+    specifications jsonb  NOT NULL,
     CONSTRAINT orders_products_pk PRIMARY KEY (products_id,orders_id)
 );
 
 -- Table: products
 CREATE TABLE products (
-    id text  NOT NULL,
+    id text DEFAULT gen_random_uuid() NOT NULL,
     name text  NOT NULL,
-    unit_price numeric(12,2)  NOT NULL,
+    currency varchar(3)  NOT NULL,
     specifications jsonb  NOT NULL,
     companies_id text  NOT NULL,
-    created_at timestamptz  NOT NULL,
-    updated_at timestamptz  NOT NULL,
-    stock int  NOT NULL,
+    created_at timestamptz DEFAULT now() NOT NULL,
+    updated_at timestamptz DEFAULT now() NOT NULL,
     isActive boolean  NOT NULL,
     CONSTRAINT products_pk PRIMARY KEY (id)
 );
 
 -- Table: reviews
 CREATE TABLE reviews (
-    id text  NOT NULL,
+    id text DEFAULT gen_random_uuid() NOT NULL,
     products_id text  NOT NULL,
     customers_id text  NOT NULL,
     stars smallint  NOT NULL,
     comment text  NULL,
-    report_points int  NOT NULL,
-    created_at timestamptz  NOT NULL,
-    updated_at timestamptz  NOT NULL,
+    report_points int DEFAULT 0 NOT NULL,
+    created_at timestamptz DEFAULT now() NOT NULL,
+    updated_at timestamptz DEFAULT now() NOT NULL,
     reviewer_comment text  NULL,
     CONSTRAINT reviews_pk PRIMARY KEY (id)
 );
@@ -159,20 +162,20 @@ CREATE INDEX idx_sessions_user_id on session ("userId" ASC);
 CREATE TABLE shopping_cart_products (
     customers_id text  NOT NULL,
     products_id text  NOT NULL,
-    updated_at timestamptz  NOT NULL,
+    updated_at timestamptz DEFAULT now() NOT NULL,
     CONSTRAINT shopping_cart_products_pk PRIMARY KEY (customers_id,products_id)
 );
 
 -- Table: transactions
 CREATE TABLE transactions (
-    id text  NOT NULL,
+    id text DEFAULT gen_random_uuid() NOT NULL,
     customers_id text  NOT NULL,
     companies_id text  NOT NULL,
     amount numeric(12,2)  NOT NULL,
     currency varchar(3)  NOT NULL,
-    isRefund boolean  NOT NULL,
+    isRefund boolean DEFAULT false NOT NULL,
     orders_id text  NOT NULL,
-    created_at timestamptz  NOT NULL,
+    created_at timestamptz DEFAULT now() NOT NULL,
     CONSTRAINT transactions_pk PRIMARY KEY (id)
 );
 
@@ -381,8 +384,6 @@ CREATE INDEX idx_customers_country_city ON customers(country, city);
 CREATE INDEX idx_products_name ON products(name);
 -- active products by company
 CREATE INDEX idx_products_company_active ON products(companies_id, isActive);
--- price range filtering
-CREATE INDEX idx_products_unit_price ON products(unit_price);
 -- category name lookups
 CREATE UNIQUE INDEX idx_categories_name ON categories(name);
 -- order status filtering
@@ -429,8 +430,6 @@ ALTER TABLE transactions
 ADD CONSTRAINT amount_positive CHECK (amount >= 0);
 ALTER TABLE orders_products
 ADD CONSTRAINT unit_price_positive CHECK (unit_price >= 0);
-ALTER TABLE products
-ADD CONSTRAINT stock_non_negative CHECK (stock >= 0);
 ALTER TABLE orders
 ADD CONSTRAINT status_check CHECK (status IN ('pending','paid','shipped','delivered','cancelled','refunded'));
 ALTER TABLE admins
