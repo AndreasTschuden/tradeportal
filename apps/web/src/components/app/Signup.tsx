@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SignUpFormData } from "@/lib/zod";
 import { signupUser } from "@/lib/zod";
 import { useState } from "react";
+import { inputClass, buttonClass } from "@/components/ui/FormControls";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 export function Signup() {
@@ -49,10 +50,7 @@ export function Signup() {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col gap-3 w-96"
-    >
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3 w-full max-w-lg">
       {/* Address */}
       <div className="grid grid-cols-2 gap-3">
         <div className="flex flex-col">
@@ -60,9 +58,7 @@ export function Signup() {
             {...register("firstname")}
             type="text"
             placeholder="First Name"
-            className={`${
-              errors.firstname ? "border-red-500" : "border-slate-300"
-            } w-full border-2 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent `}
+            className={`${errors.firstname ? "border-red-500" : "border-slate-300"} ${inputClass}`}
           />
           {errors.firstname && (
             <p className="text-red-500 text-sm mt-1">
@@ -76,9 +72,7 @@ export function Signup() {
             {...register("lastname")}
             type="text"
             placeholder="Last Name"
-            className={`${
-              errors.lastname ? "border-red-500" : "border-slate-300"
-            } w-full border-2 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
+            className={`${errors.lastname ? "border-red-500" : "border-slate-300"} ${inputClass}`}
           />
           {errors.lastname && (
             <p className="text-red-500 text-sm mt-1">
@@ -91,7 +85,7 @@ export function Signup() {
         {...register("email")}
         type="email"
         placeholder="Email"
-        className="border rounded-md px-3 py-2 text-sm"
+        className={`${errors.email ? "border-red-500" : "border-slate-300"} ${inputClass}`}
       />
       {errors.email && (
         <p className="text-red-500 text-sm">{errors.email.message}</p>
@@ -101,7 +95,7 @@ export function Signup() {
         {...register("password")}
         type="password"
         placeholder="Password"
-        className="border rounded-md px-3 py-2 text-sm"
+        className={`${errors.password ? "border-red-500" : "border-slate-300"} ${inputClass}`}
       />
       {errors.password && (
         <p className="text-red-500 text-sm">{errors.password.message}</p>
@@ -111,18 +105,18 @@ export function Signup() {
         {...register("confirmPassword")}
         type="password"
         placeholder="Confirm Password"
-        className="border rounded-md px-3 py-2 text-sm"
+        className={`${errors.confirmPassword ? "border-red-500" : "border-slate-300"} ${inputClass}`}
       />
       {errors.confirmPassword && (
         <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>
       )}
       <input
-        {...register("address")}
+        {...register("address", {
+          setValueAs: (value) => (value === "" ? undefined : value),
+        })}
         type="text"
-        placeholder="Address"
-        className={`border-2 rounded-md px-3 py-2 text-sm ${
-          errors.address ? "border-red-500" : "border-slate-300"
-        }`}
+        placeholder="Address (optional)"
+        className={`${errors.address ? "border-red-500" : "border-slate-300"} ${inputClass}`}
       />
       {errors.address && (
         <p className="text-red-500 text-sm">{errors.address.message}</p>
@@ -130,12 +124,12 @@ export function Signup() {
 
       {/* Phone */}
       <input
-        {...register("phone")}
+        {...register("phone", {
+          setValueAs: (value) => (value === "" ? undefined : value),
+        })}
         type="text"
-        placeholder="Phone"
-        className={`border-2 rounded-md px-3 py-2 text-sm ${
-          errors.phone ? "border-red-500" : "border-slate-300"
-        }`}
+        placeholder="Phone (optional)"
+        className={`${errors.phone ? "border-red-500" : "border-slate-300"} ${inputClass}`}
       />
       {errors.phone && (
         <p className="text-red-500 text-sm">{errors.phone.message}</p>
@@ -143,12 +137,12 @@ export function Signup() {
 
       {/* Gender */}
       <select
-        {...register("gender")}
-        className={`border-2 rounded-md px-3 py-2 text-sm ${
-          errors.gender ? "border-red-500" : "border-slate-300"
-        }`}
+        {...register("gender", {
+          setValueAs: (value) => (value === "" ? undefined : value),
+        })}
+        className={`${errors.gender ? "border-red-500" : "border-slate-300"} ${inputClass}`}
       >
-        <option value="">Select Gender</option>
+        <option value="">Select Gender (optional)</option>
         <option value="male">Male</option>
         <option value="female">Female</option>
         <option value="diverse">Diverse</option>
@@ -159,12 +153,12 @@ export function Signup() {
 
       {/* City */}
       <input
-        {...register("city")}
+        {...register("city", {
+          setValueAs: (value) => (value === "" ? undefined : value),
+        })}
         type="text"
-        placeholder="City"
-        className={`border-2 rounded-md px-3 py-2 text-sm ${
-          errors.city ? "border-red-500" : "border-slate-300"
-        }`}
+        placeholder="City (optional)"
+        className={`${errors.city ? "border-red-500" : "border-slate-300"} ${inputClass}`}
       />
       {errors.city && (
         <p className="text-red-500 text-sm">{errors.city.message}</p>
@@ -172,12 +166,12 @@ export function Signup() {
 
       {/* Region */}
       <input
-        {...register("region")}
+        {...register("region", {
+          setValueAs: (value) => (value === "" ? undefined : value),
+        })}
         type="text"
-        placeholder="Region"
-        className={`border-2 rounded-md px-3 py-2 text-sm ${
-          errors.region ? "border-red-500" : "border-slate-300"
-        }`}
+        placeholder="Region (optional)"
+        className={`${errors.region ? "border-red-500" : "border-slate-300"} ${inputClass}`}
       />
       {errors.region && (
         <p className="text-red-500 text-sm">{errors.region.message}</p>
@@ -185,12 +179,12 @@ export function Signup() {
 
       {/* Postal Code */}
       <input
-        {...register("postal_code")}
+        {...register("postal_code", {
+          setValueAs: (value) => (value === "" ? undefined : value),
+        })}
         type="text"
-        placeholder="Postal Code"
-        className={`border-2 rounded-md px-3 py-2 text-sm ${
-          errors.postal_code ? "border-red-500" : "border-slate-300"
-        }`}
+        placeholder="Postal Code (optional)"
+        className={`${errors.postal_code ? "border-red-500" : "border-slate-300"} ${inputClass}`}
       />
       {errors.postal_code && (
         <p className="text-red-500 text-sm">{errors.postal_code.message}</p>
@@ -198,12 +192,12 @@ export function Signup() {
 
       {/* Country */}
       <input
-        {...register("country")}
+        {...register("country", {
+          setValueAs: (value) => (value === "" ? undefined : value),
+        })}
         type="text"
-        placeholder="Country"
-        className={`border-2 rounded-md px-3 py-2 text-sm ${
-          errors.country ? "border-red-500" : "border-slate-300"
-        }`}
+        placeholder="Country (optional)"
+        className={`${errors.country ? "border-red-500" : "border-slate-300"} ${inputClass}`}
       />
       {errors.country && (
         <p className="text-red-500 text-sm">{errors.country.message}</p>
@@ -215,11 +209,7 @@ export function Signup() {
       )}
 
       {/* Button */}
-      <button
-        type="submit"
-        disabled={loading}
-        className="w-full bg-blue-600 text-white rounded-md px-4 py-2 text-sm font-medium disabled:opacity-50"
-      >
+      <button type="submit" disabled={loading} className={buttonClass}>
         {loading ? "Signing up..." : "Sign up"}
       </button>
     </form>

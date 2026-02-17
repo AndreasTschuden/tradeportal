@@ -1,6 +1,7 @@
 import React from "react";
 import { Signin } from "@/components/app/Signin";
 import { Signup } from "@/components/app/Signup";
+import { SignupCompany } from "@/components/app/SignupCompany";
 
 const page = async () => {
   return (
@@ -12,6 +13,10 @@ const page = async () => {
       <div>
         <h1 className="text-2xl font-bold">Sign Up - customer</h1>
         <Signup />
+      </div>
+      <div>
+        <h1 className="text-2xl font-bold">Sign Up - company</h1>
+        <SignupCompany />
       </div>
     </div>
   );

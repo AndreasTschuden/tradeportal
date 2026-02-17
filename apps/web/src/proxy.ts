@@ -1,13 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 
-const PUBLIC_ROUTES = ["/login"];
+const PUBLIC_ROUTES = ["/login", "/auth/signin", "/auth/signup", "/auth/signup/company"];
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  console.log(pathname)
 
   if (PUBLIC_ROUTES.includes(pathname)) {
     return NextResponse.next();
+  }
+
+  if(pathname === "/auth"){
+    const url = request.nextUrl.clone();
+    url.pathname = "/auth/signin";
+    return NextResponse.redirect(url);
   }
 
   const session = await auth.api.getSession({
@@ -16,7 +23,7 @@ export async function proxy(request: NextRequest) {
 
   if (!session) {
     const url = request.nextUrl.clone();
-    url.pathname = "/login";
+    url.pathname = "/auth/signin";
     return NextResponse.redirect(url);
   }
 
@@ -25,6 +32,6 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!api|_next|favicon.ico|login).*)", // Protect all routes except for /api, /_next/static, /favicon.ico, /login
+    "/((?!api|_next|favicon.ico).*)", // Protect all routes except for /api, /_next/static, /favicon.ico and any /auth/* pages
   ],
 };
