@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
-import { secretStripe } from '@/lib/stripe';
+import { NextResponse } from "next/server";
+import { secretStripe } from "@/lib/stripe";
 
 // for a merchant that just signed up or still needs to verify
 // creates a link for the merchant to verify their account
@@ -10,22 +10,22 @@ export async function POST(request) {
 
     const accountLink = await secretStripe.v2.core.accountLinks.create({
       account: accountId,
-      use_case: { 
-        type: 'account_onboarding',
+      use_case: {
+        type: "account_onboarding",
         account_onboarding: {
-          configurations: 'merchant',
-          refresh_url: 'https://example.com',
-          return_url: 'https://example.com',
+          configurations: "merchant",
+          refresh_url: "https://example.com",
+          return_url: "https://example.com",
         },
       },
     });
 
     return NextResponse.json({ url: accountLink.url });
   } catch (error) {
-    console.error('Error creating account link:', error);
+    console.error("Error creating account link:", error);
     return NextResponse.json(
       { error: { message: error.message } },
-      { status: 400 }
+      { status: 400 },
     );
   }
 }

@@ -2,6 +2,7 @@ import * as z from "zod"; //pnpm install zod
 
 export type SignInFormData = z.infer<typeof signinUser>;
 export type SignUpFormData = z.infer<typeof signupUser>;
+export type SignUpCompanyFormData = z.infer<typeof signupCompany>;
 
 const forbidden =
   /^(?!.*(?:Fuck|Motherfucker|Cunt|Gash|Japs eye|Punani|Pussy hole|Cocksucker|Cum|Nonce|Prickteaser|Raped|Slut|Ching Chong|Chinky|Coon|Darky|Gippo|Golliwog|Golly|Half-caste|Jungle Bunny|Kike|Negro|Nigga|Nigger|Nig-nog|Paki|Pikey|Raghead|Sambo|Spade|Spic|Uncle Tom|Wog|Yid|Batty Boy|Butt Bandit|Chick with a Dick|Dyke|Faggot|Fudge Packer|Gender Bender|He-She|Muff Diver|Rugmuncher|Shemale|Shirt Lifter|Tranny|Kike|Yid|Cripple|Mong|Retard|Schizo|Spastic|Window Licker|Behnchod|Chooray|Chamaar|Habshi|habshan|Machod)).*/i;
@@ -35,45 +36,50 @@ export const signupUser = z
 
     confirmPassword: z.string().min(1, "Please confirm your password"),
 
-    // --- Neue Felder ---
-
     address: z
       .string()
       .min(5, "Address must be at least 5 characters")
-      .max(100, "Address is too long"),
+      .max(100, "Address is too long")
+      .optional(),
 
     phone: z
       .string()
       .min(6, "Phone number is too short")
       .max(25, "Phone number is too long")
-      .regex(/^[0-9+()\-\s]+$/, "Phone number is not valid"),
+      .regex(/^[0-9+()\-\s]+$/, "Phone number is not valid")
+      .optional(),
 
     gender: z
       .union([z.literal("male"), z.literal("female"), z.literal("diverse")])
       .refine((val) => !!val, {
         message: "Please select a gender",
-      }),
+      })
+      .optional(),
 
     city: z
       .string()
       .min(2, "City must be at least 2 characters")
-      .max(50, "City is too long"),
+      .max(50, "City is too long")
+      .optional(),
 
     region: z
       .string()
       .min(2, "Region must be at least 2 characters")
-      .max(50, "Region is too long"),
+      .max(50, "Region is too long")
+      .optional(),
 
     postal_code: z
       .string()
       .min(3, "Postal code is too short")
       .max(12, "Postal code is too long")
-      .regex(/^[A-Za-z0-9\s\-]+$/, "Postal code format is not valid"),
+      .regex(/^[A-Za-z0-9\s\-]+$/, "Postal code format is not valid")
+      .optional(),
 
     country: z
       .string()
       .min(2, "Country must be at least 2 characters")
-      .max(56, "Country is too long"),
+      .max(56, "Country is too long")
+      .optional(),
   })
   .superRefine((data, ctx) => {
     if (data.password !== data.confirmPassword) {
@@ -89,3 +95,34 @@ export const signinUser = z.object({
   email: z.string().email("Email is not valid"),
   password: z.string().min(1, "Password is required"),
 });
+
+export const signupCompany = z
+  .object({
+    company_name: z
+      .string()
+      .min(4, "The Company Name must be at least 4 chars long")
+      .max(16, "The Company Name cant be longer than 16 chars")
+      .regex(forbidden, "The Company name contains profanities"),
+    email: z.string().email("Email is not valid"),
+    phone: z
+      .string()
+      .min(6, "Phone number is too short")
+      .max(25, "Phone number is too long")
+      .regex(/^[0-9+()\-\s]+$/, "Phone number is not valid"),
+    password: z
+      .string()
+      .regex(
+        passwd,
+        "Password must be: 12–128 Chars & must have ≥3 out of 4: upper-/lowercase, number, special chars & max 2 of the same chars in a row.",
+      ),
+    confirmPassword: z.string().min(1, "Please confirm your password"),
+  })
+  .superRefine((data, ctx) => {
+    if (data.password !== data.confirmPassword) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["confirmPassword"],
+        message: "Passwords don't match",
+      });
+    }
+  });

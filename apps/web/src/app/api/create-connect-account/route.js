@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
-import { secretStripe } from '@/lib/stripe'; //pnpm install stripe --save
+import { NextResponse } from "next/server";
+import { secretStripe } from "@/lib/stripe"; //pnpm install stripe --save
 
 // steps for stripe:
 // creat-connect-account: create stripe account (save stripe_account_id and onboarding_started_at into db)
@@ -8,7 +8,8 @@ import { secretStripe } from '@/lib/stripe'; //pnpm install stripe --save
 
 export async function POST(request) {
   try {
-    const { email, countryCode /*input: where is the company based at*/ } = await request.json();
+    const { email, countryCode /*input: where is the company based at*/ } =
+      await request.json();
 
     // Create a Connect account with the specified controller properties
     const account = await secretStripe.accounts.create({
@@ -38,7 +39,7 @@ export async function POST(request) {
   } catch (error) {
     return NextResponse.json(
       { error: { message: error.message } },
-      { status: 400 }
+      { status: 400 },
     );
   }
 }

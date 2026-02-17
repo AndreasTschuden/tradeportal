@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signinUser } from "@/lib/zod";
 import { SignInFormData } from "@/lib/zod";
 import { useState } from "react";
+import { inputClass, buttonClass } from "@/components/ui/FormControls";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 export function Signin() {
@@ -61,32 +62,22 @@ export function Signin() {
   } = useForm<SignInFormData>({ resolver: zodResolver(signinUser) });
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col gap-3 w-64"
-    >
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3 w-full max-w-md">
       <input
         {...register("email")}
         type="email"
-        name="email"
         placeholder="Email"
-        required
-        className={`${
-          errors.email ? "border-red-500" : "border-slate-300"
-        } w-full border-2 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent `}
+        className={`${errors.email ? "border-red-500" : "border-slate-300"} ${inputClass}`}
       />
       {errors.email && (
         <p className="text-red-500 text-sm">{errors.email.message}</p>
       )}
+
       <input
         {...register("password")}
         type="password"
-        name="password"
         placeholder="Password"
-        required
-        className={`${
-          errors.password ? "border-red-500" : "border-slate-300"
-        } w-full border-2 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent `}
+        className={`${errors.password ? "border-red-500" : "border-slate-300"} ${inputClass}`}
       />
       {errors.password && (
         <p className="text-red-500 text-sm">{errors.password.message}</p>
@@ -96,11 +87,7 @@ export function Signin() {
           {error}
         </p>
       )}
-      <button
-        type="submit"
-        disabled={loading}
-        className="w-full bg-blue-600 text-white rounded-md px-4 py-2 text-sm font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-      >
+      <button type="submit" disabled={loading} className={buttonClass}>
         {loading ? "Signing in..." : "Sign in"}
       </button>
     </form>

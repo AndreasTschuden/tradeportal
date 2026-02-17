@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
-import { secretStripe } from '@/lib/stripe';
+import { NextResponse } from "next/server";
+import { secretStripe } from "@/lib/stripe";
 
 // will be called before any monetary operations, will also be used to fill out onboarding_completed_at in the db when in returns the "go ahead signal" for a company that started the onboarding
 
@@ -32,11 +32,10 @@ export async function GET(request, { params }) {
       requirements: account.requirements,
     });
   } catch (error) {
-    console.error('Error retrieving account status:', error);
+    console.error("Error retrieving account status:", error);
     return NextResponse.json(
       { error: { message: error.message } },
-      { status: 400 }
+      { status: 400 },
     );
   }
 }
-

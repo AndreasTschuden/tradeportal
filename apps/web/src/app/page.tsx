@@ -24,10 +24,7 @@ export default async function Home() {
   }
   return (
     <div className="flex flex-col items-center justify-center h-screen gap-4">
-      <nav>
-        <Link href="/people">People</Link>
-      </nav>
-      <h1 className="text-4xl font-bold">gamgam</h1>
+      <h1 className="text-4xl font-bold">TradePortal</h1>
       <div className="mt-8 text-center">
         <p className="text-lg mb-4">User ID: {session.user.id}</p>
         <form action={signOutAction}>

@@ -3,7 +3,7 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
-import { SignUpFormData } from "@/lib/zod";
+import { SignUpCompanyFormData, SignUpFormData } from "@/lib/zod";
 import { prisma } from "@/lib/prisma";
 
 export async function signUpAction(data: SignUpFormData) {
@@ -28,7 +28,6 @@ export async function signUpAction(data: SignUpFormData) {
 
   const name = `${firstname} ${lastname}`;
 
-  try {
     const result = await auth.api.signUpEmail({
       body: {
         email,
@@ -46,22 +45,53 @@ export async function signUpAction(data: SignUpFormData) {
         id: result.user.id,
         name: `${firstname} ${lastname}`,
         email: email,
-        address: address,
-        profile_picture: null,
-        phone: phone,
-        gender: gender,
-        city: city,
-        region: region,
-        postal_code: postal_code,
-        country: country,
+        address: address || "",
+        phone: phone || "",
+        gender: gender || "",
+        city: city || "",
+        region: region || "",
+        postal_code: postal_code || "",
+        country: country || "",
         created_at: new Date(),
         updated_at: new Date(),
       },
     });
-  } catch (error) {
-    console.error(error);
-    throw new Error("Signup failed");
+
+  redirect("/");
+}
+
+export async function signUpCompanyAction(data: SignUpCompanyFormData) {
+  const { company_name, email, password, confirmPassword, phone } = data;
+
+  if (password !== confirmPassword) {
+    throw new Error("Passwords do not match");
   }
+
+    const result = await auth.api.signUpEmail({
+      body: {
+        email,
+        password,
+        name: company_name,
+      },
+    });
+
+    if (!result?.user?.id) {
+      throw new Error("User creation failed");
+    }
+
+    await prisma.companies.create({
+      data: {
+        owner_id: result.user.id,
+        stripe_account_id: "",
+        onboarding_started_at: new Date(),
+        is_verified: false,
+        company_name: company_name,
+        email: email,
+        phone_number: phone,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+    });
 
   redirect("/");
 }
