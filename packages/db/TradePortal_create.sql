@@ -80,7 +80,7 @@ CREATE TABLE companies (
     is_verified boolean  NOT NULL,
     approved_by text  NULL,
     email text  NOT NULL,
-    phone_number text  NULL,
+    phone_number text NOT NULL,
     created_at timestamptz DEFAULT now() NOT NULL,
     updated_at timestamptz DEFAULT now() NOT NULL,
     deleted_at timestamptz  NULL,
@@ -98,15 +98,15 @@ CREATE TABLE companies (
 CREATE TABLE customers (
     id text  NOT NULL,
     name text  NOT NULL,
-    address text  NOT NULL,
+    address text  NULL,
     profile_picture text  NULL,
     phone text  NULL,
     email text  NOT NULL,
     gender text  NOT NULL,
-    city text  NOT NULL,
-    region text  NOT NULL,
-    postal_code text  NOT NULL,
-    country text  NOT NULL,
+    city text  NULL,
+    region text  NULL,
+    postal_code text  NULL,
+    country text  NULL,
     created_at timestamptz DEFAULT now() NOT NULL,
     updated_at timestamptz DEFAULT now() NOT NULL,
     CONSTRAINT customer_email UNIQUE (email) NOT DEFERRABLE  INITIALLY IMMEDIATE,
@@ -185,7 +185,8 @@ CREATE INDEX idx_sessions_user_id on session ("userId" ASC);
 CREATE TABLE shopping_cart_products (
     customers_id text  NOT NULL,
     products_id text  NOT NULL,
-    updated_at timestamptz DEFAULT now() NOT NULL,
+    quantity int  NOT NULL,
+    updated_at timestamptz  NOT NULL,
     CONSTRAINT shopping_cart_products_pk PRIMARY KEY (customers_id,products_id)
 );
 

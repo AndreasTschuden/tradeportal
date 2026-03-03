@@ -21,11 +21,11 @@ export async function proxy(request: NextRequest) {
     headers: request.headers,
   });
 
-  if (!session) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/auth/signin";
-    return NextResponse.redirect(url);
-  }
+  // if (!session) {
+  //   const url = request.nextUrl.clone();
+  //   url.pathname = "/auth/signin";
+  //   return NextResponse.redirect(url);
+  // }
 
   return NextResponse.next();
 }

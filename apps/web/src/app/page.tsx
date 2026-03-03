@@ -2,11 +2,13 @@ import { headers } from "next/headers";
 import Link from "next/link";
 import { auth } from "@/lib/auth";
 import { signOutAction } from "./actions/auth";
+import File from "@/components/app/file";
 
 export default async function Home() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
+
   if (!session) {
     return (
       <div className="flex flex-col items-center justify-center h-screen gap-4">
@@ -18,6 +20,7 @@ export default async function Home() {
           >
             Sign In
           </Link>
+          <File/>
         </div>
       </div>
     );

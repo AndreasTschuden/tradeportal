@@ -9,7 +9,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: IchMagWale09
     ports:
-      - "5432:5432"
+      - "5432:5432" #will be removed when NextJs is in the Docker stack so it cant be accesed from the outside.
     volumes:
       - tradeportal_postgres_data:/var/lib/postgresql
     healthcheck:
@@ -18,6 +18,37 @@ services:
       timeout: 5s
       retries: 5
     restart: unless-stopped
- 
+  
+  minio:
+      image: quay.io/minio/aistor/minio
+      container_name: tradeportal-buckets
+      environment:
+        MINIO_ROOT_USER: admin
+        MINIO_ROOT_PASSWORD: 3cH@moJn#XrhwNP&5q3z
+      ports:
+        - "443:9000" 
+        - "9001:9001"
+      volumes:
+        - minio_data:/data
+        - minio_license:/licenses  
+        - minio_certs:/etc/minio/certs
+      command: minio server /mnt/data --license /licenses/minio.license --certs-dir /etc/minio/certs
+
+  # garage:
+  #   image: dxflrs/garage:v2.2.0
+  #   container_name: tradeportal-buckets
+  #   network_mode: "host"
+  #   restart: unless-stopped
+  #   volumes:
+  #     - tradeportal_garage_toml:/etc/garage.toml
+  #     - tradeportal_garage_meta:/var/lib/garage/meta
+  #     - tradeportal_garage_data:/var/lib/garage/data
+
 volumes:
   tradeportal_postgres_data:
+  # tradeportal_garage_toml:
+  # tradeportal_garage_meta:
+  # tradeportal_garage_data:
+  minio_data:
+  minio_license:
+  minio_certs:
