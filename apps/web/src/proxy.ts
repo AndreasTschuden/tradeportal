@@ -1,17 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 
-const PUBLIC_ROUTES = ["/login", "/auth/signin", "/auth/signup", "/auth/signup/company"];
+const PUBLIC_ROUTES = [
+  "/login",
+  "/auth/signin",
+  "/auth/signup",
+  "/auth/signup/company",
+];
+const COMPANY_ROUTES = ["/company/publish-product"];
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  console.log(pathname)
+  console.log(pathname);
 
   if (PUBLIC_ROUTES.includes(pathname)) {
     return NextResponse.next();
   }
 
-  if(pathname === "/auth"){
+  if (pathname === "/auth") {
     const url = request.nextUrl.clone();
     url.pathname = "/auth/signin";
     return NextResponse.redirect(url);
@@ -21,11 +28,23 @@ export async function proxy(request: NextRequest) {
     headers: request.headers,
   });
 
-  // if (!session) {
-  //   const url = request.nextUrl.clone();
-  //   url.pathname = "/auth/signin";
-  //   return NextResponse.redirect(url);
-  // }
+  if (!session) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/auth/signin";
+    return NextResponse.redirect(url);
+  }
+
+  const companyUser = await prisma.companies.findFirst({
+    where: {
+      owner_id: session.user.id,
+    },
+  });
+
+  if (!companyUser && COMPANY_ROUTES.includes(pathname)) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/";
+      return NextResponse.redirect(url);
+  }
 
   return NextResponse.next();
 }
