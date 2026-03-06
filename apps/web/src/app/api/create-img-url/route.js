@@ -9,7 +9,6 @@ export async function POST(request) {
   const arr = await request.json();
 
   try {
-    
     await createMinioUrl.parseAsync(arr);
 
     let resultArr = await Promise.all( //Promise.all waits until all promises get resolver, if one returns an error, it instantly fails and returns that error. 

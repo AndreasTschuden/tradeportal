@@ -32,12 +32,12 @@ importers:
       dotenv:
         specifier: ^17.2.3
         version: 17.3.1
-      minio:
-        specifier: ^8.0.7
-        version: 8.0.7
       lucide-react:
         specifier: ^0.576.0
         version: 0.576.0(react@19.2.3)
+      minio:
+        specifier: ^8.0.7
+        version: 8.0.7
       next:
         specifier: 16.1.5
         version: 16.1.5(@babel/core@7.29.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -4620,7 +4620,7 @@ snapshots:
     dependencies:
       mime-db: 1.52.0
 
-  minimatch@3.1.2:
+  minimatch@10.2.4:
     dependencies:
       brace-expansion: 5.0.4
 

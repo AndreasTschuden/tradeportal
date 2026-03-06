@@ -2,7 +2,6 @@ import { headers } from "next/headers";
 import Link from "next/link";
 import { auth } from "@/lib/auth";
 import { signOutAction } from "./actions/auth";
-import File from "@/components/app/file";
 
 export default async function Home() {
   const session = await auth.api.getSession({
@@ -20,7 +19,6 @@ export default async function Home() {
           >
             Sign In
           </Link>
-          <File/>
         </div>
       </div>
     );

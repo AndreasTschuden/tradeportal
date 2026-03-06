@@ -1,3 +1,4 @@
+import { availableMemory } from "process";
 import * as z from "zod"; //pnpm install zod
 
 export type SignInFormData = z.infer<typeof signinUser>;
@@ -128,6 +129,33 @@ export const signupCompany = z
     }
   });
 
+export const attributeSchema = z.object({
+  name: z.string().min(1, "Jede Option benötigt einen Namen"),
+  values: z
+    .array(z.string().min(1, "Jeder Wert muss mindestens 1 Zeichen haben"))
+    .min(1, "Jede Option muss mindestens einen Wert haben"),
+  images: z.record(z.string(), z.union([z.instanceof(File), z.string()])).optional(),
+});
+
+export const variantsSchema = z.object({
+  available : z.boolean(),
+  priceModifier : z.coerce.number().min(0, "Der Preis Modifizierer muss => 0 sein").max(10, "Der Preis Modifizierer muss => 10 sein")
+}).catchall(z.string());
+
+
+export const publishProductSchema = z.object({
+  title: z.string().min(5, "Titel muss mind 5 zeichen haben"),
+  basePrice : z.coerce.number().min(0, "Basispreis muss =< 0 sein"),
+  currency: z.enum(["EUR", "USD"], { error: "Ungültige Währung (EUR, USD)." }),
+  attributes : z.array(attributeSchema).min(1, "Mindestend 1 Option erforderlich"),
+  variants : z.array(variantsSchema).min(1, "Generate all variants")
+});
+
+export const fixedProductSchema = z.object({
+  title: z.string().min(5, "Titel muss mind 5 zeichen haben"),
+  basePrice: z.number().min(0, "Basispreis muss =< 0 sein"),
+  currency: z.enum(["EUR", "USD"], { error: "Ungültige Währung (EUR, USD)." }),
+});
   export const createMinioUrl = z.
   array(
     z.object({
