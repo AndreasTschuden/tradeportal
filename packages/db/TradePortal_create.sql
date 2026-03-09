@@ -1,6 +1,48 @@
 -- Created by Redgate Data Modeler (https://datamodeler.redgate-platform.com)
 -- Last modification date: 2026-02-14 02:23:11.241
 
+-- Still needs least privelage: a admin: DDL, a user: DML, a reader: only select
+-- Only read acces on tables needed, not on better auth tables.
+
+Create Role migration_role;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO migration_role;
+
+Create Role better_auth_role;
+GRANT ALL PRIVILEGES ON verification, session, account, "user" TO better_auth_role;
+
+Create Role user_role;
+GRANT SELECT ON categories, categories_products, companies, customers, orders, orders_products, products, reviews, shopping_cart_products, transactions TO user_role;
+GRANT INSERT ON customers, orders, orders_products, reviews, shopping_cart_products, transactions TO user_role;
+GRANT UPDATE ON customers, orders, reviews, shopping_cart_products TO user_role;
+GRANT DELETE ON reviews, shopping_cart_products TO user_role;
+
+Create Role company_role;
+GRANT SELECT ON categories, categories_products, companies, customers, orders, orders_products, products, reviews, shopping_cart_products, transactions TO company_role;
+GRANT INSERT ON categories_products, companies, products TO company_role;
+GRANT UPDATE ON categories_products, companies, products TO company_role;
+GRANT DELETE ON categories_products, products TO company_role;
+
+Create Role report_role;
+GRANT SELECT ON categories, categories_products, companies, customers, orders, orders_products, products, reviews, shopping_cart_products TO report_role;
+
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+GRANT SELECT ON TABLES TO migration_role, company_role, user_role;
+
+CREATE USER migration_bot WITH PASSWORD 'xLZX$95db2N29p@2mv3P';
+GRANT migration_role TO migration_bot;
+
+CREATE USER app_user WITH PASSWORD '&$YnfebHZERsn49NEe9U';
+GRANT user_role TO app_user;
+
+CREATE USER app_company WITH PASSWORD '2fD7dFtU&@pAobLYtYgx';
+GRANT company_role TO app_company;
+
+CREATE USER report_bot WITH PASSWORD 'YHRKQcq&%D5VDAnP4eVa';
+GRANT report_role TO report_bot;
+
+CREATE USER better_auth WITH PASSWORD '4KAxLTdFnT#WhveEC3&C';
+GRANT better_auth_role TO better_auth;
+
 -- 1.) Clear public schema
 DO $$ DECLARE
     r RECORD;
@@ -142,7 +184,10 @@ CREATE TABLE orders_products (
 CREATE TABLE products (
     id text DEFAULT gen_random_uuid() NOT NULL,
     name text  NOT NULL,
+    base_price numeric(12,2)  NOT NULL,
     currency varchar(3)  NOT NULL,
+    short_description text  NOT NULL,
+    long_description text  NOT NULL,
     specifications jsonb  NOT NULL,
     companies_id text  NOT NULL,
     created_at timestamptz DEFAULT now() NOT NULL,
