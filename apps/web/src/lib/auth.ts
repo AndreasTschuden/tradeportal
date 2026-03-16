@@ -7,7 +7,7 @@ import { nextCookies } from "better-auth/next-js";
 import { hashPassword, verifyPassword } from "./password";
 import { Resend } from "resend";
 
-const connectionString = `${process.env.DIRECT_URL}`;
+const connectionString = `${process.env.DATABASE_URL_BETTER_AUTH}`;
 
 const resend = new Resend(process.env.RESEND_API_KEY!);
 

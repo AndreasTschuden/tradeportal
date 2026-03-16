@@ -1,4 +1,4 @@
-/label ~"Defect"
+/label ~"issue::Defect"
 
 ## Fehlerbeschreibung
 

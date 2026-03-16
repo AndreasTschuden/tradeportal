@@ -1,7 +1,7 @@
 /assign me
 /reviewer @teamkollege1 @teamkollege2
 /approver @teamkollege1 @teamkollege2
-/label ~"ReviewProcess"
+/label ~"mergeRequest::ReviewProcess"
 
 ## 🎯 Ziel des Merge Requests
 [Kurze Beschreibung: Was wird geändert? Warum?]
