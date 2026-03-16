@@ -1,4 +1,4 @@
-/label ~"TechnicalImprovement"
+/label ~"issue::TechnicalImprovement"
 
 ## Technische Verbesserung
 

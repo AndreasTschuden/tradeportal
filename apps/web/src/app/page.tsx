@@ -7,6 +7,7 @@ export default async function Home() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
+
   if (!session) {
     return (
       <div className="flex flex-col items-center justify-center h-screen gap-4">

@@ -1,6 +1,48 @@
 -- Created by Redgate Data Modeler (https://datamodeler.redgate-platform.com)
 -- Last modification date: 2026-02-14 02:23:11.241
 
+-- Still needs least privelage: a admin: DDL, a user: DML, a reader: only select
+-- Only read acces on tables needed, not on better auth tables.
+
+Create Role migration_role;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO migration_role;
+
+Create Role better_auth_role;
+GRANT ALL PRIVILEGES ON verification, session, account, "user" TO better_auth_role;
+
+Create Role user_role;
+GRANT SELECT ON categories, categories_products, companies, customers, orders, orders_products, products, reviews, shopping_cart_products, transactions TO user_role;
+GRANT INSERT ON customers, orders, orders_products, reviews, shopping_cart_products, transactions TO user_role;
+GRANT UPDATE ON customers, orders, reviews, shopping_cart_products TO user_role;
+GRANT DELETE ON reviews, shopping_cart_products TO user_role;
+
+Create Role company_role;
+GRANT SELECT ON categories, categories_products, companies, customers, orders, orders_products, products, reviews, shopping_cart_products, transactions TO company_role;
+GRANT INSERT ON categories_products, companies, products TO company_role;
+GRANT UPDATE ON categories_products, companies, products TO company_role;
+GRANT DELETE ON categories_products, products TO company_role;
+
+Create Role report_role;
+GRANT SELECT ON categories, categories_products, companies, customers, orders, orders_products, products, reviews, shopping_cart_products TO report_role;
+
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+GRANT SELECT ON TABLES TO migration_role, company_role, user_role;
+
+CREATE USER migration_bot WITH PASSWORD 'xLZX$95db2N29p@2mv3P';
+GRANT migration_role TO migration_bot;
+
+CREATE USER app_user WITH PASSWORD '&$YnfebHZERsn49NEe9U';
+GRANT user_role TO app_user;
+
+CREATE USER app_company WITH PASSWORD '2fD7dFtU&@pAobLYtYgx';
+GRANT company_role TO app_company;
+
+CREATE USER report_bot WITH PASSWORD 'YHRKQcq&%D5VDAnP4eVa';
+GRANT report_role TO report_bot;
+
+CREATE USER better_auth WITH PASSWORD '4KAxLTdFnT#WhveEC3&C';
+GRANT better_auth_role TO better_auth;
+
 -- 1.) Clear public schema
 DO $$ DECLARE
     r RECORD;
@@ -80,7 +122,7 @@ CREATE TABLE companies (
     is_verified boolean  NOT NULL,
     approved_by text  NULL,
     email text  NOT NULL,
-    phone_number text  NULL,
+    phone_number text NOT NULL,
     created_at timestamptz DEFAULT now() NOT NULL,
     updated_at timestamptz DEFAULT now() NOT NULL,
     deleted_at timestamptz  NULL,
@@ -98,15 +140,15 @@ CREATE TABLE companies (
 CREATE TABLE customers (
     id text  NOT NULL,
     name text  NOT NULL,
-    address text  NOT NULL,
+    address text  NULL,
     profile_picture text  NULL,
     phone text  NULL,
     email text  NOT NULL,
     gender text  NOT NULL,
-    city text  NOT NULL,
-    region text  NOT NULL,
-    postal_code text  NOT NULL,
-    country text  NOT NULL,
+    city text  NULL,
+    region text  NULL,
+    postal_code text  NULL,
+    country text  NULL,
     created_at timestamptz DEFAULT now() NOT NULL,
     updated_at timestamptz DEFAULT now() NOT NULL,
     CONSTRAINT customer_email UNIQUE (email) NOT DEFERRABLE  INITIALLY IMMEDIATE,
@@ -142,7 +184,10 @@ CREATE TABLE orders_products (
 CREATE TABLE products (
     id text DEFAULT gen_random_uuid() NOT NULL,
     name text  NOT NULL,
+    base_price numeric(12,2)  NOT NULL,
     currency varchar(3)  NOT NULL,
+    short_description text  NOT NULL,
+    long_description text  NOT NULL,
     specifications jsonb  NOT NULL,
     companies_id text  NOT NULL,
     created_at timestamptz DEFAULT now() NOT NULL,
@@ -185,7 +230,8 @@ CREATE INDEX idx_sessions_user_id on session ("userId" ASC);
 CREATE TABLE shopping_cart_products (
     customers_id text  NOT NULL,
     products_id text  NOT NULL,
-    updated_at timestamptz DEFAULT now() NOT NULL,
+    quantity int  NOT NULL,
+    updated_at timestamptz  NOT NULL,
     CONSTRAINT shopping_cart_products_pk PRIMARY KEY (customers_id,products_id)
 );
 
@@ -489,6 +535,36 @@ FOR EACH ROW EXECUTE FUNCTION set_updated_at();
 CREATE TRIGGER trg_companies_updated_at
 BEFORE UPDATE ON companies
 FOR EACH ROW EXECUTE FUNCTION set_updated_at();
+
+INSERT INTO categories (name, description) VALUES
+('Electronics', 'Electronic devices and accessories'),
+('Computers & Laptops', 'Desktop computers, laptops, and accessories'),
+('Smartphones & Tablets', 'Mobile devices such as smartphones and tablets'),
+('Home Appliances', 'Appliances for kitchen and household use'),
+('Furniture', 'Furniture for home and office'),
+('Clothing', 'Apparel for men, women, and children'),
+('Shoes', 'Footwear for different occasions'),
+('Sports & Outdoors', 'Sports equipment and outdoor products'),
+('Books', 'Printed books and literature'),
+('Toys', 'Toys and games for children'),
+('Beauty & Personal Care', 'Cosmetics and personal care products'),
+('Food & Beverages', 'Food items and drinks'),
+('Automotive', 'Car parts, accessories, and maintenance products'),
+('Tools & Hardware', 'Hand tools, power tools, and hardware supplies'),
+('Garden & Outdoor', 'Garden tools, plants, and outdoor equipment'),
+('Pet Supplies', 'Food, toys, and accessories for pets'),
+('Office Supplies', 'Products for office and workplace use'),
+('Stationery', 'Paper products, notebooks, and writing supplies'),
+('Health & Wellness', 'Health products, vitamins, and wellness items'),
+('Baby Products', 'Items for infants and toddlers'),
+('Jewelry & Watches', 'Jewelry, watches, and accessories'),
+('Bags & Luggage', 'Backpacks, handbags, and travel luggage'),
+('Music & Instruments', 'Musical instruments and related accessories'),
+('Gaming', 'Video games, consoles, and gaming accessories'),
+('Movies & TV', 'DVDs, Blu-rays, and entertainment media'),
+('Art & Crafts', 'Art materials and craft supplies'),
+('Industrial & Scientific', 'Professional equipment and laboratory supplies'),
+('Others', 'Products that do not fit into any specific category');
 
 --docker compose down -v
 --docker compose up -d
