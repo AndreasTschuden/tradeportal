@@ -536,6 +536,36 @@ CREATE TRIGGER trg_companies_updated_at
 BEFORE UPDATE ON companies
 FOR EACH ROW EXECUTE FUNCTION set_updated_at();
 
+INSERT INTO categories (name, description) VALUES
+('Electronics', 'Electronic devices and accessories'),
+('Computers & Laptops', 'Desktop computers, laptops, and accessories'),
+('Smartphones & Tablets', 'Mobile devices such as smartphones and tablets'),
+('Home Appliances', 'Appliances for kitchen and household use'),
+('Furniture', 'Furniture for home and office'),
+('Clothing', 'Apparel for men, women, and children'),
+('Shoes', 'Footwear for different occasions'),
+('Sports & Outdoors', 'Sports equipment and outdoor products'),
+('Books', 'Printed books and literature'),
+('Toys', 'Toys and games for children'),
+('Beauty & Personal Care', 'Cosmetics and personal care products'),
+('Food & Beverages', 'Food items and drinks'),
+('Automotive', 'Car parts, accessories, and maintenance products'),
+('Tools & Hardware', 'Hand tools, power tools, and hardware supplies'),
+('Garden & Outdoor', 'Garden tools, plants, and outdoor equipment'),
+('Pet Supplies', 'Food, toys, and accessories for pets'),
+('Office Supplies', 'Products for office and workplace use'),
+('Stationery', 'Paper products, notebooks, and writing supplies'),
+('Health & Wellness', 'Health products, vitamins, and wellness items'),
+('Baby Products', 'Items for infants and toddlers'),
+('Jewelry & Watches', 'Jewelry, watches, and accessories'),
+('Bags & Luggage', 'Backpacks, handbags, and travel luggage'),
+('Music & Instruments', 'Musical instruments and related accessories'),
+('Gaming', 'Video games, consoles, and gaming accessories'),
+('Movies & TV', 'DVDs, Blu-rays, and entertainment media'),
+('Art & Crafts', 'Art materials and craft supplies'),
+('Industrial & Scientific', 'Professional equipment and laboratory supplies'),
+('Others', 'Products that do not fit into any specific category');
+
 --docker compose down -v
 --docker compose up -d
 --run sql script in dbeaver (after restarting that connection as well)

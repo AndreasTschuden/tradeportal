@@ -7,14 +7,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { publishProductSchema, fixedProductSchema } from "@/lib/zod";
 import { publishProduct } from "@/app/actions/company";
 
+type FormInput = z.input<typeof fixedProductSchema>;
+type FormOutput = z.output<typeof fixedProductSchema>;
+
 type ProductFormValues = z.infer<typeof fixedProductSchema>;
 
-export default function ProductForm() {
+export default function ProductForm({categories} : {categories : CategoryType[]}) {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ProductFormValues>({
+  } = useForm<FormInput, unknown, FormOutput>({
     resolver: zodResolver(fixedProductSchema),
   });
 
@@ -137,6 +140,9 @@ export default function ProductForm() {
       title: data.title,
       basePrice: data.basePrice,
       currency: data.currency,
+      category : Number(data.category),
+      shortDescription : data.shortDescription,
+      longDescription : data.longDescription,
       attributes: attributes.map((a, i) => ({
         name: a.name,
         values: a.values,
@@ -155,6 +161,7 @@ export default function ProductForm() {
         {} as Record<string, string>,
       );
       setZodErrors(messages);
+
       console.log(json);
       return;
     }
@@ -221,6 +228,50 @@ export default function ProductForm() {
                     {errors.currency && (
                       <p className="text-red-500 text-sm">
                         {errors.currency.message}
+                      </p>
+                    )}
+                  </div>
+                   <div>
+                    <label className="block mb-1 font-medium">Category</label>
+                    <select
+                    id="categories"
+                    {...register("category", { required: "Category is required" })}
+                  >
+                    {categories.map((cat) => (
+                      <option key={cat.id} value={Number(cat.id)}>
+                        {cat.name}
+                      </option>
+                    ))}
+                  </select>
+                    {errors.category && (
+                      <p className="text-red-500 text-sm">
+                        {errors.category.message}
+                      </p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block mb-1 font-medium">Short Description</label>
+                    <textarea
+                      {...register("shortDescription")}
+                      className="w-full border rounded-md p-2 h-50"
+                    />
+                    {errors.shortDescription && (
+                      <p className="text-red-500 text-sm">
+                        {errors.shortDescription.message}
+                      </p>
+                    )}
+                  </div>
+
+                   <div>
+                    <label className="block mb-1 font-medium">Long Description</label>
+                    <textarea
+                      {...register("longDescription")}
+                      className="w-full border rounded-md p-2 h-96"
+                    />
+                    {errors.longDescription && (
+                      <p className="text-red-500 text-sm">
+                        {errors.longDescription.message}
                       </p>
                     )}
                   </div>

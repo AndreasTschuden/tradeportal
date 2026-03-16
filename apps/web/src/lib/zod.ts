@@ -147,6 +147,9 @@ export const publishProductSchema = z.object({
   title: z.string().min(5, "Titel muss mind 5 zeichen haben"),
   basePrice : z.coerce.number().min(0, "Basispreis muss =< 0 sein"),
   currency: z.enum(["EUR", "USD"], { error: "Ungültige Währung (EUR, USD)." }),
+  shortDescription : z.string().min(100, "short Description must be atleast 100 chars long"),
+  longDescription : z.string().min(200, "long Description must be atleast 200 chars long"),
+  category: z.coerce.number(),
   attributes : z.array(attributeSchema).min(1, "Mindestend 1 Option erforderlich"),
   variants : z.array(variantsSchema).min(1, "Generate all variants")
 });
@@ -155,8 +158,12 @@ export const fixedProductSchema = z.object({
   title: z.string().min(5, "Titel muss mind 5 zeichen haben"),
   basePrice: z.number().min(0, "Basispreis muss =< 0 sein"),
   currency: z.enum(["EUR", "USD"], { error: "Ungültige Währung (EUR, USD)." }),
+  category: z.coerce.number(),
+  shortDescription : z.string().min(100, "short Description must be atleast 100 chars long"),
+  longDescription : z.string().min(200, "long Description must be atleast 200 chars long"),
 });
-  export const createMinioUrl = z.
+
+export const createMinioUrl = z.
   array(
     z.object({
       name: z

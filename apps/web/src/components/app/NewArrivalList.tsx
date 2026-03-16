@@ -17,7 +17,7 @@ const NewArrivalList = ({
       {newestProducts[0] ? (
         <div
           className="relative lg:w-1/2 w-full aspect-square cursor-pointer"
-          onClick={() => router.push(`/home/product/${newestProducts[0].id}`)}
+          onClick={() => router.push(`/products/product/${newestProducts[0].id}`)}
         >
           <Image
             src={`https://minio.tschudea.de/images/products/${Object.values(newestProducts[0].specifications.attributes[0].images)[0]}`}
@@ -37,7 +37,7 @@ const NewArrivalList = ({
               </p>
 
               <Link
-                href={`/home/product/${newestProducts[0].id}`}
+                href={`/products/product/${newestProducts[0].id}`}
                 className="text-black underline text-lg md:block hidden"
               >
                 Shop now
@@ -53,7 +53,7 @@ const NewArrivalList = ({
         {newestProducts[1] ? (
           <div
             className="relative w-full aspect-2/1 cursor-pointer"
-            onClick={() => router.push(`/home/product/${newestProducts[1].id}`)}
+            onClick={() => router.push(`/products/product/${newestProducts[1].id}`)}
           >
             <Image
               src={`https://minio.tschudea.de/images/products/${Object.values(newestProducts[1].specifications.attributes[0].images)[0]}`}
@@ -72,7 +72,7 @@ const NewArrivalList = ({
               </p>
 
               <Link
-                href={`/home/product/${newestProducts[1].id}`}
+                href={`/products/product/${newestProducts[1].id}`}
                 className="text-black underline text-lg md:block hidden"
               >
                 Shop now
@@ -89,7 +89,7 @@ const NewArrivalList = ({
             <div
               className="relative w-1/2 aspect-square cursor-pointer"
               onClick={() =>
-                router.push(`/home/product/${newestProducts[2].id}`)
+                router.push(`/products/product/${newestProducts[2].id}`)
               }
             >
               <Image
@@ -109,7 +109,7 @@ const NewArrivalList = ({
               </p>
 
               <Link
-                href={`/home/product/${newestProducts[2].id}`}
+                href={`/products/product/${newestProducts[2].id}`}
                 className="text-black underline text-lg md:block hidden"
               >
                 Shop now
@@ -124,7 +124,7 @@ const NewArrivalList = ({
             <div
               className="relative w-1/2 aspect-square cursor-pointer"
               onClick={() =>
-                router.push(`/home/product/${newestProducts[3].id}`)
+                router.push(`/products/product/${newestProducts[3].id}`)
               }
             >
               <Image
@@ -144,7 +144,7 @@ const NewArrivalList = ({
               </p>
 
               <Link
-                href={`/home/product/${newestProducts[3].id}`}
+                href={`/products/product/${newestProducts[3].id}`}
                 className="text-black underline text-lg md:block hidden"
               >
                 Shop now

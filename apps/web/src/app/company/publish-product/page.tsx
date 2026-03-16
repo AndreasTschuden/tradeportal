@@ -3,7 +3,8 @@ import PublishProductForm from '@/components/app/PublishProductForm'
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { db } from "@/lib/prisma";
+import { getCategories } from '@/app/actions/categories'
 
 const PublishProductsPage = async () => {
 
@@ -15,7 +16,7 @@ const PublishProductsPage = async () => {
     redirect("/auth/signin");
   }
 
-  const company = await prisma.companies.findFirst({
+  const company = await db.user.companies.findFirst({
     where: {
       AND: [
         { owner_id: session?.user.id },
@@ -30,10 +31,12 @@ const PublishProductsPage = async () => {
         <h1 className='font-bold text-red-500 text-5xl'>This Page is only accessable for verified Companies</h1>
       </div>
   )}
+
+  const categories = await getCategories()
   
   return (
     <div className=''> 
-        <PublishProductForm/>
+        <PublishProductForm categories={categories}/>
     </div>
   )
 }
