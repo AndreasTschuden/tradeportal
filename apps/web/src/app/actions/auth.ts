@@ -4,7 +4,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { SignUpCompanyFormData, SignUpFormData } from "@/lib/zod";
-import { prisma } from "@/lib/prisma";
+import { db } from "@/lib/prisma";
 
 export async function signUpAction(data: SignUpFormData) {
   const {
@@ -40,7 +40,7 @@ export async function signUpAction(data: SignUpFormData) {
       throw new Error("User creation failed");
     }
 
-    await prisma.customers.create({
+    await db.user.customers.create({
       data: {
         id: result.user.id,
         name: `${firstname} ${lastname}`,
@@ -79,7 +79,7 @@ export async function signUpCompanyAction(data: SignUpCompanyFormData) {
       throw new Error("User creation failed");
     }
 
-    await prisma.companies.create({
+    await db.company.companies.create({
       data: {
         owner_id: result.user.id,
         stripe_account_id: "",

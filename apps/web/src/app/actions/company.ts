@@ -2,7 +2,7 @@
 
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { prisma } from "@/lib/prisma";
+import { db } from "@/lib/prisma";
 import { publishProductSchema } from "@/lib/zod";
 import { z } from "zod";
 import { createUploadImageUrl } from "@/app/actions/bucket";
@@ -11,6 +11,7 @@ import { auth } from "@/lib/auth";
 type ProductType = z.infer<typeof publishProductSchema>;
 
 export async function publishProduct(formData: ProductType) {
+
   if (!formData) {
     throw new Error("Something went wrong!");
   }
@@ -28,7 +29,7 @@ export async function publishProduct(formData: ProductType) {
     redirect("auth/signin");
   }
 
-  const company = await prisma.companies.findFirst({
+  const company = await db.company.companies.findFirst({
     where: {
       owner_id: session.user.id,
     },
@@ -69,17 +70,33 @@ export async function publishProduct(formData: ProductType) {
 
   const specifications = JSON.stringify(productData);
 
-  const product = await prisma.products.create({
+  const product = await db.company.products.create({
     data: {
       name: formData.title,
       currency: formData.currency,
+      base_price : formData.basePrice,
+      short_description : formData.shortDescription,
+      long_description : formData.longDescription,
       specifications: specifications,
       companies_id: company.id,
       isactive: true,
     },
   });
 
-  console.log(product);
+  if(!product){
+    throw new Error("Something went wrong!")
+  }
+
+  const resultCat = await db.company.categories_products.create({
+    data : {
+      categories_id : formData.category,
+      products_id : product.id
+    }
+  })
+
+  if(!resultCat){
+    throw new Error("Something went wrong!")
+  }
 
   redirect("company/products");
 }

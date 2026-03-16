@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { db } from "@/lib/prisma";
 
 const PUBLIC_ROUTES = [
   "/login",
@@ -34,7 +34,7 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  const companyUser = await prisma.companies.findFirst({
+  const companyUser = await db.company.companies.findFirst({
     where: {
       owner_id: session.user.id,
     },
