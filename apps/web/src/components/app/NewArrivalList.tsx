@@ -37,7 +37,7 @@ const NewArrivalList = ({
               </p>
 
               <Link
-                href={`/products/product/${newestProducts[0].id}`}
+                href={`/home/products/product/${newestProducts[0].id}`}
                 className="text-black underline text-lg md:block hidden"
               >
                 Shop now
@@ -72,7 +72,7 @@ const NewArrivalList = ({
               </p>
 
               <Link
-                href={`/products/product/${newestProducts[1].id}`}
+                href={`/home/products/product/${newestProducts[1].id}`}
                 className="text-black underline text-lg md:block hidden"
               >
                 Shop now
@@ -109,7 +109,7 @@ const NewArrivalList = ({
               </p>
 
               <Link
-                href={`/products/product/${newestProducts[2].id}`}
+                href={`/home/products/product/${newestProducts[2].id}`}
                 className="text-black underline text-lg md:block hidden"
               >
                 Shop now
@@ -144,7 +144,7 @@ const NewArrivalList = ({
               </p>
 
               <Link
-                href={`/products/product/${newestProducts[3].id}`}
+                href={`/home/products/product/${newestProducts[3].id}`}
                 className="text-black underline text-lg md:block hidden"
               >
                 Shop now

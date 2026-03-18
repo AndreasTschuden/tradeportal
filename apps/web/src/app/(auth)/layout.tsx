@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "@/app/globals.css";
 
 export const metadata: Metadata = {
-  title: "Publish Product - Company",
-  description: "Publish a product others can buy",
+  title: "TradePortal | Authentication",
+  description: "Sign in or register to access your TradePortal account.",
 };
 
 export default function RootLayout({

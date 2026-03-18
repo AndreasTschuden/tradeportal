@@ -1,7 +1,12 @@
-// app/(main)/home/layout.tsx
+import type { Metadata } from "next";
 import { SubNav } from "@/components/app/SubNav";
 
-export default function RootLayout({
+export const metadata: Metadata = {
+  title: "TradePortal | Home Navigation",
+  description: "Quick links to TradePortal sections and featured categories.",
+};
+
+export default function HomeSubnavLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -11,9 +16,7 @@ export default function RootLayout({
       <div className="min-h-[5vh]">
         <SubNav />
       </div>
-      <div className="py-2 md:px-30 px-5">
-  {children}
-  </div>;
+      <div className="py-2 md:px-30 px-5">{children}</div>
     </>
   );
 }

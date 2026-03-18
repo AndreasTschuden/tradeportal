@@ -4,8 +4,8 @@ import { SubNav } from "@/components/app/SubNav";
 import { Guarantees } from "@/components/app/Guarantees";
 
 export const metadata: Metadata = {
-  title: "Home - TradePortal",
-  description: "Homepage of Tradeportal",
+  title: "TradePortal | Marketplace",
+  description: "Explore TradePortal's featured products, companies, and services.",
 };
 
 export default function RootLayout({

@@ -2,7 +2,7 @@
 import { publicStripe } from "@/lib/stripe";
 import { useEffect } from "react";
 
-export function Checkout() {
+export default function CheckoutPage() {
   useEffect(() => {
     // Fetch Checkout Session and retrieve the client secret
     async function initialize() {
@@ -25,9 +25,7 @@ export function Checkout() {
     }
 
     initialize();
-  });
-
-  //something about checkout.unmount, look into that as well.
+  }, []);
 
   return (
     <div id="checkout">

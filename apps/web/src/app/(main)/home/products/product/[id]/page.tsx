@@ -26,11 +26,11 @@ const ProductDetailPage = async ({ params }: PageProps) => {
           Home
         </Link>
         <p className="px-3 text-gray-400">/</p>
-        <Link href="/products" className="text-gray-400">
+        <Link href="/home/products" className="text-gray-400">
           Products
         </Link>
         <p className="px-3 text-gray-400">/</p>
-        <Link href="/products" className="text-red-700 font-bold">
+        <Link href="/home/products" className="text-red-700 font-bold">
           {product.name}
         </Link>
       </nav>

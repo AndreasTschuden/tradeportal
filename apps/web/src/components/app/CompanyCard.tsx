@@ -23,7 +23,7 @@ const CompanyCard = ({
           <div className="flex items-center gap-2">
             <button
               className="border-2 border-black py-1 px-3 rounded-lg font-bold"
-              onClick={() => router.push(`/companies/${id}`)}
+              onClick={() => router.push(`/home/companies/${id}`)}
             >
               View Company
             </button>
