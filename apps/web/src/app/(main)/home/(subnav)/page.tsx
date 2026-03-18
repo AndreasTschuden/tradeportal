@@ -1,8 +1,8 @@
 import React from 'react'
 import { NewArrivalList } from "@/components/app/NewArrivalList"
 import { ProductsList } from "@/components/app/ProductsList"
-import { getNewestProducts } from "@/app/actions/products"
-import { getProducts } from "@/app/actions/products"
+import { getNewestProducts } from "@/actions/products"
+import { getProducts } from "@/actions/products"
 
 const HomePage = async () => {
   

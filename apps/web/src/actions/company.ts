@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { db } from "@/lib/prisma";
 import { publishProductSchema } from "@/lib/zod";
 import { z } from "zod";
-import { createUploadImageUrl } from "@/app/actions/bucket";
+import { createUploadImageUrl } from "@/actions/bucket";
 import { auth } from "@/lib/auth";
 
 type ProductType = z.infer<typeof publishProductSchema>;
@@ -26,7 +26,7 @@ export async function publishProduct(formData: ProductType) {
   });
 
   if (!session?.user) {
-    redirect("auth/signin");
+    redirect("/signin");
   }
 
   const company = await db.company.companies.findFirst({

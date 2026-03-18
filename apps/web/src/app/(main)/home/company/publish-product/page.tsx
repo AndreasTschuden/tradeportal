@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/prisma";
-import { getCategories } from '@/app/actions/categories'
+import { getCategories } from '@/actions/categories'
 
 const PublishProductsPage = async () => {
 
@@ -13,7 +13,7 @@ const PublishProductsPage = async () => {
   });
 
   if (!session) {
-    redirect("/auth/signin");
+    redirect("/signin");
   }
 
   const company = await db.user.companies.findFirst({

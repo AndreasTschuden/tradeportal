@@ -1,7 +1,7 @@
 import { headers } from "next/headers";
 import Link from "next/link";
 import { auth } from "@/lib/auth";
-import { signOutAction } from "./actions/auth";
+import { signOutAction } from "@/actions/auth";
 
 export default async function Home() {
   const session = await auth.api.getSession({

@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Star } from "lucide-react";
-import { createReview } from "@/app/actions/reviews";
+import { createReview } from "@/actions/reviews";
 
 const reviewSchema = z.object({
   rating: z.number().min(1, "Please select a rating"),

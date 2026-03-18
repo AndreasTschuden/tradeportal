@@ -1,6 +1,6 @@
 "use client";
 
-import { signInAction } from "@/app//actions/auth";
+import { signInAction } from "@/actions/auth";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signinUser } from "@/lib/zod";

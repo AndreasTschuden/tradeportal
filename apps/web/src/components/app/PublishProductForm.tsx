@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { publishProductSchema, fixedProductSchema } from "@/lib/zod";
-import { publishProduct } from "@/app/actions/company";
+import { publishProduct } from "@/actions/company";
 
 type FormInput = z.input<typeof fixedProductSchema>;
 type FormOutput = z.output<typeof fixedProductSchema>;

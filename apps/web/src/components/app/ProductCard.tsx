@@ -17,7 +17,7 @@ const ProductCard = ({prod} : { prod : productWithStatsType}) => {
                 fill
                 alt={prod.name}
                 className="w-full h-full object-cover"
-                onClick={() => router.push(`/products/product/${prod.id}`)}
+                onClick={() => router.push(`/home/products/product/${prod.id}`)}
               />
               <button
                 className="absolute bottom-0 left-0 w-full h-13 bg-red-700 

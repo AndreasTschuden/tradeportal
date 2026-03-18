@@ -57,7 +57,7 @@ export async function signUpAction(data: SignUpFormData) {
       },
     });
 
-  redirect("/");
+  redirect("/home");
 }
 
 export async function signUpCompanyAction(data: SignUpCompanyFormData) {
@@ -93,7 +93,7 @@ export async function signUpCompanyAction(data: SignUpCompanyFormData) {
       },
     });
 
-  redirect("/");
+  redirect("/home");
 }
 
 export async function signInAction(data: { email: string; password: string }) {
@@ -120,12 +120,12 @@ export async function signInAction(data: { email: string; password: string }) {
       throw new Error(String(err));
     }
   }
-  redirect("/");
+  redirect("/home");
 }
 
 export async function signOutAction() {
   await auth.api.signOut({
     headers: await headers(), // need headers to sign out the current session
   });
-  redirect("/");
+  redirect("/home");
 }

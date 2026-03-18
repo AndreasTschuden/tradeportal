@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { getDetailedProduct , getFourProductsByCategory} from "@/app/actions/products";
+import { getDetailedProduct , getFourProductsByCategory} from "@/actions/products";
 import { Star, Truck } from "lucide-react";
 import { ProductOptionForm } from "@/components/app/ProductOptionForm";
 import { CompanyCard } from "@/components/app/CompanyCard";
 import { PictureList } from "@/components/app/PictureList"
 import { DescriptionReviewsSwitch } from "@/components/app/DescriptionReviewsSwitch"
-import {getReviews} from "@/app/actions/reviews"
+import {getReviews} from "@/actions/reviews"
 import { YouMayAlsoLike } from "@/components/app/YouMayAlsoLike"
 
 interface PageProps {

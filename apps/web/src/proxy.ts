@@ -3,11 +3,11 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/prisma";
 
 const PUBLIC_ROUTES = [
-  "/login",
-  "/auth/signin",
-  "/auth/signup",
-  "/auth/signup/company",
+  "/signin",
+  "/signup",
+  "/signup/company",
 ];
+
 const COMPANY_ROUTES = ["/company/publish-product"];
 
 export async function proxy(request: NextRequest) {
@@ -18,19 +18,13 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  if (pathname === "/auth") {
-    const url = request.nextUrl.clone();
-    url.pathname = "/auth/signin";
-    return NextResponse.redirect(url);
-  }
-
   const session = await auth.api.getSession({
     headers: request.headers,
   });
 
   if (!session) {
     const url = request.nextUrl.clone();
-    url.pathname = "/auth/signin";
+    url.pathname = "/signin";
     return NextResponse.redirect(url);
   }
 
