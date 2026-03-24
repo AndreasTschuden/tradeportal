@@ -11,6 +11,6 @@ export default function CompanyAccountLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <section className="py-4 md:px-30 px-5">{children}</section>
+    <section>{children}</section>
   );
 }
