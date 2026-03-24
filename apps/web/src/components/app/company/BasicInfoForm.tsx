@@ -70,7 +70,7 @@ const BasicInfoForm = ({ Information }: { Information: Companyinfos }) => {
       </div>
 
       <div className="flex flex-col">
-        <label className="text-sm text-gray-500 mb-1">Email Address</label>
+        <label className="text-sm text-gray-500 mb-1 flex gap-1 items-center">Email Address<strong className="text-red-700 text-xs">(not editable)</strong></label>
         <input
           {...register("email")}
           disabled
