@@ -1,15 +1,12 @@
 import Link from "next/link";
 import { Trash2 } from "lucide-react";
-import { BasicInfoForm } from "@/components/app/company/BasicInfoForm"
-import { CompanyProfileButtons } from "@/components/app/company/CompanyProfileButtons"
-import { getBasicInformation } from "@/actions/company-account"
-
-
+import { BasicInfoForm } from "@/components/app/company/BasicInfoForm";
+import { CompanyProfileButtons } from "@/components/app/company/CompanyProfileButtons";
+import { AdditionalInfoForm } from "@/components/app/company/AdditionalInfoForm";
+import { getBasicInformation } from "@/actions/company-account";
 
 const page = async () => {
-
-  const Information = await getBasicInformation()
-
+  const Information = await getBasicInformation();
 
   return (
     <div>
@@ -25,12 +22,12 @@ const page = async () => {
       <div className="flex flex-col gap-8">
         <div className="flex flex-row justify-between">
           <div>
-          <h2 className="text-3xl font-bold">Company Profile</h2>
-          <p className="text-gray-400">
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr
-          </p>
+            <h2 className="text-3xl font-bold">Company Profile</h2>
+            <p className="text-gray-400">
+              Lorem ipsum dolor sit amet, consetetur sadipscing elitr
+            </p>
           </div>
-          <CompanyProfileButtons/>
+          <CompanyProfileButtons />
         </div>
         <div className="w-full min-h-35 h-full border-2 border-gray-200 rounded-2xl flex justify-between px-20">
           <div className="flex gap-3 justify-center items-center">
@@ -55,28 +52,42 @@ const page = async () => {
           <span className="absolute -top-4 left-10 bg-white px-2 text-2xl font-medium">
             Basic Information
           </span>
-           <p className="absolute top-4 left-12 text-md text-gray-400 font-light">Update the companys basic information</p>
+          <p className="absolute top-4 left-12 text-md text-gray-400 font-light">
+            Update the companys basic information
+          </p>
           <div className="mt-20 ml-12 mb-10">
-                <BasicInfoForm Information={Information}/>
+            <BasicInfoForm Information={Information} />
           </div>
         </div>
 
-         <div className="relative w-full h-full border-2 border-gray-200 rounded-2xl flex justify-between">
+        <div className="relative w-full h-full border-2 border-gray-200 rounded-2xl flex justify-between">
           <span className="absolute -top-4 left-10 bg-white px-2 text-2xl font-medium flex gap-2 justify-center items-center">
             Verification
             <div className="bg-[#00800030] text-sm text-[#008000] justify-center items-center flex gap-2 px-3 py-0.5 rounded-full">
-                <div className="bg-[#008000] rounded-full aspect-square h-3 font-light">
-                </div>
-                Verified
+              <div className="bg-[#008000] rounded-full aspect-square h-3 font-light"></div>
+              Verified
             </div>
           </span>
-           <p className="absolute top-4 left-12 text-md text-gray-400 font-light">The certificate was real and the company is now verified.</p>
+          <p className="absolute top-4 left-12 text-md text-gray-400 font-light">
+            The certificate was real and the company is now verified.
+          </p>
           <div className="mt-20 ml-12 mb-10">
-                <p className="text-gray-400">Approved by</p>
-                <p className="">Andreas Tschuden</p>
+            <p className="text-gray-400">Approved by</p>
+            <p className="">Andreas Tschuden</p>
           </div>
         </div>
 
+        <div className="relative w-full h-full border-2 border-gray-200 rounded-2xl flex justify-between">
+          <span className="absolute -top-4 left-10 bg-white px-2 text-2xl font-medium">
+            Additional Information
+          </span>
+          <p className="absolute top-4 left-12 text-md text-gray-400 font-light">
+            Update the companys basic information
+          </p>
+          <div className="mt-20 ml-12 mb-10">
+            <AdditionalInfoForm Information={Information} />
+          </div>
+        </div>
       </div>
     </div>
   );
