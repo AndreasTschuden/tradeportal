@@ -1,16 +1,15 @@
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
-import { auth } from "@/lib/auth";
-import { db } from "@/lib/prisma";
 import Link from "next/link";
 import { Trash2 } from "lucide-react";
 import { BasicInfoForm } from "@/components/app/company/BasicInfoForm"
 import { CompanyProfileButtons } from "@/components/app/company/CompanyProfileButtons"
+import { getBasicInformation } from "@/actions/company-account"
 
 
 
+const page = async () => {
 
-const page = () => {
+  const Information = await getBasicInformation()
+
 
   return (
     <div>
@@ -37,7 +36,7 @@ const page = () => {
           <div className="flex gap-3 justify-center items-center">
             <div className="aspect-square bg-gray-100 h-20 rounded-full"></div>
             <div className="flex flex-col">
-              <h3 className="font-bold text-md">Tschudea Gmbh</h3>
+              <h3 className="font-bold text-md">{Information.company_name}</h3>
               <p className="text-gray-400">Company</p>
             </div>
           </div>
@@ -58,7 +57,7 @@ const page = () => {
           </span>
            <p className="absolute top-4 left-12 text-md text-gray-400 font-light">Update the companys basic information</p>
           <div className="mt-20 ml-12 mb-10">
-                <BasicInfoForm/>
+                <BasicInfoForm Information={Information}/>
           </div>
         </div>
 

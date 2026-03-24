@@ -178,4 +178,17 @@ export const createMinioUrl = z.
   .min(1, "There must be at least one picture to upload");
 
 
+export const companySchema = z.object({
+  name: z.string().min(1, "Required"),
+  email: z.string().email(),
+  phone: z.string().min(1),
+  address: z.string().optional(),
+  head: z.string().optional(),
+  employees: z.string().optional(),
+  founded: z.string().optional()
+});
+
+export type CompanyForm = z.infer<typeof companySchema>;
+
+
 

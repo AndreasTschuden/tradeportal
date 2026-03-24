@@ -13,7 +13,7 @@ const CompanyProfileButtons = () => {
         href="/home/company/publish-product"
         className="flex gap-2 py-2 px-7 bg-red-700 text-white rounded-xl font-medium"
       >
-        <PackagePlus />
+        <PackagePlus strokeWidth={1}/>
         Publish new product
       </Link>
     </div>
