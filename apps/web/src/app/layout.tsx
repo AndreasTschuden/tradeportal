@@ -3,6 +3,7 @@ import { Inter, Geist } from "next/font/google";
 import ReCaptchaProvider from "@/components/app/ReCaptchaProvider";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { Toaster } from "@/components/ui/sonner"
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
@@ -34,6 +35,16 @@ export default function RootLayout({
       </head>
       <body className={inter.variable}>
         <ReCaptchaProvider>{children}</ReCaptchaProvider>
+         <Toaster
+  position="bottom-right"
+  toastOptions={{
+    classNames: {
+      toast: "bg-white text-black border border-gray-200 shadow-md",
+      title: "font-semibold",
+      description: "text-gray-600",
+    },
+  }}
+/>
       </body>
     </html>
   );

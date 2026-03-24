@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Save } from "lucide-react";
 import { updateInformation } from "@/actions/company-account";
 import { companySchema, CompanyForm } from "@/lib/zod";
+import { toast } from "sonner"
 
 const BasicInfoForm = ({ Information }: { Information: Companyinfos }) => {
   const [confirm, setConfirm] = useState(false);
@@ -45,6 +46,8 @@ const BasicInfoForm = ({ Information }: { Information: Companyinfos }) => {
         console.log(e);
       }
     }
+
+    toast.success("You have sucessfully updated your basic informations")
   };
 
   return (
