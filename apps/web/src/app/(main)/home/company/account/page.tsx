@@ -82,7 +82,7 @@ const page = async () => {
             Additional Information
           </span>
           <p className="absolute top-4 left-12 text-md text-gray-400 font-light">
-            Update the companys basic information
+            Add or Update Additional Information
           </p>
           <div className="mt-20 ml-12 mb-10">
             <AdditionalInfoForm Information={Information} />

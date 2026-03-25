@@ -190,5 +190,21 @@ export const companySchema = z.object({
 
 export type CompanyForm = z.infer<typeof companySchema>;
 
+const optionalUrl = z.preprocess(
+  (val) => val === "" ? undefined : val,
+  z .url()
+    .optional()
+    .refine(val => !val || val.startsWith("https://"), {
+      message: "Muss mit https:// beginnen"
+    })
+)
+
+export const additionalInfoSchema = z.object({
+  website: optionalUrl,
+  linked_in: optionalUrl
+})
+
+export type additionalInfoType = z.infer<typeof additionalInfoSchema>
+
 
 
