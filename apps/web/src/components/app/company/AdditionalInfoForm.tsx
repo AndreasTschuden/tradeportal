@@ -26,10 +26,10 @@ const AdditionalInfoForm = ({Information }: {Information: Companyinfos }) => {
 
   const onSubmit = async (data: additionalInfoType) => {
     try {
-        await updateAdditionalInformation(data)
+      await updateAdditionalInformation(data)
       console.log(data);
       setConfirm(false);
-      toast.success("You have sucessfully updated your basic informations")
+      toast.success("You have sucessfully updated your additional informations")
     } catch (e) {
       if (e instanceof Error) {
         setError(e.message);

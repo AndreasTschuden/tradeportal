@@ -6,6 +6,11 @@ export async function getProducts() {
   const products = await db.user.products.findMany({
     where: {
       isactive: true,
+    //   companies: {
+    //   is: {
+    //     deleted_at: null
+    //   }
+    // }
     },
     select: {
       id: true,
@@ -60,6 +65,11 @@ export async function getNewestProducts() {
   const newestProducts = await db.user.products.findMany({
     where: {
       isactive: true,
+    // companies: {
+    //   is: {
+    //     deleted_at: null
+    //   }
+    // }
     },
     select: {
       id: true,

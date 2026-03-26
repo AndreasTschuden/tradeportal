@@ -1,9 +1,12 @@
+
+
 import Link from "next/link";
-import { Trash2 } from "lucide-react";
 import { BasicInfoForm } from "@/components/app/company/BasicInfoForm";
 import { CompanyProfileButtons } from "@/components/app/company/CompanyProfileButtons";
 import { AdditionalInfoForm } from "@/components/app/company/AdditionalInfoForm";
 import { getBasicInformation } from "@/actions/company-account";
+import { ChangePasswordForm } from "@/components/app/company/ChangePasswordForm"
+import RemoveAccount from "@/components/app/company/RemoveAccount"
 
 const page = async () => {
   const Information = await getBasicInformation();
@@ -41,10 +44,7 @@ const page = async () => {
             <button className="ring-1 ring-black py-2 px-7 rounded-xl font-medium">
               Upload new Picture
             </button>
-            <button className="bg-[#FF000020] py-2 px-7 rounded-xl font-medium text-[#FF0000] flex gap-1">
-              <Trash2 strokeWidth={1} />
-              Remove
-            </button>
+            <RemoveAccount/>
           </div>
         </div>
 
@@ -88,6 +88,19 @@ const page = async () => {
             <AdditionalInfoForm Information={Information} />
           </div>
         </div>
+
+        <div className="relative w-full h-full border-2 border-gray-200 rounded-2xl flex justify-between">
+          <span className="absolute -top-4 left-10 bg-white px-2 text-2xl font-medium">
+            Change Password
+          </span>
+          <p className="absolute top-4 left-12 text-md text-gray-400 font-light">
+            Update your Password
+          </p>
+          <div className="mt-20 ml-12 mb-10">
+            <ChangePasswordForm />
+          </div>
+        </div>
+
       </div>
     </div>
   );

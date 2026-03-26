@@ -4,8 +4,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
-import { additionalInfoSchema, companySchema, CompanyForm } from "@/lib/zod";
-import { email } from "zod";
+import { additionalInfoSchema, companySchema } from "@/lib/zod";
 
 export async function getBasicInformation() {
   const session = await auth.api.getSession({
