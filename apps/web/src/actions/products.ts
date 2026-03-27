@@ -5,12 +5,7 @@ import { db } from "@/lib/prisma";
 export async function getProducts() {
   const products = await db.user.products.findMany({
     where: {
-      isactive: true,
-    //   companies: {
-    //   is: {
-    //     deleted_at: null
-    //   }
-    // }
+      // isactive: true 
     },
     select: {
       id: true,
@@ -64,12 +59,7 @@ export async function getProducts() {
 export async function getNewestProducts() {
   const newestProducts = await db.user.products.findMany({
     where: {
-      isactive: true,
-    // companies: {
-    //   is: {
-    //     deleted_at: null
-    //   }
-    // }
+      // isactive: true 
     },
     select: {
       id: true,

@@ -18,7 +18,7 @@ const page = async () => {
           Home
         </Link>
         <p className="px-3 text-gray-400">/</p>
-        <Link href="/home/products" className="text-red-700 font-bold">
+        <Link href="/home/company/account" className="text-red-700 font-bold">
           Company - Account
         </Link>
       </nav>

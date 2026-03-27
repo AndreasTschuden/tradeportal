@@ -45,6 +45,15 @@ export const auth = betterAuth({
           },
         });
 
+        await prisma.products.updateMany({
+          where: {
+            companies_id : company.id,
+          },
+          data: {
+            isActive: false,
+          },
+        });
+
       },
       sendDeleteAccountVerification: async ({ user, url, token }, request) => {
         const result = await resend.emails.send({
