@@ -28,34 +28,34 @@ export async function signUpAction(data: SignUpFormData) {
 
   const name = `${firstname} ${lastname}`;
 
-    const result = await auth.api.signUpEmail({
-      body: {
-        email,
-        password,
-        name,
-      },
-    });
+  const result = await auth.api.signUpEmail({
+    body: {
+      email,
+      password,
+      name,
+    },
+  });
 
-    if (!result?.user?.id) {
-      throw new Error("User creation failed");
-    }
+  if (!result?.user?.id) {
+    throw new Error("User creation failed");
+  }
 
-    await db.user.customers.create({
-      data: {
-        id: result.user.id,
-        name: `${firstname} ${lastname}`,
-        email: email,
-        address: address || "",
-        phone: phone || "",
-        gender: gender || "",
-        city: city || "",
-        region: region || "",
-        postal_code: postal_code || "",
-        country: country || "",
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
-    });
+  await db.user.customers.create({
+    data: {
+      id: result.user.id,
+      name: `${firstname} ${lastname}`,
+      email: email,
+      address: address || "",
+      phone: phone || "",
+      gender: gender || "",
+      city: city || "",
+      region: region || "",
+      postal_code: postal_code || "",
+      country: country || "",
+      created_at: new Date(),
+      updated_at: new Date(),
+    },
+  });
 
   redirect("/home");
 }
@@ -67,31 +67,31 @@ export async function signUpCompanyAction(data: SignUpCompanyFormData) {
     throw new Error("Passwords do not match");
   }
 
-    const result = await auth.api.signUpEmail({
-      body: {
-        email,
-        password,
-        name: company_name,
-      },
-    });
+  const result = await auth.api.signUpEmail({
+    body: {
+      email,
+      password,
+      name: company_name,
+    },
+  });
 
-    if (!result?.user?.id) {
-      throw new Error("User creation failed");
-    }
+  if (!result?.user?.id) {
+    throw new Error("User creation failed");
+  }
 
-    await db.company.companies.create({
-      data: {
-        owner_id: result.user.id,
-        stripe_account_id: "",
-        onboarding_started_at: new Date(),
-        is_verified: true, //for now its true but after the the verification functionality this will be false as default
-        company_name: company_name,
-        email: email,
-        phone_number: phone,
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
-    });
+  await db.company.companies.create({
+    data: {
+      owner_id: result.user.id,
+      stripe_account_id: "",
+      onboarding_started_at: new Date(),
+      is_verified: true, //for now its true but after the the verification functionality this will be false as default
+      company_name: company_name,
+      email: email,
+      phone_number: phone,
+      created_at: new Date(),
+      updated_at: new Date(),
+    },
+  });
 
   redirect("/home");
 }
@@ -128,4 +128,43 @@ export async function signOutAction() {
     headers: await headers(), // need headers to sign out the current session
   });
   redirect("/home");
+}
+
+export async function handleUserDeletion(user: {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  email: string;
+  emailVerified: boolean;
+  name: string;
+  image?: string | null | undefined;
+}) {
+
+  const company = await db.company.companies.findFirst({
+    where: {
+      owner_id: user.id,
+    },
+  });
+
+  if (!company) {
+    redirect("/home");
+  }
+
+  const result = await db.company.companies.update({
+    where: {
+      id: company.id,
+    },
+    data: {
+      deleted_at: new Date(),
+    },
+  });
+
+  await db.company.products.updateMany({
+    where: {
+      companies_id: company.id,
+    },
+    data: {
+      isActive: false,
+    },
+  });
 }
