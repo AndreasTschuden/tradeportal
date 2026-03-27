@@ -1,6 +1,5 @@
 import { betterAuth } from "better-auth";
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
+import { handleUserDeletion } from "@/actions/auth"
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import "dotenv/config";
 import { PrismaPg } from "@prisma/adapter-pg";
@@ -25,35 +24,7 @@ export const auth = betterAuth({
     deleteUser: {
       enabled: true,
       afterDelete: async (user, request) => {
-
-           const company = await db.company.companies.findFirst({
-             where: {
-               owner_id: user.id,
-             },
-           });
-         
-           if (!company) {
-             redirect("/home");
-           }
-
-        const result = await db.company.companies.update({
-          where: {
-            id: company.id,
-          },
-          data: {
-            deleted_at : new Date()
-          },
-        });
-
-        await prisma.products.updateMany({
-          where: {
-            companies_id : company.id,
-          },
-          data: {
-            isActive: false,
-          },
-        });
-
+          await handleUserDeletion(user)
       },
       sendDeleteAccountVerification: async ({ user, url, token }, request) => {
         const result = await resend.emails.send({
