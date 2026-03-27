@@ -4,7 +4,7 @@ import * as z from "zod"; //pnpm install zod
 export type SignInFormData = z.infer<typeof signinUser>;
 export type SignUpFormData = z.infer<typeof signupUser>;
 export type SignUpCompanyFormData = z.infer<typeof signupCompany>;
-export type createMinioUrlFormData = z.infer<typeof createMinioUrl>
+export type createMinioUrlFormData = z.infer<typeof createMinioUrl>;
 
 const forbidden =
   /^(?!.*(?:Fuck|Motherfucker|Cunt|Gash|Japs eye|Punani|Pussy hole|Cocksucker|Cum|Nonce|Prickteaser|Raped|Slut|Ching Chong|Chinky|Coon|Darky|Gippo|Golliwog|Golly|Half-caste|Jungle Bunny|Kike|Negro|Nigga|Nigger|Nig-nog|Paki|Pikey|Raghead|Sambo|Spade|Spic|Uncle Tom|Wog|Yid|Batty Boy|Butt Bandit|Chick with a Dick|Dyke|Faggot|Fudge Packer|Gender Bender|He-She|Muff Diver|Rugmuncher|Shemale|Shirt Lifter|Tranny|Kike|Yid|Cripple|Mong|Retard|Schizo|Spastic|Window Licker|Behnchod|Chooray|Chamaar|Habshi|habshan|Machod)).*/i;
@@ -134,24 +134,36 @@ export const attributeSchema = z.object({
   values: z
     .array(z.string().min(1, "Jeder Wert muss mindestens 1 Zeichen haben"))
     .min(1, "Jede Option muss mindestens einen Wert haben"),
-  images: z.record(z.string(), z.union([z.instanceof(File), z.string()])).optional(),
+  images: z
+    .record(z.string(), z.union([z.instanceof(File), z.string()]))
+    .optional(),
 });
 
-export const variantsSchema = z.object({
-  available : z.boolean(),
-  priceModifier : z.coerce.number().min(0, "Der Preis Modifizierer muss => 0 sein").max(10, "Der Preis Modifizierer muss => 10 sein")
-}).catchall(z.string());
-
+export const variantsSchema = z
+  .object({
+    available: z.boolean(),
+    priceModifier: z.coerce
+      .number()
+      .min(0, "Der Preis Modifizierer muss => 0 sein")
+      .max(10, "Der Preis Modifizierer muss => 10 sein"),
+  })
+  .catchall(z.string());
 
 export const publishProductSchema = z.object({
   title: z.string().min(5, "Titel muss mind 5 zeichen haben"),
-  basePrice : z.coerce.number().min(0, "Basispreis muss =< 0 sein"),
+  basePrice: z.coerce.number().min(0, "Basispreis muss =< 0 sein"),
   currency: z.enum(["EUR", "USD"], { error: "Ungültige Währung (EUR, USD)." }),
-  shortDescription : z.string().min(100, "short Description must be atleast 100 chars long"),
-  longDescription : z.string().min(200, "long Description must be atleast 200 chars long"),
+  shortDescription: z
+    .string()
+    .min(100, "short Description must be atleast 100 chars long"),
+  longDescription: z
+    .string()
+    .min(200, "long Description must be atleast 200 chars long"),
   category: z.coerce.number(),
-  attributes : z.array(attributeSchema).min(1, "Mindestend 1 Option erforderlich"),
-  variants : z.array(variantsSchema).min(1, "Generate all variants")
+  attributes: z
+    .array(attributeSchema)
+    .min(1, "Mindestend 1 Option erforderlich"),
+  variants: z.array(variantsSchema).min(1, "Generate all variants"),
 });
 
 export const fixedProductSchema = z.object({
@@ -159,23 +171,83 @@ export const fixedProductSchema = z.object({
   basePrice: z.number().min(0, "Basispreis muss =< 0 sein"),
   currency: z.enum(["EUR", "USD"], { error: "Ungültige Währung (EUR, USD)." }),
   category: z.coerce.number(),
-  shortDescription : z.string().min(100, "short Description must be atleast 100 chars long"),
-  longDescription : z.string().min(200, "long Description must be atleast 200 chars long"),
+  shortDescription: z
+    .string()
+    .min(100, "short Description must be atleast 100 chars long"),
+  longDescription: z
+    .string()
+    .min(200, "long Description must be atleast 200 chars long"),
 });
 
-export const createMinioUrl = z.
-  array(
+export const createMinioUrl = z
+  .array(
     z.object({
       name: z
         .string()
-        .min(1,"The picture must have a name")
+        .min(1, "The picture must have a name")
         .regex(forbidden, "Picture name contains profanities")
-        .refine((str) => !str.includes("/"), {error: 'Picture name must not include a /'}),
-      folder: z
-        .enum(["products","profile"],'The folder must match: products | profile'),
-    })
+        .refine((str) => !str.includes("/"), {
+          error: "Picture name must not include a /",
+        }),
+      folder: z.enum(
+        ["products", "profile"],
+        "The folder must match: products | profile",
+      ),
+    }),
   )
   .min(1, "There must be at least one picture to upload");
 
+export const companySchema = z.object({
+  name: z.string().min(1, "Required"),
+  email: z.string().email(),
+  phone: z.string().min(1),
+  address: z.string().optional(),
+  head: z.string().optional(),
+  employees: z.string().optional(),
+  founded: z.string().optional(),
+});
 
+export type CompanyForm = z.infer<typeof companySchema>;
 
+const optionalUrl = z.preprocess(
+  (val) => (val === "" ? undefined : val),
+  z.url().optional().refine(
+    (val) => !val || val.startsWith("https://"),
+    { message: "Muss mit https:// beginnen" }
+  )
+);
+
+export const additionalInfoSchema = z.object({
+  website: optionalUrl,
+  linked_in: optionalUrl,
+});
+
+export type additionalInfoType = z.infer<typeof additionalInfoSchema>;
+
+export const changePasswordSchema = z
+  .object({
+    current_password: z
+      .string()
+      .regex(
+        passwd,
+        "Password must be: 12–128 Chars & must have ≥3 out of 4: upper-/lowercase, number, special chars & max 2 of the same chars in a row.",
+      ),
+    new_password: z
+      .string()
+      .regex(
+        passwd,
+        "Password must be: 12–128 Chars & must have ≥3 out of 4: upper-/lowercase, number, special chars & max 2 of the same chars in a row.",
+      ),
+    confirm_password: z.string().min(1, "Please confirm your password"),
+  })
+  .superRefine((data, ctx) => {
+    if (data.new_password !== data.confirm_password) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["confirm_password"],
+        message: "Passwords don't match",
+      });
+    }
+  });
+
+export type changePasswordType = z.infer<typeof changePasswordSchema>

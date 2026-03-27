@@ -8,7 +8,7 @@ const PUBLIC_ROUTES = [
   "/signup/company",
 ];
 
-const COMPANY_ROUTES = ["/company/publish-product"];
+const COMPANY_ROUTES = ["/company/publish-product, /company/account"];
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
