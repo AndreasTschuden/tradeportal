@@ -1,5 +1,5 @@
 import { betterAuth } from "better-auth";
-import { handleUserDeletion } from "@/actions/auth"
+import { handleUserDeletion } from "@/actions/company-account"
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import "dotenv/config";
 import { PrismaPg } from "@prisma/adapter-pg";

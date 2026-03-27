@@ -120,3 +120,42 @@ export async function updateAdditionalInformation(data : { website : string | un
         throw new Error("Failed updating Data, please try again later!")
     }
 }
+
+export async function handleUserDeletion(user: {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  email: string;
+  emailVerified: boolean;
+  name: string;
+  image?: string | null | undefined;
+}) {
+
+  const company = await db.company.companies.findFirst({
+    where: {
+      owner_id: user.id,
+    },
+  });
+
+  if (!company) {
+    redirect("/home");
+  }
+
+  const result = await db.company.companies.update({
+    where: {
+      id: company.id,
+    },
+    data: {
+      deleted_at: new Date(),
+    },
+  });
+
+  await db.company.products.updateMany({
+    where: {
+      companies_id: company.id,
+    },
+    data: {
+      isActive: false,
+    },
+  });
+}
