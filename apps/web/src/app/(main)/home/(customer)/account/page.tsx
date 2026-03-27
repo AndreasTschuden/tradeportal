@@ -1,7 +1,11 @@
 import React from 'react'
 import Link from 'next/link'
 
-const page = () => {
+import { ChangePasswordForm } from "@/components/app/company/ChangePasswordForm"
+
+const page = async () => {
+
+
   return (
     <div>
         <nav className="flex my-2 mb-6 text-sm">
@@ -70,7 +74,7 @@ const page = () => {
             Update your Password
           </p>
           <div className="mt-20 ml-12 mb-10">
-            4
+            <ChangePasswordForm/>
           </div>
         </div>
 
