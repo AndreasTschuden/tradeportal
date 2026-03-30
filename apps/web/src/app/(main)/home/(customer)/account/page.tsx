@@ -36,7 +36,7 @@ const page = async () => {
           <div className="flex gap-3 justify-center items-center">
             <div className="aspect-square bg-gray-100 h-20 rounded-full"></div>
             <div className="flex flex-col">
-              <h3 className="font-bold text-md">USERNAME</h3>
+              <h3 className="font-bold text-md">{infos.name}</h3>
               <p className="text-gray-400">Customer</p>
             </div>
           </div>
