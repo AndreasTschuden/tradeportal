@@ -35,6 +35,8 @@ type productWithStatsType = {
   specifications : JsonValue;
   _count: { reviews: number };
   avgStars?: number;
+  created_at?:Date;
+  isactive?: boolean;
 };
 
 type detailedProductType = {

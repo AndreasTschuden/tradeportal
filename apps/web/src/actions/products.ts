@@ -252,10 +252,12 @@ export async function getProductsByCompany(){
     },
     select: {
       id: true,
+      isactive : true,
       name: true,
       base_price: true,
       currency: true,
       specifications: true,
+      created_at : true,
       reviews: {
         select: {
           id: true,
@@ -297,4 +299,36 @@ export async function getProductsByCompany(){
 
   console.log(finalProducts)
   return finalProducts
+}
+
+export async function updateProductAvailability(value : boolean, productId : string){
+
+    const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session?.user) {
+    redirect("/signin");
+  }
+
+  const company = await db.company.companies.findFirst({
+    where: {
+      owner_id: session.user.id,
+    },
+  });
+
+  if (!company) {
+    redirect("/home");
+  }
+
+ const result = await db.company.products.update({
+    where: {
+      id: productId,
+    },
+    data: {
+      isactive: value,
+    },
+  });
+
+
 }
