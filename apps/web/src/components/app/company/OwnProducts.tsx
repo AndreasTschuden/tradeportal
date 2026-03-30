@@ -48,7 +48,7 @@ const OwnProducts = ({
 
     setProductsState(filtered);
   };
-  
+
   useEffect(() => {
     applyFilters();
   }, [search, selectedCategory, currentOrder]);
@@ -71,6 +71,10 @@ const OwnProducts = ({
       <nav className="flex my-2 mb-6 text-sm">
         <Link href="/home" className="text-gray-400">
           Home
+        </Link>
+        <p className="px-3 text-gray-400">/</p>
+        <Link href="/home/company/account" className="text-gray-400">
+          Company - Account
         </Link>
         <p className="px-3 text-gray-400">/</p>
         <Link href="/home/company/products" className="text-red-700 font-bold">
