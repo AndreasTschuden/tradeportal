@@ -258,6 +258,11 @@ export async function getProductsByCompany(){
       currency: true,
       specifications: true,
       created_at : true,
+      categories_products : {
+        select : {
+            categories_id : true
+          }
+        },
       reviews: {
         select: {
           id: true,
@@ -275,7 +280,7 @@ export async function getProductsByCompany(){
   let avg = 0;
   let count = 0;
 
-  let productWithStats: productWithStatsType[] = products;
+  let productWithStats: productsForCompanyType[] = products;
 
   productWithStats.forEach((prod) => {
     if (prod._count.reviews != 0) {

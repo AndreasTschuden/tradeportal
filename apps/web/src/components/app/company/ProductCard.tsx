@@ -88,9 +88,9 @@ const ProductCard = ({ product }: { product: productWithStatsType }) => {
         <p className="text-gray-400">Publish at</p>
       </div>
       <div className="flex gap-2 justify-center items-center">
-        <button className="p-1 aspect-square rounded-full bg-gray-200 h-full">
+        {/* <button className="p-1 aspect-square rounded-full bg-gray-100 h-full">
           <SquarePen height={18} color="blue" />
-        </button>
+        </button> */}
         <button
           onClick={() => handleActiveToggle()}
           className={`w-16 h-8 flex items-center rounded-full p-1 duration-300 transition-colors ${
