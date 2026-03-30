@@ -13,6 +13,7 @@ const ProductCard = ({ product }: { product: productWithStatsType }) => {
     try {
       await updateProductAvailability(!enabled, product.id);
       setEnabled((prev) => !prev);
+      toast.success(`Your product is now ${!enabled ? "active" : "inactive"}`)
     } catch (e) {
       if (e instanceof Error) {
         toast.error(e.message)
