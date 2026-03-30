@@ -108,3 +108,19 @@ type Companyinfos =  {
     head_of_company: string | null;
     employee_count: number | null;
 }
+
+type PersonalInformation = {
+    id: string;
+    name: string;
+    address: string | null;
+    profile_picture: string | null;
+    phone: string | null;
+    email: string;
+    gender: string;
+    city: string | null;
+    region: string | null;
+    postal_code: string | null;
+    country: string | null;
+    created_at: Date;
+    updated_at: Date;
+}
