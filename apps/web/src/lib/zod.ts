@@ -277,3 +277,34 @@ export const personalInformationSchema = z.object({
 });
 
 export type personalInformationType = z.infer<typeof personalInformationSchema>
+
+export const billingAddressSchema = z.object({
+  city: z
+    .string()
+    .trim()
+    .min(1, "City is required")
+    .optional()
+    .or(z.literal("")),
+
+  postal_code: z
+    .string()
+    .trim()
+    .min(1, "Postal code is required")
+    .optional()
+    .or(z.literal("")),
+
+  region: z
+    .string()
+    .trim()
+    .optional()
+    .or(z.literal("")),
+
+  country: z
+    .string()
+    .trim()
+    .min(1, "Country is required")
+    .optional()
+    .or(z.literal("")),
+});
+
+export type billingAddressType = z.infer<typeof billingAddressSchema>

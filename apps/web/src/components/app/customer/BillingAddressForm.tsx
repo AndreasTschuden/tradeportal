@@ -4,11 +4,11 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Save } from "lucide-react";
-import { updatePersonalInformation } from "@/actions/customer-account";
-import { personalInformationSchema, personalInformationType } from "@/lib/zod";
+import { updateBillingAddress } from "@/actions/customer-account";
+import { billingAddressSchema, billingAddressType } from "@/lib/zod";
 import { toast } from "sonner";
 
-const PersonalInformationForm = ({
+const BillingAddressForm = ({
   information,
 }: {
   information: PersonalInformation;
@@ -20,20 +20,19 @@ const PersonalInformationForm = ({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<personalInformationType>({
-    resolver: zodResolver(personalInformationSchema),
+  } = useForm<billingAddressType>({
+    resolver: zodResolver(billingAddressSchema),
     defaultValues: {
-      firstname: information.name.split(" ")[0],
-      lastname: information.name.split(" ")[1],
-      email: information.email,
-      gender: information.gender,
-      phone: information.phone || "",
+     city : information.city || "",
+     postal_code : information.postal_code || "",
+     region : information.region || "",
+     country : information.country || ""
     },
   });
 
-  const onSubmit = async (data: personalInformationType) => {
+  const onSubmit = async (data: billingAddressType) => {
     try {
-      await updatePersonalInformation(data);
+      await updateBillingAddress(data)
       console.log(data);
       setConfirm(false);
       toast.success("You have sucessfully updated your personal informations");
@@ -53,86 +52,65 @@ const PersonalInformationForm = ({
       className="grid grid-cols-2 gap-x-10 gap-y-4 w-[50vw]"
     >
       <div className="flex flex-col">
-        <label className="text-sm text-gray-500 mb-1">First Name</label>
+        <label className="text-sm text-gray-500 mb-1">City</label>
         <input
-          {...register("firstname")}
-          placeholder="Enter your first name"
+          {...register("city")}
+          placeholder="Enter your city"
           className={`bg-[#F5F7FA] rounded-sm px-4 py-3 outline placeholder:text-gray-400 ${
-            errors.firstname && "outline-red-500"
+            errors.city && "outline-red-500"
           }`}
         />
-        {errors.firstname && (
+        {errors.city && (
           <span className="text-red-500 text-sm mt-1">
-            {errors.firstname.message}
+            {errors.city.message}
           </span>
         )}
       </div>
 
       <div className="flex flex-col">
-        <label className="text-sm text-gray-500 mb-1">Last Name</label>
+        <label className="text-sm text-gray-500 mb-1">Postal Code</label>
         <input
-          {...register("lastname")}
-          placeholder="Enter your last name"
+          {...register("postal_code")}
+          placeholder="Enter your postal code"
           className={`bg-[#F5F7FA] rounded-sm px-4 py-3 outline placeholder:text-gray-400 ${
-            errors.lastname && "outline-red-500"
+            errors.postal_code && "outline-red-500"
           }`}
         />
-        {errors.lastname && (
+        {errors.postal_code && (
           <span className="text-red-500 text-sm mt-1">
-            {errors.lastname.message}
+            {errors.postal_code.message}
           </span>
         )}
       </div>
 
       <div className="flex flex-col">
-        <label className="text-sm text-gray-500 mb-1 flex gap-1 items-center">
-          Email Address
-          <strong className="text-red-700 text-xs">(not editable)</strong>
-        </label>
+        <label className="text-sm text-gray-500 mb-1">Region</label>
         <input
-          {...register("email")}
-          disabled
+          {...register("region")}
+          placeholder="Enter your Region"
           className={`bg-[#F5F7FA] rounded-sm px-4 py-3 outline placeholder:text-gray-400 ${
-            errors.email && "outline-red-500"
+            errors.region && "outline-red-500"
           }`}
         />
-        {errors.email && (
+        {errors.region && (
           <span className="text-red-500 text-sm mt-1">
-            {errors.email.message}
+            {errors.region.message}
           </span>
         )}
       </div>
 
       <div className="flex flex-col">
-        <label className="text-sm text-gray-500 mb-1">Gender</label>
+        <label className="text-sm text-gray-500 mb-1">Country</label>
         <input
-          {...register("gender")}
-          placeholder="Enter your gender"
+          {...register("country")}
+          placeholder="Enter your country"
           className={`bg-[#F5F7FA] rounded-sm px-4 py-3 outline placeholder:text-gray-400 ${
-            errors.gender && "outline-red-500"
+            errors.country && "outline-red-500"
           }`}
         />
-        {errors.gender && (
+        {errors.country && (
           <span className="text-red-500 text-sm mt-1">
-            {errors.gender.message}
-          </span>
-        )}
-      </div>
-
-      <div className="flex flex-col">
-        <label className="text-sm text-gray-500 mb-1">Phone Number</label>
-        <input
-          {...register("phone", {
-            setValueAs: (value) => (value === "" ? undefined : value),
-          })}
-          placeholder="Enter your phone number"
-          className={`bg-[#F5F7FA] rounded-sm px-4 py-3 outline placeholder:text-gray-400 ${
-            errors.phone && "outline-red-500"
-          }`}
-        />
-        {errors.phone && (
-          <span className="text-red-500 text-sm mt-1">
-            {errors.phone.message}
+            {errors.country.message}
           </span>
         )}
       </div>
@@ -173,4 +151,4 @@ const PersonalInformationForm = ({
   );
 };
 
-export { PersonalInformationForm };
+export { BillingAddressForm };

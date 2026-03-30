@@ -3,6 +3,7 @@ import Link from 'next/link'
 
 import { ChangePasswordForm } from "@/components/app/company/ChangePasswordForm"
 import { getCustomerInformation } from "@/actions/customer-account"
+import { BillingAddressForm } from "@/components/app/customer/BillingAddressForm"
 import { PersonalInformationForm } from "@/components/app/customer/PersonalInformationForm"
 
 const page = async () => {
@@ -66,7 +67,7 @@ const page = async () => {
             Update your billing address
           </p>
           <div className="mt-20 ml-12 mb-10">
-            3
+            <BillingAddressForm information={infos}/>
           </div>
         </div>
 
