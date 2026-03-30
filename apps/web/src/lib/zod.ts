@@ -211,10 +211,12 @@ export type CompanyForm = z.infer<typeof companySchema>;
 
 const optionalUrl = z.preprocess(
   (val) => (val === "" ? undefined : val),
-  z.url().optional().refine(
-    (val) => !val || val.startsWith("https://"),
-    { message: "Muss mit https:// beginnen" }
-  )
+  z
+    .url()
+    .optional()
+    .refine((val) => !val || val.startsWith("https://"), {
+      message: "Muss mit https:// beginnen",
+    }),
 );
 
 export const additionalInfoSchema = z.object({
@@ -250,4 +252,28 @@ export const changePasswordSchema = z
     }
   });
 
-export type changePasswordType = z.infer<typeof changePasswordSchema>
+export type changePasswordType = z.infer<typeof changePasswordSchema>;
+
+export const personalInformationSchema = z.object({
+  firstname: z
+    .string()
+    .min(4, "The firstname must be at least 4 chars long")
+    .max(16, "The firstname cant be longer than 16 chars")
+    .regex(forbidden, "The name contains profanities"),
+
+  lastname: z
+    .string()
+    .min(4, "The lastname must be at least 4 chars long")
+    .max(16, "The lastname cant be longer than 16 chars")
+    .regex(forbidden, "The name contains profanities"),
+  email: z.email(),
+  phone: z
+    .string()
+    .min(6, "Phone number is too short")
+    .max(25, "Phone number is too long")
+    .regex(/^[0-9+()\-\s]+$/, "Phone number is not valid")
+    .optional(),
+  gender: z.string().regex(forbidden, "The name contains profanities").min(1, "Required"),
+});
+
+export type personalInformationType = z.infer<typeof personalInformationSchema>

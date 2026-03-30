@@ -2,8 +2,12 @@ import React from 'react'
 import Link from 'next/link'
 
 import { ChangePasswordForm } from "@/components/app/company/ChangePasswordForm"
+import { getCustomerInformation } from "@/actions/customer-account"
+import { PersonalInformationForm } from "@/components/app/customer/PersonalInformationForm"
 
 const page = async () => {
+
+  const infos = await getCustomerInformation()
 
 
   return (
@@ -50,7 +54,7 @@ const page = async () => {
            Update your personal information
           </p>
           <div className="mt-20 ml-12 mb-10">
-            1
+            <PersonalInformationForm information={infos}/>
           </div>
         </div>
 
