@@ -121,7 +121,7 @@ export async function updateAdditionalInformation(data : { website : string | un
     }
 }
 
-export async function handleUserDeletion(user: {
+export async function handleCompanyDeletion(user: {
   id: string;
   createdAt: Date;
   updatedAt: Date;

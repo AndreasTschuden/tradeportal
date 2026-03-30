@@ -5,6 +5,7 @@ import { ChangePasswordForm } from "@/components/app/company/ChangePasswordForm"
 import { getCustomerInformation } from "@/actions/customer-account"
 import { BillingAddressForm } from "@/components/app/customer/BillingAddressForm"
 import { PersonalInformationForm } from "@/components/app/customer/PersonalInformationForm"
+import RemoveAccount from "@/components/app/company/RemoveAccount"
 
 const page = async () => {
 
@@ -43,7 +44,7 @@ const page = async () => {
             <button className="ring-1 ring-black py-2 px-7 rounded-xl font-medium">
               Upload new Picture
             </button>
-            {/* <RemoveAccount/> */}
+              <RemoveAccount/>
           </div>
         </div>
 

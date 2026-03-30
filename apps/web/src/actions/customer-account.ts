@@ -124,4 +124,27 @@ export async function updateBillingAddress(formData: {
   }
 }
 
-export async function handleUserDeletion() {}
+export async function handleCustomerDeletion(user: {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  email: string;
+  emailVerified: boolean;
+  name: string;
+  image?: string | null | undefined;
+}) {
+
+  await db.user.customers.update({
+    where: {
+      id: user.id,
+    },
+    data: {
+      city : null,
+      country : null,
+      region : null,
+      postal_code : null,
+      phone : null,
+      address : null,
+    },
+  });
+}
