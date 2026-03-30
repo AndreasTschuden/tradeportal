@@ -8,7 +8,9 @@ const PUBLIC_ROUTES = [
   "/signup/company",
 ];
 
-const COMPANY_ROUTES = ["/company/publish-product, /company/account"];
+const COMPANY_ROUTES = ["/home/company/publish-product, /home/company/account"];
+
+const CUSTOMER_ROUTES = ["/home/account"]
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -39,6 +41,20 @@ export async function proxy(request: NextRequest) {
       url.pathname = "/";
       return NextResponse.redirect(url);
   }
+
+  const customerUser = await db.company.customers.findFirst({
+    where: {
+      id: session.user.id,
+    },
+  });
+
+      if (!customerUser && CUSTOMER_ROUTES.includes(pathname)) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/";
+      return NextResponse.redirect(url);
+  }
+
+
 
   return NextResponse.next();
 }
