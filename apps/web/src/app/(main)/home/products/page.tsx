@@ -26,6 +26,9 @@ const ProductsPage = async () => {
           <div className="border-b border-gray-500">
             <h4 className="font-normal text-lg">Categories</h4>
           </div>
+        <div className="border-b border-gray-500">
+            <h4 className="font-normal text-lg">Company</h4>
+          </div>
           <div className="border-b border-gray-500">
             <h4 className="font-normal text-lg">Minimum Rating</h4>
           </div>
@@ -33,7 +36,7 @@ const ProductsPage = async () => {
             <h4 className="font-normal text-lg">Price Range</h4>
           </div>
         </nav>
-        <div className="flex flex-col w-full gap-3">
+        <div className="flex flex-col w-full gap-5">
           <div className="flex justify-between">
             <div>
               <h2 className="text-3xl font-bold">Products</h2>
