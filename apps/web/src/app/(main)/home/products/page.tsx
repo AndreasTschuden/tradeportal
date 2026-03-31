@@ -1,9 +1,14 @@
 import React from 'react'
+import { getAllProducts } from "@/actions/products"
 
-const page = () => {
+const ProductsPage = async () => {
+
+    await getAllProducts()
   return (
-    <div>page</div>
+    <div>
+
+    </div>
   )
 }
 
-export default page
+export default ProductsPage

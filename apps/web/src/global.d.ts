@@ -142,3 +142,33 @@ type productsForCompanyType = {
         categories_id: number;
     }[];
 };
+
+type allProductsType = {
+    reviews: {
+        id: string;
+        created_at: Date;
+        updated_at: Date;
+        products_id: string;
+        customers_id: string;
+        stars: number;
+        comment: string | null;
+        report_points: number;
+        reviewer_comment: string | null;
+    }[];
+    _count: {
+        reviews: number;
+    };
+} & {
+    id: string;
+    name: string;
+    base_price: Decimal;
+    currency: string;
+    short_description: string;
+    long_description: string;
+    specifications: JsonValue;
+    companies_id: string;
+    created_at: Date;
+    updated_at: Date;
+    isactive: boolean;
+    avgStars?: number;
+}
