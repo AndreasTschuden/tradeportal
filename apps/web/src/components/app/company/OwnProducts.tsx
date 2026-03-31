@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { CalendarArrowDown, CalendarArrowUp, Search } from "lucide-react";
 import ResponsivePagination from "react-responsive-pagination";
-import "react-responsive-pagination/themes/classic-light-dark.css";
 
 const OwnProducts = ({
   products,
@@ -20,6 +19,7 @@ const OwnProducts = ({
   const [currentOrder, setCurrentOrder] = useState<boolean>(false);
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<number>(100);
+
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -155,7 +155,7 @@ const OwnProducts = ({
               containerClassName="flex justify-center gap-2 mt-6"
               pageItemClassName="inline-flex items-center rounded-md border text-sm"
               pageLinkClassName="px-3 py-2"
-              activeItemClassName="border-red-700 text-red-700"
+              activeItemClassName="font-bold text-red-700"
               inactiveItemClassName="border-gray-300 text-gray-700 hover:bg-red-700 hover:border-red-700 hover:text-white"
               disabledItemClassName="pointer-events-none border-gray-200 text-gray-400 opacity-50"
               previousClassName="bg-red-700 border-red-700 text-white"
