@@ -52,6 +52,14 @@ const ProductsPage = async ({ searchParams }: PageProps) => {
     );
   }
 
+  if(params.rating){
+    const rating = Number(params.rating)
+
+    filteredProducts = filteredProducts.filter(
+      (prod) => Number(prod.avgStars) >= rating
+    );
+  }
+
 
   return (
     <div>
