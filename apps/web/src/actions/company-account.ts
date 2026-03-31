@@ -88,7 +88,7 @@ export async function updateAdditionalInformation(data : { website : string | un
         throw new Error(validate.error.message);
     }
 
-     const session = await auth.api.getSession({
+  const session = await auth.api.getSession({
     headers: await headers(),
   });
 

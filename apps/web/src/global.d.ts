@@ -35,6 +35,8 @@ type productWithStatsType = {
   specifications : JsonValue;
   _count: { reviews: number };
   avgStars?: number;
+  created_at?:Date;
+  isactive?: boolean;
 };
 
 type detailedProductType = {
@@ -124,3 +126,19 @@ type PersonalInformation = {
     created_at: Date;
     updated_at: Date;
 }
+
+type productsForCompanyType = {
+  id: string;
+  name: string;
+  currency : string;
+  base_price: Decimal;
+  reviews: { id: string; stars: number }[];
+  specifications : JsonValue;
+  _count: { reviews: number };
+  avgStars?: number;
+  created_at:Date;
+  isactive: boolean;
+  categories_products: {
+        categories_id: number;
+    }[];
+};
