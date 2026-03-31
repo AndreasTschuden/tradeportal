@@ -34,6 +34,17 @@ const ProductsPage = async ({ searchParams }: PageProps) => {
     )
   }
 
+  if(params.sort){
+    const sort = params.sort
+     filteredProducts = filteredProducts.sort((a, b) => {
+      const dateA = new Date(a.created_at ?? 0).getTime();
+      const dateB = new Date(b.created_at ?? 0).getTime();
+
+      return sort === "latest" ? dateA - dateB : dateB - dateA;
+    });
+  }
+  
+
   return (
     <div>
       <nav className="flex my-2 mb-6 text-sm">
