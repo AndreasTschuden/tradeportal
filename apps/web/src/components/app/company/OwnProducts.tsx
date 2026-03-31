@@ -4,6 +4,8 @@ import { ProductCard } from "@/components/app/company/ProductCard";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { CalendarArrowDown, CalendarArrowUp, Search } from "lucide-react";
+import ResponsivePagination from "react-responsive-pagination";
+import "react-responsive-pagination/themes/classic-light-dark.css";
 
 const OwnProducts = ({
   products,
@@ -18,26 +20,24 @@ const OwnProducts = ({
   const [currentOrder, setCurrentOrder] = useState<boolean>(false);
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<number>(100);
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const applyFilters = () => {
     let filtered = [...allProducts];
 
-
     if (selectedCategory !== 100) {
       filtered = filtered.filter(
         (prod) =>
-          prod.categories_products[0].categories_id === selectedCategory
+          prod.categories_products[0].categories_id === selectedCategory,
       );
     }
-
 
     if (search !== "") {
       filtered = filtered.filter((p) =>
-        p.name.toLowerCase().includes(search.toLowerCase())
+        p.name.toLowerCase().includes(search.toLowerCase()),
       );
     }
-
 
     filtered.sort((a, b) => {
       const dateA = new Date(a.created_at ?? 0).getTime();
@@ -47,10 +47,12 @@ const OwnProducts = ({
     });
 
     setProductsState(filtered);
+    setCurrentPage(1);
   };
 
   useEffect(() => {
     applyFilters();
+    setCurrentPage(1);
   }, [search, selectedCategory, currentOrder]);
 
   const handleDateFilter = () => {
@@ -65,6 +67,11 @@ const OwnProducts = ({
     e.preventDefault();
     applyFilters();
   };
+
+  const totalPages = Math.ceil(productsState.length / itemsPerPage);
+
+  const start = (currentPage - 1) * itemsPerPage;
+  const currentProducts = productsState.slice(start, start + itemsPerPage);
 
   return (
     <div>
@@ -136,10 +143,26 @@ const OwnProducts = ({
           </div>
         </div>
 
-        <div className="mt-10 flex flex-col gap-3">
-          {productsState.map((prod) => (
+        <div className="mt-10 flex flex-col gap-3 overflow-y-auto">
+          {currentProducts.map((prod) => (
             <ProductCard product={prod} key={prod.id} />
           ))}
+          <div className="flex justify-center">
+            <ResponsivePagination
+              total={totalPages}
+              current={currentPage}
+              onPageChange={setCurrentPage}
+              containerClassName="flex justify-center gap-2 mt-6"
+              pageItemClassName="inline-flex items-center rounded-md border text-sm"
+              pageLinkClassName="px-3 py-2"
+              activeItemClassName="border-red-700 text-red-700"
+              inactiveItemClassName="border-gray-300 text-gray-700 hover:bg-red-700 hover:border-red-700 hover:text-white"
+              disabledItemClassName="pointer-events-none border-gray-200 text-gray-400 opacity-50"
+              previousClassName="bg-red-700 border-red-700 text-white"
+              nextClassName="bg-red-700 border-red-700 text-white"
+              navClassName="text-white"
+            />
+          </div>
         </div>
       </div>
     </div>

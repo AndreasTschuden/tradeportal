@@ -84,7 +84,7 @@ export async function getNewestProducts() {
   return finalProducts;
 }
 
-export async function getDetailedProduct(id: string) {
+export async function getDetailedProduct(id: string) {  
   const product = await db.user.products.findUnique({
     where: {
       id: id,
