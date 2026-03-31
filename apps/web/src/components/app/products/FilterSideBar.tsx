@@ -50,8 +50,6 @@ const FilterSideBar = ({
 
   const handlePriceChange = (key: "minPrice" | "maxPrice", value: string) => {
     const params = new URLSearchParams(searchParams.toString());
-    if (key === "minPrice") setMinPrice(value);
-    if (key === "maxPrice") setMaxPrice(value);
 
     if (value) {
       params.set(key, value);
@@ -181,7 +179,13 @@ const FilterSideBar = ({
                 type="number"
                 className="w-full rounded px-1 py-0.5 focus:outline-none focus:ring-1 focus:ring-red-500"
                 value={minPrice}
-                onChange={(e) => handlePriceChange("minPrice", e.target.value)}
+                onChange={(e) => setMinPrice(e.target.value)}
+                onBlur={(e) => handlePriceChange("minPrice", e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handlePriceChange("minPrice", e.currentTarget.value);
+                  }
+                }}
               />
             </div>
           </div>
@@ -193,7 +197,13 @@ const FilterSideBar = ({
                 type="number"
                 className="w-full rounded px-1 py-0.5 focus:outline-none focus:ring-1 focus:ring-red-500"
                 value={maxPrice}
-                onChange={(e) => handlePriceChange("maxPrice", e.target.value)}
+                onChange={(e) => setMaxPrice(e.target.value)}
+                onBlur={(e) => handlePriceChange("maxPrice", e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handlePriceChange("maxPrice", e.currentTarget.value);
+                  }
+                }}
               />
             </div>
           </div>
