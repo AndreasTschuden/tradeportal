@@ -170,28 +170,28 @@ const FilterSideBar = ({
         </div>
       </div>
 
-      <div className="border-b border-gray-500 pb-3">
+      <div className="">
         <h4 className="font-normal text-lg mb-2">Price Range</h4>
         <div className="flex gap-2">
-          <div className="flex-1 flex flex-col gap-1 p-2 border border-gray-500 rounded-sm">
+          <div className="flex-1 flex flex-col gap-1 p-2 border border-gray-300 rounded-sm">
             <label className="text-gray-600 text-sm">Min Price</label>
             <div className="flex items-center gap-1">
               <span className="text-gray-600">$</span>
               <input
                 type="number"
-                className="w-full border border-gray-300 rounded px-1 py-0.5 focus:outline-none focus:ring-1 focus:ring-red-500"
+                className="w-full rounded px-1 py-0.5 focus:outline-none focus:ring-1 focus:ring-red-500"
                 value={minPrice}
                 onChange={(e) => handlePriceChange("minPrice", e.target.value)}
               />
             </div>
           </div>
-          <div className="flex-1 flex flex-col gap-1 p-2 border border-gray-500 rounded-sm">
+          <div className="flex-1 flex flex-col gap-1 p-2 border border-gray-300 rounded-sm">
             <label className="text-gray-600 text-sm">Max Price</label>
             <div className="flex items-center gap-1">
               <span className="text-gray-600">$</span>
               <input
                 type="number"
-                className="w-full border border-gray-300 rounded px-1 py-0.5 focus:outline-none focus:ring-1 focus:ring-red-500"
+                className="w-full rounded px-1 py-0.5 focus:outline-none focus:ring-1 focus:ring-red-500"
                 value={maxPrice}
                 onChange={(e) => handlePriceChange("maxPrice", e.target.value)}
               />
