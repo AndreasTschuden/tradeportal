@@ -6,10 +6,33 @@ import { FilterSideBar } from "@/components/app/products/FilterSideBar";
 import { getCategories } from "@/actions/categories";
 import { getCompanies } from "@/actions/company";
 
-const ProductsPage = async () => {
+interface PageProps {
+  searchParams: { [key: string]: string | undefined };
+}
+
+const ProductsPage = async ({ searchParams }: PageProps) => {
+  const params = await searchParams
+
   const products = await getAllProducts();
   const categories = await getCategories();
   const companies = await getCompanies()
+
+  
+  let filteredProducts = products;
+
+  if (params.category && params.category !== "0") {
+    const categoryId = Number(params.category);
+    filteredProducts = products.filter((prod) =>
+      prod.categories_products[0].categories.id === categoryId
+    );
+  }
+
+  if(params.company){
+    const companyId = params.company
+    filteredProducts = filteredProducts.filter((prod) => 
+      prod.companies_id === companyId
+    )
+  }
 
   return (
     <div>
@@ -35,7 +58,7 @@ const ProductsPage = async () => {
             <SelectFilters categories={categories} />
           </div>
           <div className="grid grid-cols-4 w-full gap-3">
-            {products.map((prod) => (
+            {filteredProducts.map((prod) => (
               <ProductCard prod={prod} key={prod.id} />
             ))}
           </div>

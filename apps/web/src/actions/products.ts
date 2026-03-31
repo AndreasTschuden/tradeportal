@@ -345,6 +345,15 @@ export async function getAllProducts(){
           reviews: true,
         },
       },
+      categories_products : {
+        select : {
+          categories : {
+            select : {
+              id : true
+            }
+          }
+        }
+      }
     }
   });
 

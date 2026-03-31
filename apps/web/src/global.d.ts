@@ -144,6 +144,11 @@ type productsForCompanyType = {
 };
 
 type allProductsType = {
+    categories_products: {
+        categories: {
+            id: number;
+        };
+    }[];
     reviews: {
         id: string;
         created_at: Date;
@@ -170,7 +175,7 @@ type allProductsType = {
     created_at: Date;
     updated_at: Date;
     isactive: boolean;
-    avgStars?: number;
+    avgStars? : number
 }
 
 type companyType = {
