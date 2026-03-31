@@ -11,39 +11,47 @@ interface PageProps {
 }
 
 const ProductsPage = async ({ searchParams }: PageProps) => {
-  const params = await searchParams
+  const params = await searchParams;
 
   const products = await getAllProducts();
   const categories = await getCategories();
-  const companies = await getCompanies()
+  const companies = await getCompanies();
 
-  
   let filteredProducts = products;
 
   if (params.category && params.category !== "0") {
     const categoryId = Number(params.category);
-    filteredProducts = products.filter((prod) =>
-      prod.categories_products[0].categories.id === categoryId
+    filteredProducts = products.filter(
+      (prod) => prod.categories_products[0].categories.id === categoryId,
     );
   }
 
-  if(params.company){
-    const companyId = params.company
-    filteredProducts = filteredProducts.filter((prod) => 
-      prod.companies_id === companyId
-    )
+  if (params.company) {
+    const companyId = params.company;
+    filteredProducts = filteredProducts.filter(
+      (prod) => prod.companies_id === companyId,
+    );
   }
 
-  if(params.sort){
-    const sort = params.sort
-     filteredProducts = filteredProducts.sort((a, b) => {
+  if (params.sort) {
+    const sort = params.sort;
+    filteredProducts = filteredProducts.sort((a, b) => {
       const dateA = new Date(a.created_at ?? 0).getTime();
       const dateB = new Date(b.created_at ?? 0).getTime();
 
       return sort === "latest" ? dateA - dateB : dateB - dateA;
     });
   }
-  
+
+  if (params.minPrice || params.maxPrice) {
+    const minPrice = params.minPrice ? Number(params.minPrice) : 0;
+    const maxPrice = params.maxPrice ? Number(params.maxPrice) : Infinity;
+
+    filteredProducts = filteredProducts.filter(
+      (prod) => prod.base_price >= minPrice && prod.base_price <= maxPrice,
+    );
+  }
+
 
   return (
     <div>
@@ -57,7 +65,7 @@ const ProductsPage = async ({ searchParams }: PageProps) => {
         </Link>
       </nav>
       <div className="flex gap-5">
-        <FilterSideBar categories={categories} companies={companies}/>
+        <FilterSideBar categories={categories} companies={companies} />
         <div className="flex flex-col w-full gap-5">
           <div className="flex justify-between">
             <div>
