@@ -143,7 +143,7 @@ const FilterSideBar = ({
             >
               <input
                 type="checkbox"
-                className="accent-red-600 scale-125"
+                className="accent-red-600 scale-150"
                 checked={Number(searchParams.get("rating")) === rating}
                 onChange={() => {
                   const params = new URLSearchParams(searchParams.toString());
@@ -159,7 +159,7 @@ const FilterSideBar = ({
                 {Array.from({ length: 5 }).map((_, i) => (
                   <Star
                     key={i}
-                    size={18}
+                    size={20}
                     fill={i < rating ? "orange" : "lightgray"}
                     stroke="none"
                   />
