@@ -172,3 +172,30 @@ type allProductsType = {
     isactive: boolean;
     avgStars?: number;
 }
+
+type companyType = {
+    _count: {
+        products: number;
+    };
+} & {
+    id: string;
+    owner_id: string;
+    stripe_account_id: string;
+    onboarding_started_at: Date;
+    onboarding_completed_at: Date | null;
+    company_name: string;
+    certificate_of_incorporation: string | null;
+    is_verified: boolean;
+    approved_by: string | null;
+    email: string;
+    phone_number: string;
+    created_at: Date;
+    updated_at: Date;
+    deleted_at: Date | null;
+    founded_at: Date | null;
+    website: string | null;
+    address: string | null;
+    linkedin_url: string | null;
+    head_of_company: string | null;
+    employee_count: number | null;
+}

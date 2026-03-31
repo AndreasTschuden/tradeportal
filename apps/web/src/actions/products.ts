@@ -373,6 +373,5 @@ export async function getAllProducts(){
     prod.base_price = Number(prod.base_price);
   });
 
-  console.log(finalProducts)
   return(finalProducts)
 }

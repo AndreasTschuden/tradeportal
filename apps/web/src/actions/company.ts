@@ -100,3 +100,32 @@ export async function publishProduct(formData: ProductType) {
 
   redirect("company/products");
 }
+
+export async function getCompanies(){
+  const companies = await db.user.companies.findMany({
+    where : {
+      deleted_at : null,
+      is_verified : true,
+      products : {
+        some : {
+          isactive : true
+        }
+      }
+    },
+    orderBy : {
+      products : {
+        _count : "desc",
+      }
+    },
+    include : {
+      _count : {
+        select : {
+          products : true,
+        }
+      }
+    }
+  })
+  
+  console.log(companies)
+  return companies
+}
