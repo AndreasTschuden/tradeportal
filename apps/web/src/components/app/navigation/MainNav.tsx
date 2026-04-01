@@ -1,11 +1,13 @@
-import { Divide, Search, ShoppingCart, UserRound } from "lucide-react";
+import {  Search, ShoppingCart, UserRound } from "lucide-react";
 import { handleUserLink } from "@/actions/auth";
 import Link from "next/link";
 import { getCartItemsCount } from "@/actions/cart";
+import SearchField from "./SearchField";
 
 const MainNav = async () => {
   const result = await handleUserLink();
   const cartItemsCount = await getCartItemsCount();
+  // const cartItemsPriceSum = await getCartItemsPriceSum();
 
   console.log(cartItemsCount);
   console.log(result);
@@ -18,14 +20,7 @@ const MainNav = async () => {
         </Link>
       </div>
       <div className="flex items-center gap-15">
-        <div className="flex p-2 border border-[#808080] rounded-sm px-4">
-          <input
-            type="text"
-            placeholder="Search Products..."
-            className="font-light outline-none"
-          />
-          <Search strokeWidth={1} color="#808080" />
-        </div>
+        <SearchField />
         <div className="flex gap-5">
           {result === "/home/account" ? (
             <Link
