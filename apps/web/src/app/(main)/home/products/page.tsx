@@ -63,6 +63,14 @@ const ProductsPage = async ({ searchParams }: PageProps) => {
     );
   }
 
+  if(params.search) {
+    const searchQuery = params.search.toLowerCase().trim();
+
+    filteredProducts = filteredProducts.filter((prod) =>
+      prod.name.toLowerCase().trim().includes(searchQuery),
+    );
+  }
+
   const currentPage = Number(params.page) || 1;
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
 
