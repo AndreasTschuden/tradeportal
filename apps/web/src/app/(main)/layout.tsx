@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { MainNav } from "@/components/app/navigation/MainNav"
 import "@/app/globals.css";
 
 export const metadata: Metadata = {
@@ -17,10 +18,7 @@ export default function RootLayout({
         <h1>USD</h1>
         <h2>TEL</h2>
       </header>
-      <nav className="bg-gray-200 h-[10vh] flex items-center justify-between md:px-30 px-5">
-        <h1>TradePortal</h1>
-        <h2>Links / User / Cart</h2>
-      </nav>
+        <MainNav/>
       <main>{children}</main>
       <footer className="bg-gray-200 h-[40vh] flex items-center justify-center md:px-30 px-5">
         <h1>Footer</h1>
