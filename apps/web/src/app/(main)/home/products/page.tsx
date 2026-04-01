@@ -5,6 +5,7 @@ import { SelectFilters } from "@/components/app/products/SelectFilters";
 import { FilterSideBar } from "@/components/app/products/FilterSideBar";
 import { getCategories } from "@/actions/categories";
 import { getCompanies } from "@/actions/company";
+import { PaginationControl } from "@/components/app/products/PaginationControl";
 
 interface PageProps {
   searchParams: { [key: string]: string | undefined };
@@ -16,6 +17,8 @@ const ProductsPage = async ({ searchParams }: PageProps) => {
   const products = await getAllProducts();
   const categories = await getCategories();
   const companies = await getCompanies();
+
+  const itemsPerPage = 16;
 
   let filteredProducts = products;
 
@@ -52,14 +55,16 @@ const ProductsPage = async ({ searchParams }: PageProps) => {
     );
   }
 
-  if(params.rating){
-    const rating = Number(params.rating)
+  if (params.rating) {
+    const rating = Number(params.rating);
 
     filteredProducts = filteredProducts.filter(
-      (prod) => Number(prod.avgStars) >= rating
+      (prod) => Number(prod.avgStars) >= rating,
     );
   }
 
+  const currentPage = Number(params.page) || 1;
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
 
   return (
     <div>
@@ -89,6 +94,10 @@ const ProductsPage = async ({ searchParams }: PageProps) => {
               <ProductCard prod={prod} key={prod.id} />
             ))}
           </div>
+          <PaginationControl
+            currentPage={currentPage}
+            totalPages={totalPages}
+          />
         </div>
       </div>
     </div>
