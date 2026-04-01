@@ -159,13 +159,17 @@ export async function customerOrders() {
     throw new Error("Couldnt get session")
   }
 
+  console.log(session)
+
   const orders = await db.user.orders.findMany({
     where: {
       customers_id: session?.user.id,
     },
   });
 
-  if(!orders){
+  console.log(orders)
+
+  if(orders.length == 0){
     throw new Error("You do not have any orders")
   }
 
