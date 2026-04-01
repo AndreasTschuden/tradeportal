@@ -590,111 +590,421 @@ GRANT better_auth_role TO better_auth;
 
 
 
-    -- change the c.company_name and c.name into names that alr signed up.
-    -- you can use rollback to undo the the inserts.
-    
-    BEGIN;
+--  -- change the c.company_name and c.name into names that alr signed up.
+--  -- you can use rollback to undo the the inserts.
+ 
+--  BEGIN;
 
-    -- PRODUCTS
-    INSERT INTO products (
-        id,
-        name,
-        base_price,
-        currency,
-        short_description,
-        long_description,
-        specifications,
-        companies_id,
-        isActive
-    )
-    SELECT
-    'prod_1',
-    'Laptop',
-    1200.00,
-    'USD',
-    'High performance laptop',
-    'A very powerful laptop for professionals',
-    '{"ram":"16GB","storage":"512GB"}', --needs to be replaced by the actual JSON
-    c.id,
-    true
-    FROM companies c
-    WHERE c.company_name = 'Tech Corp';
+-- -- PRODUCTS
+-- INSERT INTO products (
+--     id,
+--     name,
+--     base_price,
+--     currency,
+--     short_description,
+--     long_description,
+--     specifications,
+--     companies_id,
+--     isActive
+-- )
+-- SELECT
+--   'prod_1',
+--   'T-shirt',
+--   12.00,
+--   'USD',
+--   'High Airflow Tshirt',
+--   'A very light and comfortable Tshirt for runners',
+-- $${
+--   "attributes": [
+--     {
+--       "name": "Color",
+--       "values": [
+--         "blue",
+--         "green",
+--         "gray",
+--         "black"
+--       ],
+--       "images": {
+--         "blue": "50d006cb-9f8d-43e8-9849-92fd93e6f890_blue.webp",
+--         "green": "5061f149-c296-4b83-9bf5-4f578a6f5f94_green.webp",
+--         "gray": "bb075cf8-70ed-4fe6-a077-db658c5bb120_gray.webp",
+--         "black": "5e675d67-7959-46fb-bc37-d65ca2712e41_black.webp"
+--       }
+--     },
+--     {
+--       "name": "Size",
+--       "values": [
+--         "XL",
+--         "L",
+--         "M",
+--         "S",
+--         "XS"
+--       ]
+--     }
+--   ],
+--   "variants": [
+--     {
+--       "Color": "blue",
+--       "Size": "XL",
+--       "available": true,
+--       "priceModifier": 1
+--     },
+--     {
+--       "Color": "blue",
+--       "Size": "L",
+--       "available": false,
+--       "priceModifier": 1
+--     },
+--     {
+--       "Color": "blue",
+--       "Size": "M",
+--       "available": true,
+--       "priceModifier": 1
+--     },
+--     {
+--       "Color": "blue",
+--       "Size": "S",
+--       "available": true,
+--       "priceModifier": 1
+--     },
+--     {
+--       "Color": "blue",
+--       "Size": "XS",
+--       "available": true,
+--       "priceModifier": 1
+--     },
+--     {
+--       "Color": "green",
+--       "Size": "XL",
+--       "available": true,
+--       "priceModifier": 1
+--     },
+--     {
+--       "Color": "green",
+--       "Size": "L",
+--       "available": true,
+--       "priceModifier": 1
+--     },
+--     {
+--       "Color": "green",
+--       "Size": "M",
+--       "available": true,
+--       "priceModifier": 1
+--     },
+--     {
+--       "Color": "green",
+--       "Size": "S",
+--       "available": true,
+--       "priceModifier": 1
+--     },
+--     {
+--       "Color": "green",
+--       "Size": "XS",
+--       "available": true,
+--       "priceModifier": 1
+--     },
+--     {
+--       "Color": "gray",
+--       "Size": "XL",
+--       "available": true,
+--       "priceModifier": 1
+--     },
+--     {
+--       "Color": "gray",
+--       "Size": "L",
+--       "available": true,
+--       "priceModifier": 1
+--     },
+--     {
+--       "Color": "gray",
+--       "Size": "M",
+--       "available": true,
+--       "priceModifier": 1
+--     },
+--     {
+--       "Color": "gray",
+--       "Size": "S",
+--       "available": true,
+--       "priceModifier": 1
+--     },
+--     {
+--       "Color": "gray",
+--       "Size": "XS",
+--       "available": true,
+--       "priceModifier": 1
+--     },
+--     {
+--       "Color": "black",
+--       "Size": "XL",
+--       "available": true,
+--       "priceModifier": 1
+--     },
+--     {
+--       "Color": "black",
+--       "Size": "L",
+--       "available": true,
+--       "priceModifier": 1
+--     },
+--     {
+--       "Color": "black",
+--       "Size": "M",
+--       "available": true,
+--       "priceModifier": 1
+--     },
+--     {
+--       "Color": "black",
+--       "Size": "S",
+--       "available": true,
+--       "priceModifier": 1
+--     },
+--     {
+--       "Color": "black",
+--       "Size": "XS",
+--       "available": true,
+--       "priceModifier": 1
+--     }
+--   ]
+-- }$$::jsonb,
+-- c.id,
+--   true
+-- FROM companies c
+-- WHERE c.company_name = 'Tech Corp';
 
-    INSERT INTO products (
-        id,
-        name,
-        base_price,
-        currency,
-        short_description,
-        long_description,
-        specifications,
-        companies_id,
-        isActive
-    )
-    SELECT
-    'prod_2',
-    'RAM',
-    600.00,
-    'USD',
-    'High performance RAM',
-    'A very speedy RAM Stick professional gamers',
-    '{"ram":"16GB","storage":"512GB"}', --needs to be replaced by the actual JSON
-    c.id,
-    true
-    FROM companies c
-    WHERE c.company_name = 'Tech Corp';
+-- INSERT INTO products (
+--     id,
+--     name,
+--     base_price,
+--     currency,
+--     short_description,
+--     long_description,
+--     specifications,
+--     companies_id,
+--     isActive
+-- )
+-- SELECT
+--   'prod_2',
+--   'Sweater',
+--   60.00,
+--   'USD',
+--   'Fine fiber Sweater',
+--   'A very comfy sweater for professional snugglers',
+--   $${
+--   "attributes": [
+--     {
+--       "name": "Color",
+--       "values": [
+--         "blue",
+--         "green",
+--         "gray",
+--         "black"
+--       ],
+--       "images": {
+--         "blue": "50d006cb-9f8d-43e8-9849-92fd93e6f890_blue.webp",
+--         "green": "5061f149-c296-4b83-9bf5-4f578a6f5f94_green.webp",
+--         "gray": "bb075cf8-70ed-4fe6-a077-db658c5bb120_gray.webp",
+--         "black": "5e675d67-7959-46fb-bc37-d65ca2712e41_black.webp"
+--       }
+--     },
+--     {
+--       "name": "Size",
+--       "values": [
+--         "XL",
+--         "L",
+--         "M",
+--         "S",
+--         "XS"
+--       ]
+--     }
+--   ],
+--   "variants": [
+--     {
+--       "Color": "blue",
+--       "Size": "XL",
+--       "available": true,
+--       "priceModifier": 1
+--     },
+--     {
+--       "Color": "blue",
+--       "Size": "L",
+--       "available": false,
+--       "priceModifier": 1
+--     },
+--     {
+--       "Color": "blue",
+--       "Size": "M",
+--       "available": true,
+--       "priceModifier": 1
+--     },
+--     {
+--       "Color": "blue",
+--       "Size": "S",
+--       "available": true,
+--       "priceModifier": 1
+--     },
+--     {
+--       "Color": "blue",
+--       "Size": "XS",
+--       "available": true,
+--       "priceModifier": 1
+--     },
+--     {
+--       "Color": "green",
+--       "Size": "XL",
+--       "available": true,
+--       "priceModifier": 1
+--     },
+--     {
+--       "Color": "green",
+--       "Size": "L",
+--       "available": true,
+--       "priceModifier": 1
+--     },
+--     {
+--       "Color": "green",
+--       "Size": "M",
+--       "available": true,
+--       "priceModifier": 1
+--     },
+--     {
+--       "Color": "green",
+--       "Size": "S",
+--       "available": true,
+--       "priceModifier": 1
+--     },
+--     {
+--       "Color": "green",
+--       "Size": "XS",
+--       "available": true,
+--       "priceModifier": 1
+--     },
+--     {
+--       "Color": "gray",
+--       "Size": "XL",
+--       "available": true,
+--       "priceModifier": 1
+--     },
+--     {
+--       "Color": "gray",
+--       "Size": "L",
+--       "available": true,
+--       "priceModifier": 1
+--     },
+--     {
+--       "Color": "gray",
+--       "Size": "M",
+--       "available": true,
+--       "priceModifier": 1
+--     },
+--     {
+--       "Color": "gray",
+--       "Size": "S",
+--       "available": true,
+--       "priceModifier": 1
+--     },
+--     {
+--       "Color": "gray",
+--       "Size": "XS",
+--       "available": true,
+--       "priceModifier": 1
+--     },
+--     {
+--       "Color": "black",
+--       "Size": "XL",
+--       "available": true,
+--       "priceModifier": 1
+--     },
+--     {
+--       "Color": "black",
+--       "Size": "L",
+--       "available": true,
+--       "priceModifier": 1
+--     },
+--     {
+--       "Color": "black",
+--       "Size": "M",
+--       "available": true,
+--       "priceModifier": 1
+--     },
+--     {
+--       "Color": "black",
+--       "Size": "S",
+--       "available": true,
+--       "priceModifier": 1
+--     },
+--     {
+--       "Color": "black",
+--       "Size": "XS",
+--       "available": true,
+--       "priceModifier": 1
+--     }
+--   ]
+-- }$$::jsonb,
+--   c.id,
+--   true
+-- FROM companies c
+-- WHERE c.company_name = 'Tech Corp';
 
-    -- CATEGORIES_PRODUCTS
-    INSERT INTO categories_products (categories_id, products_id)
-    VALUES
-    (1, 'prod_1'),
-    (2, 'prod_1'),
-    (1, 'prod_2');
+-- -- CATEGORIES_PRODUCTS
+-- INSERT INTO categories_products (categories_id, products_id)
+-- VALUES
+-- (1, 'prod_1'),
+-- (2, 'prod_1'),
+-- (1, 'prod_2');
 
-    -- ORDERS
-    INSERT INTO orders (
-        id, customers_id, order_date, shipper, tracking_number, status
-    )
-    SELECT
-    'order_1', c.id, CURRENT_DATE, 'DHL', 'TRACK123', 'shipped' 
-    from customers c 
-    where c.name = 'Test User';
+-- -- ORDERS
+-- INSERT INTO orders (
+--     id, customers_id, order_date, shipper, tracking_number, status
+-- )
+-- SELECT
+-- 'order_1', c.id, CURRENT_DATE, 'DHL', 'TRACK123', 'shipped' 
+-- from customers c 
+-- where c.name = 'Test User';
 
-    -- ORDERS_PRODUCTS
-    INSERT INTO orders_products (
-        products_id, orders_id, unit_price, quantity, discount, specifications
-    )
-    VALUES
-    ('prod_1', 'order_1', 1200.00, 1, 0.00, '{"color":"silver"}'),  --needs to be replaced by the actual JSON
-    ('prod_2', 'order_1', 800.00, 2, 0.10, '{"color":"black"}');  --needs to be replaced by the actual JSON
+-- -- ORDERS_PRODUCTS
+-- INSERT INTO orders_products (
+--     products_id, orders_id, unit_price, quantity, discount, specifications
+-- )
+-- VALUES
+-- ('prod_1', 'order_1', 1200.00, 1, 0.00,$${
+--       "Color": "blue",
+--       "Size": "M",
+--       "available": true,
+--       "priceModifier": 1
+--     }$$::jsonb),  
+-- ('prod_2', 'order_1', 800.00, 2, 0.10, $${
+--       "Color": "black",
+--       "Size": "L",
+--       "available": true,
+--       "priceModifier": 1.2
+--     }$$::jsonb);  
 
-    -- REVIEWS
-    INSERT INTO reviews (
-        products_id, customers_id, stars, comment
-    )
-    SELECT
-    'prod_1', c.id, 5, 'Excellent product' from customers c where c.name = 'Test User';
+-- -- REVIEWS
+-- INSERT INTO reviews (
+--     products_id, customers_id, stars, comment
+-- )
+-- SELECT
+-- 'prod_1', c.id, 5, 'Excellent product' from customers c where c.name = 'Test User';
 
-    INSERT INTO reviews (
-        products_id, customers_id, stars, comment
-    )
-    SELECT
-    'prod_2', c.id, 4, 'Very good phone' from customers c where c.name = 'Test User';
+-- INSERT INTO reviews (
+--     products_id, customers_id, stars, comment
+-- )
+-- SELECT
+-- 'prod_2', c.id, 4, 'Very good phone' from customers c where c.name = 'Test User';
 
-    -- SHOPPING CART
-    INSERT INTO shopping_cart_products (
-        customers_id, products_id, product_variant, quantity, updated_at
-    )
-    SELECT
-    c.id, 'prod_1', 1, 1, now() from customers c where c.name = 'Test User';
+-- -- SHOPPING CART
+-- INSERT INTO shopping_cart_products (
+--     customers_id, products_id, product_variant, quantity, updated_at
+-- )
+-- SELECT
+-- c.id, 'prod_1', 1, 1, now() from customers c where c.name = 'Test User';
 
-    -- TRANSACTIONS
-    INSERT INTO transactions (
-        customers_id, companies_id, amount, currency, orders_id
-    )
-    VALUES
-    ((selct c.id from customers c where c.name = 'Test User'), (selct c.id from companies c where c.company_name = 'Tech Corp'), 2800.00, 'USD', 'order_1');
+-- -- TRANSACTIONS
+-- INSERT INTO transactions (
+--     customers_id, companies_id, amount, currency, orders_id
+-- )
+-- VALUES
+-- ((select c.id from customers c where c.name = 'Test User'), (select co.id from companies co where co.company_name = 'Tech Corp'), 2800.00, 'USD', 'order_1');
 
-    COMMIT;
+-- COMMIT;
 
-    -- rollback
+--  -- rollback
