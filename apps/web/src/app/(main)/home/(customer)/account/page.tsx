@@ -1,20 +1,20 @@
-import React from 'react'
-import Link from 'next/link'
+import React from "react";
+import Link from "next/link";
 
-import { ChangePasswordForm } from "@/components/app/company/ChangePasswordForm"
-import { getCustomerInformation } from "@/actions/customer-account"
-import { BillingAddressForm } from "@/components/app/customer/BillingAddressForm"
-import { PersonalInformationForm } from "@/components/app/customer/PersonalInformationForm"
-import RemoveAccount from "@/components/app/company/RemoveAccount"
+import { ChangePasswordForm } from "@/components/app/company/ChangePasswordForm";
+import { getCustomerInformation } from "@/actions/customer-account";
+import { BillingAddressForm } from "@/components/app/customer/BillingAddressForm";
+import { PersonalInformationForm } from "@/components/app/customer/PersonalInformationForm";
+import RemoveAccount from "@/components/app/company/RemoveAccount";
+import { signOutAction } from "@/actions/auth";
+import { LogOut } from "lucide-react";
 
 const page = async () => {
-
-  const infos = await getCustomerInformation()
-
+  const infos = await getCustomerInformation();
 
   return (
     <div>
-        <nav className="flex my-2 mb-6 text-sm">
+      <nav className="flex my-2 mb-6 text-sm">
         <Link href="/home" className="text-gray-400">
           Home
         </Link>
@@ -23,7 +23,7 @@ const page = async () => {
           Account
         </Link>
       </nav>
-            <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-8">
         <div className="flex flex-row justify-between">
           <div>
             <h2 className="text-3xl font-bold">Profile</h2>
@@ -44,7 +44,7 @@ const page = async () => {
             <button className="ring-1 ring-black py-2 px-7 rounded-xl font-medium">
               Upload new Picture
             </button>
-              <RemoveAccount/>
+            <RemoveAccount />
           </div>
         </div>
 
@@ -53,10 +53,10 @@ const page = async () => {
             Personal Information
           </span>
           <p className="absolute top-4 left-12 text-md text-gray-400 font-light">
-           Update your personal information
+            Update your personal information
           </p>
           <div className="mt-20 ml-12 mb-10">
-            <PersonalInformationForm information={infos}/>
+            <PersonalInformationForm information={infos} />
           </div>
         </div>
 
@@ -65,10 +65,10 @@ const page = async () => {
             Billing Address
           </span>
           <p className="absolute top-4 left-12 text-md text-gray-400 font-light">
-            Update your billing address
+            Update your billing addres
           </p>
           <div className="mt-20 ml-12 mb-10">
-            <BillingAddressForm information={infos}/>
+            <BillingAddressForm information={infos} />
           </div>
         </div>
 
@@ -80,13 +80,30 @@ const page = async () => {
             Update your Password
           </p>
           <div className="mt-20 ml-12 mb-10">
-            <ChangePasswordForm/>
+            <ChangePasswordForm />
           </div>
         </div>
-
+        <div className="relative w-full h-full border-2 border-gray-200 rounded-2xl flex justify-between">
+          <span className="absolute -top-4 left-10 bg-white px-2 text-2xl font-medium">
+            Logout
+          </span>
+          <p className="absolute top-4 left-12 text-md text-gray-400 font-light">
+            Logout of your account
+          </p>
+          <div className="mt-20 ml-12 mb-10">
+            <form action={signOutAction}>
+              <button
+                type="submit"
+                className="bg-[#FF000020] py-2 px-7 rounded-xl font-medium text-[#FF0000] flex gap-1"
+              >
+                <LogOut /> Logout
+              </button>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;

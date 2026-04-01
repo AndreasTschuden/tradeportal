@@ -1,12 +1,12 @@
-
-
 import Link from "next/link";
 import { BasicInfoForm } from "@/components/app/company/BasicInfoForm";
 import { CompanyProfileButtons } from "@/components/app/company/CompanyProfileButtons";
 import { AdditionalInfoForm } from "@/components/app/company/AdditionalInfoForm";
 import { getBasicInformation } from "@/actions/company-account";
-import { ChangePasswordForm } from "@/components/app/company/ChangePasswordForm"
-import RemoveAccount from "@/components/app/company/RemoveAccount"
+import { ChangePasswordForm } from "@/components/app/company/ChangePasswordForm";
+import RemoveAccount from "@/components/app/company/RemoveAccount";
+import { signOutAction } from "@/actions/auth";
+import { LogOut } from "lucide-react";
 
 const page = async () => {
   const Information = await getBasicInformation();
@@ -44,7 +44,8 @@ const page = async () => {
             <button className="ring-1 ring-black py-2 px-7 rounded-xl font-medium">
               Upload new Picture
             </button>
-            <RemoveAccount/>
+
+            <RemoveAccount />
           </div>
         </div>
 
@@ -100,7 +101,24 @@ const page = async () => {
             <ChangePasswordForm />
           </div>
         </div>
-
+        <div className="relative w-full h-full border-2 border-gray-200 rounded-2xl flex justify-between">
+          <span className="absolute -top-4 left-10 bg-white px-2 text-2xl font-medium">
+            Logout
+          </span>
+          <p className="absolute top-4 left-12 text-md text-gray-400 font-light">
+            Logout of your account
+          </p>
+          <div className="mt-20 ml-12 mb-10">
+            <form action={signOutAction}>
+              <button
+                type="submit"
+                className="bg-[#FF000020] py-2 px-7 rounded-xl font-medium text-[#FF0000] flex gap-1"
+              >
+                <LogOut /> Logout
+              </button>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   );
