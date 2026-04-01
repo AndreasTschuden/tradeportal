@@ -77,6 +77,10 @@ export async function getNewestProducts() {
 
   const finalProducts: newestProductsType[] = newestProducts;
 
+  if(!finalProducts){
+    throw new Error("there are no products yet")
+  }
+
   finalProducts.forEach((prod) => {
     prod.specifications = JSON.parse(prod.specifications);
   });

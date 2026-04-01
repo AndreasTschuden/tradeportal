@@ -4,45 +4,6 @@
 -- Still needs least privelage: a admin: DDL, a user: DML, a reader: only select
 -- Only read acces on tables needed, not on better auth tables.
 
-Create Role migration_role;
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO migration_role;
-
-Create Role better_auth_role;
-GRANT ALL PRIVILEGES ON verification, session, account, "user" TO better_auth_role;
-
-Create Role user_role;
-GRANT SELECT ON categories, categories_products, companies, customers, orders, orders_products, products, reviews, shopping_cart_products, transactions TO user_role;
-GRANT INSERT ON customers, orders, orders_products, reviews, shopping_cart_products, transactions TO user_role;
-GRANT UPDATE ON customers, orders, reviews, shopping_cart_products TO user_role;
-GRANT DELETE ON reviews, shopping_cart_products TO user_role;
-
-Create Role company_role;
-GRANT SELECT ON categories, categories_products, companies, customers, orders, orders_products, products, reviews, shopping_cart_products, transactions TO company_role;
-GRANT INSERT ON categories_products, companies, products TO company_role;
-GRANT UPDATE ON categories_products, companies, products TO company_role;
-GRANT DELETE ON categories_products, products TO company_role;
-
-Create Role report_role;
-GRANT SELECT ON categories, categories_products, companies, customers, orders, orders_products, products, reviews, shopping_cart_products TO report_role;
-
-ALTER DEFAULT PRIVILEGES IN SCHEMA public
-GRANT SELECT ON TABLES TO migration_role, company_role, user_role;
-
-CREATE USER migration_bot WITH PASSWORD 'xLZX$95db2N29p@2mv3P';
-GRANT migration_role TO migration_bot;
-
-CREATE USER app_user WITH PASSWORD '&$YnfebHZERsn49NEe9U';
-GRANT user_role TO app_user;
-
-CREATE USER app_company WITH PASSWORD '2fD7dFtU&@pAobLYtYgx';
-GRANT company_role TO app_company;
-
-CREATE USER report_bot WITH PASSWORD 'YHRKQcq&%D5VDAnP4eVa';
-GRANT report_role TO report_bot;
-
-CREATE USER better_auth WITH PASSWORD '4KAxLTdFnT#WhveEC3&C';
-GRANT better_auth_role TO better_auth;
-
 -- 1.) Clear public schema
 DO $$ DECLARE
     r RECORD;
@@ -230,9 +191,10 @@ CREATE INDEX idx_sessions_user_id on session ("userId" ASC);
 CREATE TABLE shopping_cart_products (
     customers_id text  NOT NULL,
     products_id text  NOT NULL,
+    product_variant int  NOT NULL,
     quantity int  NOT NULL,
     updated_at timestamptz  NOT NULL,
-    CONSTRAINT shopping_cart_products_pk PRIMARY KEY (customers_id,products_id)
+    CONSTRAINT shopping_cart_products_pk PRIMARY KEY (customers_id,products_id,product_variant)
 );
 
 -- Table: transactions
@@ -566,8 +528,173 @@ INSERT INTO categories (name, description) VALUES
 ('Industrial & Scientific', 'Professional equipment and laboratory supplies'),
 ('Others', 'Products that do not fit into any specific category');
 
+Create Role migration_role;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO migration_role;
+
+Create Role better_auth_role;
+GRANT ALL PRIVILEGES ON verification, session, account, "user" TO better_auth_role;
+
+Create Role user_role;
+GRANT SELECT ON categories, categories_products, companies, customers, orders, orders_products, products, reviews, shopping_cart_products, transactions TO user_role;
+GRANT INSERT ON customers, orders, orders_products, reviews, shopping_cart_products, transactions TO user_role;
+GRANT UPDATE ON customers, orders, reviews, shopping_cart_products TO user_role;
+GRANT DELETE ON reviews, shopping_cart_products TO user_role;
+
+Create Role company_role;
+GRANT SELECT ON categories, categories_products, companies, customers, orders, orders_products, products, reviews, shopping_cart_products, transactions TO company_role;
+GRANT INSERT ON categories_products, companies, products TO company_role;
+GRANT UPDATE ON categories_products, companies, products TO company_role;
+GRANT DELETE ON categories_products, products TO company_role;
+
+Create Role report_role;
+GRANT SELECT ON categories, categories_products, companies, customers, orders, orders_products, products, reviews, shopping_cart_products TO report_role;
+
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+GRANT SELECT ON TABLES TO migration_role, company_role, user_role;
+
+CREATE USER migration_bot WITH PASSWORD 'xLZX$95db2N29p@2mv3P';
+GRANT migration_role TO migration_bot;
+
+CREATE USER app_user WITH PASSWORD '&$YnfebHZERsn49NEe9U';
+GRANT user_role TO app_user;
+
+CREATE USER app_company WITH PASSWORD '2fD7dFtU&@pAobLYtYgx';
+GRANT company_role TO app_company;
+
+CREATE USER report_bot WITH PASSWORD 'YHRKQcq&%D5VDAnP4eVa';
+GRANT report_role TO report_bot;
+
+CREATE USER better_auth WITH PASSWORD '4KAxLTdFnT#WhveEC3&C';
+GRANT better_auth_role TO better_auth;
+
+ GRANT USAGE ON SCHEMA public TO better_auth;
+ GRANT CONNECT ON DATABASE tradeportal TO better_auth;
+
+ GRANT USAGE ON SCHEMA public TO migration_bot;
+ GRANT CONNECT ON DATABASE tradeportal TO migration_bot;
+
+ GRANT USAGE ON SCHEMA public TO app_user;
+ GRANT CONNECT ON DATABASE tradeportal TO app_user;
+ 
+ GRANT USAGE ON SCHEMA public TO app_company;
+ GRANT CONNECT ON DATABASE tradeportal TO app_company;
+
+ GRANT USAGE ON SCHEMA public TO report_bot;
+ GRANT CONNECT ON DATABASE tradeportal TO report_bot;
+
 --docker compose down -v
 --docker compose up -d
 --run sql script in dbeaver (after restarting that connection as well)
 --npx prisma db pull
 --npx prisma generate
+
+
+
+    -- change the c.company_name and c.name into names that alr signed up.
+    -- you can use rollback to undo the the inserts.
+    
+    BEGIN;
+
+    -- PRODUCTS
+    INSERT INTO products (
+        id,
+        name,
+        base_price,
+        currency,
+        short_description,
+        long_description,
+        specifications,
+        companies_id,
+        isActive
+    )
+    SELECT
+    'prod_1',
+    'Laptop',
+    1200.00,
+    'USD',
+    'High performance laptop',
+    'A very powerful laptop for professionals',
+    '{"ram":"16GB","storage":"512GB"}', --needs to be replaced by the actual JSON
+    c.id,
+    true
+    FROM companies c
+    WHERE c.company_name = 'Tech Corp';
+
+    INSERT INTO products (
+        id,
+        name,
+        base_price,
+        currency,
+        short_description,
+        long_description,
+        specifications,
+        companies_id,
+        isActive
+    )
+    SELECT
+    'prod_2',
+    'RAM',
+    600.00,
+    'USD',
+    'High performance RAM',
+    'A very speedy RAM Stick professional gamers',
+    '{"ram":"16GB","storage":"512GB"}', --needs to be replaced by the actual JSON
+    c.id,
+    true
+    FROM companies c
+    WHERE c.company_name = 'Tech Corp';
+
+    -- CATEGORIES_PRODUCTS
+    INSERT INTO categories_products (categories_id, products_id)
+    VALUES
+    (1, 'prod_1'),
+    (2, 'prod_1'),
+    (1, 'prod_2');
+
+    -- ORDERS
+    INSERT INTO orders (
+        id, customers_id, order_date, shipper, tracking_number, status
+    )
+    SELECT
+    'order_1', c.id, CURRENT_DATE, 'DHL', 'TRACK123', 'shipped' 
+    from customers c 
+    where c.name = 'Test User';
+
+    -- ORDERS_PRODUCTS
+    INSERT INTO orders_products (
+        products_id, orders_id, unit_price, quantity, discount, specifications
+    )
+    VALUES
+    ('prod_1', 'order_1', 1200.00, 1, 0.00, '{"color":"silver"}'),  --needs to be replaced by the actual JSON
+    ('prod_2', 'order_1', 800.00, 2, 0.10, '{"color":"black"}');  --needs to be replaced by the actual JSON
+
+    -- REVIEWS
+    INSERT INTO reviews (
+        products_id, customers_id, stars, comment
+    )
+    SELECT
+    'prod_1', c.id, 5, 'Excellent product' from customers c where c.name = 'Test User';
+
+    INSERT INTO reviews (
+        products_id, customers_id, stars, comment
+    )
+    SELECT
+    'prod_2', c.id, 4, 'Very good phone' from customers c where c.name = 'Test User';
+
+    -- SHOPPING CART
+    INSERT INTO shopping_cart_products (
+        customers_id, products_id, product_variant, quantity, updated_at
+    )
+    SELECT
+    c.id, 'prod_1', 1, 1, now() from customers c where c.name = 'Test User';
+
+    -- TRANSACTIONS
+    INSERT INTO transactions (
+        customers_id, companies_id, amount, currency, orders_id
+    )
+    VALUES
+    ((selct c.id from customers c where c.name = 'Test User'), (selct c.id from companies c where c.company_name = 'Tech Corp'), 2800.00, 'USD', 'order_1');
+
+    COMMIT;
+
+    -- rollback

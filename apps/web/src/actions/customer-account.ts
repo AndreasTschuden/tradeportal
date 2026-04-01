@@ -148,3 +148,28 @@ export async function handleCustomerDeletion(user: {
     },
   });
 }
+
+export async function customerOrders() {
+
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if(!session){
+    throw new Error("Couldnt get session")
+  }
+
+  const orders = await db.user.orders.findMany({
+    where: {
+      customers_id: session?.user.id,
+    },
+  });
+
+  if(!orders){
+    throw new Error("You do not have any orders")
+  }
+
+  return orders
+}
+
+
