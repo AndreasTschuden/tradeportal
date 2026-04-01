@@ -27,7 +27,10 @@ const CompanyCard = ({
             >
               View Company
             </button>
-            <button className="border-2 border-red-700 py-1 px-6 rounded-lg font-bold text-red-700">
+            <button
+              onClick={() => router.push(`/home/products?company=${id}`)}
+              className="border-2 border-red-700 py-1 px-6 rounded-lg font-bold text-red-700"
+            >
               View Our Products
             </button>
           </div>

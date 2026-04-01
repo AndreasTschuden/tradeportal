@@ -14,9 +14,9 @@ export default function RootLayout({
 }>) {
   return (
     <>
-      <header className="min-h-[3vh] flex md:px-30 px-5 justify-between py-2">
-        <h1>USD</h1>
-        <h2>TEL</h2>
+      <header className="min-h-[3vh] flex md:px-30 px-5 justify-between py-2 bg-gray-100">
+        <h1>USD | EUR</h1>
+        <h2>+43 680 1201010</h2>
       </header>
         <MainNav/>
       <main>{children}</main>
