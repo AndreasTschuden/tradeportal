@@ -27,25 +27,25 @@ const MainNav = async () => {
           <Search strokeWidth={1} color="#808080" />
         </div>
         <div className="flex gap-5">
-          {result === "/home/account" ? (          <Link
-            href="/home/cart"
-            className="flex gap-2 items-center justify-center"
-          >
-            <ShoppingCart size={40} strokeWidth={1} />
-            <div className="relative">
-              <h2 className="font-light">Cart</h2>
-              <p className="font-bold">$ 160</p>
-               {cartItemsCount !== null && (
-              <div className="bg-gray-200 font-bold text-red-700 rounded-full w-5 h-5 flex items-center justify-center text-xs absolute top-0 -left-5.5 ">
-                {cartItemsCount}
+          {result === "/home/account" ? (
+            <Link
+              href="/home/cart"
+              className="flex gap-2 items-center justify-center"
+            >
+              <ShoppingCart size={40} strokeWidth={1} />
+              <div className="relative">
+                <h2 className="font-light">Cart</h2>
+                <p className="font-bold">$ 160</p>
+                {cartItemsCount !== null && (
+                  <div className="bg-gray-200 font-bold text-red-700 rounded-full w-5 h-5 flex items-center justify-center text-xs absolute top-0 -left-5.5 ">
+                    {cartItemsCount}
+                  </div>
+                )}
               </div>
-            )}
-            </div>
-          </Link>
+            </Link>
           ) : (
             <div className="font-light flex items-center"> No Cart</div>
           )}
-
 
           <div className="h-12 bg-gray-300 w-0.5"></div>
           <Link
@@ -57,7 +57,7 @@ const MainNav = async () => {
               <h2 className="font-light">
                 {result === "/home/account" ? "User" : "Company"}
               </h2>
-              <p className="font-bold" >Account</p>
+              <p className="font-bold">Account</p>
             </div>
           </Link>
         </div>

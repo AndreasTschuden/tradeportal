@@ -28,14 +28,7 @@ export default async function Home() {
       <h1 className="text-4xl font-bold">TradePortal</h1>
       <div className="mt-8 text-center">
         <p className="text-lg mb-4">User ID: {session.user.id}</p>
-        <form action={signOutAction}>
-          <button
-            type="submit"
-            className="inline-flex items-center justify-center rounded-md bg-blue-600 px-5 py-2.5 text-lg font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            Logout
-          </button>
-        </form>
+        
       </div>
       <div className="mt-6 w-full flex justify-center px-4"></div>
     </div>
