@@ -12,7 +12,7 @@ export default function ProductDetailLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="">
+    <div className="py-2 md:px-30 px-5">
       {children}
     </div>
   );
