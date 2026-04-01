@@ -18,7 +18,7 @@ const ProductsPage = async ({ searchParams }: PageProps) => {
   const categories = await getCategories();
   const companies = await getCompanies();
 
-  const itemsPerPage = 1;
+  const itemsPerPage = 16;
 
   let filteredProducts = products;
 
