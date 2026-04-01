@@ -18,7 +18,7 @@ const ProductsPage = async ({ searchParams }: PageProps) => {
   const categories = await getCategories();
   const companies = await getCompanies();
 
-  const itemsPerPage = 16;
+  const itemsPerPage = 1;
 
   let filteredProducts = products;
 
@@ -66,6 +66,9 @@ const ProductsPage = async ({ searchParams }: PageProps) => {
   const currentPage = Number(params.page) || 1;
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
 
+  const start = (currentPage - 1) * itemsPerPage;
+  const currentProducts = filteredProducts.slice(start, start + itemsPerPage);
+
   return (
     <div>
       <nav className="flex my-2 mb-6 text-sm">
@@ -90,7 +93,7 @@ const ProductsPage = async ({ searchParams }: PageProps) => {
             <SelectFilters categories={categories} />
           </div>
           <div className="grid grid-cols-4 w-full gap-3">
-            {filteredProducts.map((prod) => (
+            {currentProducts.map((prod) => (
               <ProductCard prod={prod} key={prod.id} />
             ))}
           </div>
