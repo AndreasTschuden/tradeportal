@@ -142,3 +142,65 @@ type productsForCompanyType = {
         categories_id: number;
     }[];
 };
+
+type allProductsType = {
+    categories_products: {
+        categories: {
+            id: number;
+        };
+    }[];
+    reviews: {
+        id: string;
+        created_at: Date;
+        updated_at: Date;
+        products_id: string;
+        customers_id: string;
+        stars: number;
+        comment: string | null;
+        report_points: number;
+        reviewer_comment: string | null;
+    }[];
+    _count: {
+        reviews: number;
+    };
+} & {
+    id: string;
+    name: string;
+    base_price: Decimal;
+    currency: string;
+    short_description: string;
+    long_description: string;
+    specifications: JsonValue;
+    companies_id: string;
+    created_at: Date;
+    updated_at: Date;
+    isactive: boolean;
+    avgStars? : number
+}
+
+type companyType = {
+    _count: {
+        products: number;
+    };
+} & {
+    id: string;
+    owner_id: string;
+    stripe_account_id: string;
+    onboarding_started_at: Date;
+    onboarding_completed_at: Date | null;
+    company_name: string;
+    certificate_of_incorporation: string | null;
+    is_verified: boolean;
+    approved_by: string | null;
+    email: string;
+    phone_number: string;
+    created_at: Date;
+    updated_at: Date;
+    deleted_at: Date | null;
+    founded_at: Date | null;
+    website: string | null;
+    address: string | null;
+    linkedin_url: string | null;
+    head_of_company: string | null;
+    employee_count: number | null;
+}

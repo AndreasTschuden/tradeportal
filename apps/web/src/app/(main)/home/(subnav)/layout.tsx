@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { SubNav } from "@/components/app/SubNav";
+import { Guarantees } from "@/components/app/Guarantees";
 
 export const metadata: Metadata = {
   title: "TradePortal | Home Navigation",
@@ -17,6 +18,9 @@ export default function HomeSubnavLayout({
         <SubNav />
       </div>
       <div className="py-2 md:px-30 px-5">{children}</div>
+      <div className="h-full">
+        <Guarantees />
+      </div>
     </>
   );
 }
