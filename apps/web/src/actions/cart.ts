@@ -105,3 +105,56 @@ export async function addToCart(
 
   return "added";
 }
+
+export async function getCartItems(userId: string) {
+  const cartItems = await db.user.shopping_cart_products.findMany({
+    where: {
+      customers_id: userId,
+    },
+    include: {
+      products: {
+        include: {
+          _count: {
+            select: {
+              reviews: true,
+            },
+          },
+          reviews: {
+            select: {
+              id: true,
+              stars: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  let avg = 0;
+  let count = 0;
+
+  let productWithStats : cartItemsWithAvgStars[] = cartItems;
+
+  productWithStats.forEach((prod) => {
+    if (prod.products._count.reviews != 0) {
+      prod.products.reviews.forEach((review) => {
+        avg += review.stars;
+        count = count + 1;
+      });
+      prod.products.avgStars = Math.round(avg / count);
+      avg = 0;
+    } else {
+      prod.products.avgStars = 0;
+    }
+  });
+
+  const finalProducts = productWithStats;
+
+  finalProducts.forEach((prod) => {
+    prod.products.specifications = JSON.parse(prod.products.specifications);
+    prod.products.base_price = Number(prod.products.base_price);
+  });
+
+  console.log(finalProducts);
+  return finalProducts;
+}

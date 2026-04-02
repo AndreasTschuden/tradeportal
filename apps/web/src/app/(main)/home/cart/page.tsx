@@ -3,8 +3,11 @@ import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/prisma";
 import Link from "next/link";
+import { ProductCard } from "@/components/app/cart/ProductCard";
+import { getCartItems } from "@/actions/cart";
 
 const ShoppingCartPage = async () => {
+
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -23,6 +26,8 @@ const ShoppingCartPage = async () => {
     redirect("/home");
   }
 
+  const products = await getCartItems(session.user.id);
+
   return (
     <div>
       <nav className="flex my-2 mb-4 text-sm">
@@ -35,7 +40,52 @@ const ShoppingCartPage = async () => {
         </Link>
       </nav>
       <div>
-       Cart
+        <div className="flex flex-col gap-10">
+          <div className="h-px bg-gray-300 w-full"></div>
+          <div className="flex gap-20 items-center justify-center">
+            <div className="flex gap-5 items-center justify-center">
+              <div className="bg-red-700 text-white font-medium text-2xl w-13 h-13 rounded-full flex items-center justify-center">
+                1
+              </div>
+              <h1 className="text-xl font-bold">CART ITEMS</h1>
+            </div>
+            <div className="flex gap-5 items-center justify-center">
+              <div className="bg-gray-300 text-black font-medium text-2xl w-13 h-13 rounded-full flex items-center justify-center">
+                2
+              </div>
+              <h1 className="text-xl font-bold">CHECKOUT</h1>
+            </div>
+            <div className="flex gap-5 items-center justify-center">
+              <div className="bg-gray-300 text-black font-medium text-2xl w-13 h-13 rounded-full flex items-center justify-center">
+                3
+              </div>
+              <h1 className="text-xl font-bold">ORDER COMPLETE</h1>
+            </div>
+          </div>
+          <div className="h-px bg-gray-300 w-full"></div>
+        </div>
+        <div>
+          <div className="w-full mt-15">
+            <div className="font-light flex justify-between items-center">
+              <div>
+                <p>Product</p>
+              </div>
+              <div className="flex gap-40">
+                <p>Price</p>
+                <p>Quantity</p>
+                <p>Total</p>
+                <p>Delete</p>
+              </div>
+            </div>
+            <div className="h-px bg-gray-300 w-full mt-1"></div>
+          </div>
+          <main>
+            <div className="mt-5 mb-5">
+              <ProductCard prod={products[0]}/>
+            </div>
+              <div className="h-px bg-gray-300 w-full"></div>
+          </main>
+        </div>
       </div>
     </div>
   );

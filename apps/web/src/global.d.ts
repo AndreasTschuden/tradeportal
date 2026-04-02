@@ -204,3 +204,34 @@ type companyType = {
     head_of_company: string | null;
     employee_count: number | null;
 }
+
+type cartItemsWithAvgStars = {
+    products: {
+        reviews: {
+            id: string;
+            stars: number;
+        }[];
+        _count: {
+            reviews: number;
+        };
+    } & {
+        name: string;
+        id: string;
+        created_at: Date;
+        updated_at: Date;
+        base_price: Decimal;
+        currency: string;
+        short_description: string;
+        long_description: string;
+        specifications: JsonValue;
+        companies_id: string;
+        isactive: boolean;
+        avgStars?: number;
+    };
+} & {
+    products_id: string;
+    customers_id: string;
+    updated_at: Date;
+    product_variant: number;
+    quantity: number;
+}
