@@ -4,7 +4,6 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
-import { Select } from "radix-ui";
 
 export async function getCartItemsCount() {
   const session = await auth.api.getSession({
@@ -34,7 +33,7 @@ export async function getCartItemsCount() {
   return cartItemsCount;
 }
 
-export async function addToCart(productId: string, product_variant: number, quantity: number) {
+export async function addToCart(productId: string, variant: number, quantity: number) {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -53,11 +52,12 @@ export async function addToCart(productId: string, product_variant: number, quan
     redirect("/home");
   }
 
+
   const result =await db.user.shopping_cart_products.create({
     data: {
       customers_id: session.user.id,
       products_id: productId,
-      product_variant: product_variant,
+      product_variant: variant,
       quantity : quantity,
       updated_at: new Date(),
     },

@@ -4,13 +4,15 @@ import { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { Heart, ShoppingCart } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { variantOptionSchema, variantOptionType } from "@/lib/zod";
-import { on } from "events";
+import { variantOptionSchema } from "@/lib/zod";
+import { addToCart } from "@/actions/cart";
+import { set } from "zod";
 
 const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
   const [cartCounter, setCartCounter] = useState<number>(1);
   const [toggleFavourite, setToggleFavourite] = useState<boolean>(false);
   const [variantAvailable, setVariantAvailable] = useState<boolean>(true);
+  const [currentVariant, setCurrentVariant] = useState<number | null>(null);
 
   const {
     register,
@@ -53,10 +55,32 @@ const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
         v.available === true,
     );
 
+    if (variant != undefined) {
+      const variantIndex = product.specifications.variants.findIndex(
+        (v: any) =>
+          Object.entries(newAttributes).every(([key, val]) => v[key] === val) &&
+          v.available === true,
+      );
+      setCurrentVariant(variantIndex);
+    }
     setVariantAvailable(!!variant);
   };
 
   const onSubmit = (data: any) => {
+    if (!variantAvailable) {
+      return;
+    }
+
+    try {
+      addToCart(product.id, currentVariant || 1, cartCounter);
+    } catch (error) {
+      if (error instanceof Error) {
+        // setErrorMessage(error.message);
+      } else {
+        console.error("Unknown error adding to cart:", error);
+      }
+    }
+
     console.log("Selected Attributes:", data);
   };
 
