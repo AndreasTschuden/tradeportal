@@ -317,7 +317,8 @@ export const variantOptionSchema = z.object({
         value: z.string().min(1, "Bitte auswählen")
       })
     )
-    .min(1, "Mindestens ein Select erforderlich")
+    .min(1, "Mindestens ein Select erforderlich"),
+  quantity: z.coerce.number().min(1, "Mindestbestellmenge ist 1"),
 });
 
 export type variantOptionType = z.infer<typeof variantOptionSchema>;

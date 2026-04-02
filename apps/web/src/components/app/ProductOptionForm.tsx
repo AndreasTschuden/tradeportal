@@ -5,6 +5,7 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { Heart, ShoppingCart } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { variantOptionSchema, variantOptionType } from "@/lib/zod";
+import { on } from "events";
 
 const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
   const [cartCounter, setCartCounter] = useState<number>(1);
@@ -16,7 +17,7 @@ const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<variantOptionType>({
+  } = useForm({
     resolver: zodResolver(variantOptionSchema),
   });
 
@@ -99,6 +100,11 @@ const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
               {errors.options.message || "Please select valid options."}
             </div>
           )}
+          {errors.quantity && (
+            <div className="text-red-500">
+              {errors.quantity.message || "Please enter a valid quantity."}
+            </div>
+          )}
         </div>
 
         <div className="flex flex-col gap-3">
@@ -121,14 +127,35 @@ const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
               >
                 +
               </button>
-              <p className="border-2 border-gray-200 h-full w-full flex items-center justify-center text-3xl">
-                {cartCounter}
-              </p>
+
+              <input
+                type="text"
+                min={1}
+                className="w-full text-center border-y-2 border-gray-200 text-3xl h-full outline-none"
+                value={cartCounter}
+                {...register("quantity", {
+                  onChange: (e) => {
+                    const val = e.target.value;
+
+                    if (val === "") {
+                      setCartCounter(0);
+                      return;
+                    }
+
+                    const num = Number(val);
+
+                    if (!isNaN(num) && num >= 1) {
+                      setCartCounter(num);
+                    }
+                  },
+                })}
+              />
+
               <button
                 type="button"
                 className="bg-gray-200 h-full w-full rounded-r-xl text-3xl"
                 onClick={() =>
-                  setCartCounter((prev) => (prev >= 2 ? prev - 1 : prev))
+                  setCartCounter((prev) => (prev > 1 ? prev - 1 : 1))
                 }
               >
                 -
