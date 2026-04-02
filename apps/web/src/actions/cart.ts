@@ -33,7 +33,11 @@ export async function getCartItemsCount() {
   return cartItemsCount;
 }
 
-export async function addToCart(productId: string, variant: number, quantity: number) {
+export async function addToCart(
+  productId: string,
+  variant: number,
+  quantity: number,
+) {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -52,20 +56,52 @@ export async function addToCart(productId: string, variant: number, quantity: nu
     redirect("/home");
   }
 
+  const product = await db.user.shopping_cart_products.findFirst({
+    where: {
+      customers_id: session.user.id,
+      products_id: productId,
+      product_variant: variant,
+    },
+  });
 
-  const result =await db.user.shopping_cart_products.create({
+  if (product) {
+    const updatedQuantity = product.quantity + quantity;
+
+    const result = await db.user.shopping_cart_products.update({
+      where: {
+        // Composite Primary Key
+        customers_id_products_id_product_variant: {
+          customers_id: product.customers_id,
+          products_id: product.products_id,
+          product_variant: product.product_variant,
+        },
+      },
+      data: {
+        quantity: updatedQuantity,
+        updated_at: new Date(),
+      },
+    });
+
+    if (!result) {
+      throw new Error("Failed to update cart item");
+    }
+
+    return "updated";
+  }
+
+  const result = await db.user.shopping_cart_products.create({
     data: {
       customers_id: session.user.id,
       products_id: productId,
       product_variant: variant,
-      quantity : quantity,
+      quantity: quantity,
       updated_at: new Date(),
     },
   });
 
-  if(!result) {
+  if (!result) {
     throw new Error("Failed to add item to cart");
   }
 
-  return result;
+  return "added";
 }

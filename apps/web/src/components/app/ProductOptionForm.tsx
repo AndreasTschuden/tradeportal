@@ -6,13 +6,15 @@ import { Heart, ShoppingCart } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { variantOptionSchema } from "@/lib/zod";
 import { addToCart } from "@/actions/cart";
-import { set } from "zod";
+import { toast } from "sonner";
+
 
 const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
   const [cartCounter, setCartCounter] = useState<number>(1);
   const [toggleFavourite, setToggleFavourite] = useState<boolean>(false);
   const [variantAvailable, setVariantAvailable] = useState<boolean>(true);
   const [currentVariant, setCurrentVariant] = useState<number | null>(null);
+
 
   const {
     register,
@@ -66,18 +68,24 @@ const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
     setVariantAvailable(!!variant);
   };
 
-  const onSubmit = (data: any) => {
+  const onSubmit = async (data: any) => {
     if (!variantAvailable) {
       return;
     }
 
     try {
-      addToCart(product.id, currentVariant || 1, cartCounter);
+      const result = await addToCart(product.id, currentVariant || 1, cartCounter);
+      if (result === "updated") {
+        toast.success("Cart item updated successfully!");
+      } else if (result === "added") {
+        toast.success("Item added to cart successfully!");
+      }
     } catch (error) {
       if (error instanceof Error) {
-        // setErrorMessage(error.message);
+        toast.error(error.message);
       } else {
         console.error("Unknown error adding to cart:", error);
+        toast.error("An unknown error occurred while adding to cart.");
       }
     }
 
