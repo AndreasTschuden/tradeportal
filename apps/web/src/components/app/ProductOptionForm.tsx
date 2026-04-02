@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { variantOptionSchema } from "@/lib/zod";
 import { addToCart } from "@/actions/cart";
 import { toast } from "sonner";
+import { redirect } from "next/navigation";
 
 
 const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
@@ -79,13 +80,17 @@ const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
         toast.success("Cart item updated successfully!");
       } else if (result === "added") {
         toast.success("Item added to cart successfully!");
+      }else if (result === "customer_not_found") {
+        toast.error("Customer not found. Please sign in again.");
+        redirect("/home");
       }
     } catch (error) {
       if (error instanceof Error) {
-        toast.error(error.message);
-      } else {
-        console.error("Unknown error adding to cart:", error);
-        toast.error("An unknown error occurred while adding to cart.");
+        if (error.message === "NEXT_REDIRECT") {
+          redirect("/home");
+        } else {
+          toast.error(error.message);
+        }
       }
     }
 
