@@ -145,9 +145,5 @@ export async function getCompanyById(id : string){
     }
   })
 
-  if(!company){
-    throw new Error("Company not found")
-  }
-
   return company;
 }

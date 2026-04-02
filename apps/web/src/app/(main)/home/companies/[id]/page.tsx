@@ -6,7 +6,7 @@ interface PageProps {
 }
 
 const Page = async ({ params }: PageProps) => {
-  const { id } = params;
+  const { id } = await params;
   const company = await getCompanyById(id);
 
   if (!company) {
