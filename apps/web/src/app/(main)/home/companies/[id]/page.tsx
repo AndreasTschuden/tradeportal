@@ -25,7 +25,7 @@ const Page = async ({ params }: PageProps) => {
   }) => (
     <div>
       <p className="text-sm text-gray-500">{label}</p>
-      <p className="font-medium break-words">{value || 'N/A'}</p>
+      <p className="font-medium wrap-break-words">{value || 'N/A'}</p>
     </div>
   );
 
@@ -64,7 +64,6 @@ const Page = async ({ params }: PageProps) => {
         </Link>
       </nav>
 
-      {/* Header */}
       <div className="bg-white shadow rounded-2xl p-6 mb-6">
         <h1 className="text-3xl font-bold mb-3">
           {company.company_name}
@@ -82,7 +81,7 @@ const Page = async ({ params }: PageProps) => {
       </div>
 
       <div className="space-y-6">
-        {/* General */}
+
         <div className="bg-white rounded-2xl p-6">
           <h2 className="text-lg font-semibold mb-4">General</h2>
           <div className="grid md:grid-cols-2 gap-6">
@@ -93,7 +92,6 @@ const Page = async ({ params }: PageProps) => {
           </div>
         </div>
 
-        {/* Contact */}
         <div className="bg-white shadow rounded-2xl p-6">
           <h2 className="text-lg font-semibold mb-4">Contact</h2>
           <div className="grid md:grid-cols-2 gap-6">
@@ -103,7 +101,6 @@ const Page = async ({ params }: PageProps) => {
           </div>
         </div>
 
-        {/* Online Presence */}
         <div className="bg-white shadow rounded-2xl p-6">
           <h2 className="text-lg font-semibold mb-4">Online Presence</h2>
           <div className="grid md:grid-cols-2 gap-6">
