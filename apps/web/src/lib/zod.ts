@@ -308,3 +308,16 @@ export const billingAddressSchema = z.object({
 });
 
 export type billingAddressType = z.infer<typeof billingAddressSchema>
+
+
+export const variantOptionSchema = z.object({
+  options: z
+    .array(
+      z.object({
+        value: z.string().min(1, "Bitte auswählen")
+      })
+    )
+    .min(1, "Mindestens ein Select erforderlich")
+});
+
+export type variantOptionType = z.infer<typeof variantOptionSchema>;

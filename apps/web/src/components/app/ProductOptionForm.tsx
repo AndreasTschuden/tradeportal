@@ -1,12 +1,31 @@
 "use client";
 
 import { useState } from "react";
+import { useFieldArray, useForm } from "react-hook-form";
 import { Heart, ShoppingCart } from "lucide-react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { variantOptionSchema, variantOptionType } from "@/lib/zod";
 
 const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
   const [cartCounter, setCartCounter] = useState<number>(1);
   const [toggleFavourite, setToggleFavourite] = useState<boolean>(false);
   const [variantAvailable, setVariantAvailable] = useState<boolean>(true);
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<variantOptionType>({
+    resolver: zodResolver(variantOptionSchema),
+  });
+
+  const { fields, append, prepend, remove, swap, move, insert } = useFieldArray(
+    {
+      control,
+      name: "options",
+    },
+  );
 
   const initialObj = product.specifications.attributes.reduce(
     (acc: Record<string, string>, attr: any) => {
@@ -36,28 +55,32 @@ const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
     setVariantAvailable(!!variant);
   };
 
+  const onSubmit = (data: any) => {
+    console.log("Selected Attributes:", data);
+  };
+
   return (
     <div className="flex flex-col gap-3 justify-between h-full mt-10 mb-5">
       <form
-        onSubmit={() => {}}
+        onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col justify-between h-full"
       >
         <div className="flex flex-col gap-5">
-          {product.specifications.attributes.map((attr: any) => (
+          {product.specifications.attributes.map((attr: any, index: number) => (
             <div key={attr.name}>
               <div className="flex justify-between mb-1">
                 <p>{attr.name}</p>
 
                 <select
-                  name={attr.name}
-                  id={attr.name}
-                  value={selectedAttributes[attr.name] || ""}
-                  onChange={(e) =>
-                    handleSelectChange(attr.name, e.target.value)
-                  }
+                  key={attr.name}
+                  {...register(`options.${index}.value`, {
+                    onChange: (e) =>
+                      handleSelectChange(attr.name, e.target.value),
+                  })}
+                  defaultValue={attr.values[0]}
                 >
-                  {attr.values.map((option: any) => (
-                    <option value={option} key={option}>
+                  {attr.values.map((option: string) => (
+                    <option key={option} value={option}>
                       {option}
                     </option>
                   ))}
@@ -69,6 +92,11 @@ const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
           {!variantAvailable && (
             <div className="text-red-500">
               Diese Variante ist nicht mehr verfügbar
+            </div>
+          )}
+          {errors.options && (
+            <div className="text-red-500">
+              {errors.options.message || "Please select valid options."}
             </div>
           )}
         </div>

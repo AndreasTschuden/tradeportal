@@ -34,7 +34,7 @@ export async function getCartItemsCount() {
   return cartItemsCount;
 }
 
-export async function addToCart(productId: number, variantId: number, quantity: number) {
+export async function addToCart(productId: string, product_variant: number, quantity: number) {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -53,12 +53,19 @@ export async function addToCart(productId: number, variantId: number, quantity: 
     redirect("/home");
   }
 
-  await db.user.shopping_cart_products.create({
+  const result =await db.user.shopping_cart_products.create({
     data: {
       customers_id: session.user.id,
       products_id: productId,
-      variants_id: variantId,
-      quantity,
+      product_variant: product_variant,
+      quantity : quantity,
+      updated_at: new Date(),
     },
   });
+
+  if(!result) {
+    throw new Error("Failed to add item to cart");
+  }
+
+  return result;
 }
