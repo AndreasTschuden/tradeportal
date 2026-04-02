@@ -3,10 +3,24 @@
 import { ShoppingCart, Star } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { addToCart } from "@/actions/cart";
+import { toast } from "sonner";
 
 const ProductCard = ({prod} : { prod : productWithStatsType}) => {
 
     const router = useRouter();
+
+    const handleAddToCart = async () => {
+      try {
+        await addToCart(prod.id, 1, 1);
+        toast.success("Product added to cart!");
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error("Error adding to cart:", error.message);
+          toast.error("Failed to add product to cart.");
+        }
+      }
+    };
       
   return (
 
@@ -25,6 +39,7 @@ const ProductCard = ({prod} : { prod : productWithStatsType}) => {
                 opacity-0 group-hover:opacity-100
                 transition-opacity duration-300
                 rounded-b-md"
+                onClick={handleAddToCart}
               >
                 <p className="text-white font-medium flex gap-3">
                   <ShoppingCart />
