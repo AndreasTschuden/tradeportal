@@ -129,3 +129,25 @@ export async function getCompanies(){
   console.log(companies)
   return companies
 }
+
+export async function getCompanyById(id : string){
+
+  const company = await db.user.companies.findFirst({
+    where : {
+      id : id,
+      deleted_at : null,
+      is_verified : true,
+      products : {
+        some : {
+          isactive : true
+        }
+      }
+    }
+  })
+
+  if(!company){
+    throw new Error("Company not found")
+  }
+
+  return company;
+}
