@@ -33,3 +33,32 @@ export async function getCartItemsCount() {
 
   return cartItemsCount;
 }
+
+export async function addToCart(productId: number, variantId: number, quantity: number) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session?.user) {
+    redirect("/signin");
+  }
+
+  const customer = await db.user.customers.findFirst({
+    where: {
+      id: session.user.id,
+    },
+  });
+
+  if (!customer) {
+    redirect("/home");
+  }
+
+  await db.user.shopping_cart_products.create({
+    data: {
+      customers_id: session.user.id,
+      products_id: productId,
+      variants_id: variantId,
+      quantity,
+    },
+  });
+}
