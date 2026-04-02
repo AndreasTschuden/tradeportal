@@ -229,8 +229,6 @@ export async function getFourProductsByCategory(
   return finalProducts;
 }
 
-
-
 export async function getProductsByCompany(){
 
   const session = await auth.api.getSession({
@@ -342,4 +340,53 @@ export async function updateProductAvailability(value : boolean, productId : str
   });
 
 
+}
+
+export async function getAllProducts(){
+  const products = await db.user.products.findMany({
+    include:{
+      reviews: {},
+      _count: {
+        select: {
+          reviews: true,
+        },
+      },
+      categories_products : {
+        select : {
+          categories : {
+            select : {
+              id : true
+            }
+          }
+        }
+      }
+    }
+  });
+
+   let avg = 0;
+  let count = 0;
+
+  let productWithStats: allProductsType[] = products;
+
+  productWithStats.forEach((prod) => {
+    if (prod._count.reviews != 0) {
+      prod.reviews.forEach((review) => {
+        avg += review.stars;
+        count = count + 1;
+      });
+      prod.avgStars = Math.round(avg / count);
+      avg = 0;
+    } else {
+      prod.avgStars = 0;
+    }
+  });
+
+  const finalProducts = productWithStats;
+
+  finalProducts.forEach((prod) => {
+    prod.specifications = JSON.parse(prod.specifications);
+    prod.base_price = Number(prod.base_price);
+  });
+
+  return(finalProducts)
 }

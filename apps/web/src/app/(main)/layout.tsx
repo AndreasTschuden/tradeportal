@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
+import { MainNav } from "@/components/app/navigation/MainNav"
 import "@/app/globals.css";
-import { SubNav } from "@/components/app/SubNav";
-import { Guarantees } from "@/components/app/Guarantees";
 
 export const metadata: Metadata = {
   title: "TradePortal | Marketplace",
@@ -15,18 +14,12 @@ export default function RootLayout({
 }>) {
   return (
     <>
-      <header className="min-h-[3vh] flex md:px-30 px-5 justify-between py-2">
-        <h1>USD</h1>
-        <h2>TEL</h2>
+      <header className="min-h-[3vh] flex md:px-30 px-5 justify-between py-2 bg-gray-100">
+        <h1>USD | EUR</h1>
+        <h2>+43 680 1201010</h2>
       </header>
-      <nav className="bg-gray-200 h-[10vh] flex items-center justify-between md:px-30 px-5">
-        <h1>TradePortal</h1>
-        <h2>Links / User / Cart</h2>
-      </nav>
+        <MainNav/>
       <main>{children}</main>
-      <div className="h-full">
-        <Guarantees />
-      </div>
       <footer className="bg-gray-200 h-[40vh] flex items-center justify-center md:px-30 px-5">
         <h1>Footer</h1>
       </footer>

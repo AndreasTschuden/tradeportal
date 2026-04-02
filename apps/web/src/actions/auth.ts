@@ -129,3 +129,25 @@ export async function signOutAction() {
   });
   redirect("/home");
 }
+
+export async function handleUserLink() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session?.user) {
+    redirect("/signin");
+  }
+
+  const company = await db.company.companies.findFirst({
+    where: {
+      owner_id: session.user.id,
+    },
+  });
+
+  if (company) {
+    return "/home/company/account";
+  }
+
+  return "/home/account";
+}
