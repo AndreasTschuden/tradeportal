@@ -134,7 +134,7 @@ const CustomerOrders = () => {
       {typeof displayArr != "string" && displayArr ? (
         displayArr.map((obj, index) => (
           <div className="border rounded-xl mt-6" key={obj.id}>
-            <div className="flex mt-2 mx-4 gap-auto gap-[20%]">
+            <div className="flex mt-2 mx-4 gap-auto gap-[18%]">
               {" "}
               {/*Ka ohnung wie i dos center, des deina Andi*/}
               <div className="flex flex-col">
@@ -162,6 +162,11 @@ const CustomerOrders = () => {
                 <p>Tracking number</p>
                 <p className="text-black font-semibold">
                   {obj.tracking_number}
+                </p>
+              </div>
+              <div className="flex flex-col">
+                <p className={(obj.status == "pending" || obj.status == "shipped") ? "text-amber-400 px-6 py-2 rounded-xl bg-amber-200" : obj.status == "cancelled" ? "text-red-500 px-6 py-2 rounded-xl bg-red-300" : "text-green-500 px-6 py-2 rounded-xl bg-green-300"}>
+                  {obj.status}
                 </p>
               </div>
             </div>
