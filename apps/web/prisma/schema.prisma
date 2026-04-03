@@ -208,14 +208,15 @@ model session {
 }
 
 model shopping_cart_products {
-  customers_id String
-  products_id  String
-  quantity     Int
-  updated_at   DateTime  @db.Timestamptz(6)
-  customers    customers @relation(fields: [customers_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "shopping_carts_products_customers")
-  products     products  @relation(fields: [products_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "shopping_carts_products_products")
+  customers_id    String
+  products_id     String
+  product_variant Int
+  quantity        Int
+  updated_at      DateTime  @db.Timestamptz(6)
+  customers       customers @relation(fields: [customers_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "shopping_carts_products_customers")
+  products        products  @relation(fields: [products_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "shopping_carts_products_products")
 
-  @@id([customers_id, products_id], map: "shopping_cart_products_pk")
+  @@id([customers_id, products_id, product_variant], map: "shopping_cart_products_pk")
   @@index([products_id], map: "idx_shopping_cart_products_products_id")
   @@index([customers_id, updated_at(sort: Desc)], map: "idx_shopping_cart_products_updated_at")
 }

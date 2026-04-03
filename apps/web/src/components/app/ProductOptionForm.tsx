@@ -1,12 +1,37 @@
 "use client";
 
 import { useState } from "react";
+import { useFieldArray, useForm } from "react-hook-form";
 import { Heart, ShoppingCart } from "lucide-react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { variantOptionSchema } from "@/lib/zod";
+import { addToCart } from "@/actions/cart";
+import { toast } from "sonner";
+import { redirect } from "next/navigation";
+
 
 const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
   const [cartCounter, setCartCounter] = useState<number>(1);
   const [toggleFavourite, setToggleFavourite] = useState<boolean>(false);
   const [variantAvailable, setVariantAvailable] = useState<boolean>(true);
+  const [currentVariant, setCurrentVariant] = useState<number | null>(null);
+
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(variantOptionSchema),
+  });
+
+  const { fields, append, prepend, remove, swap, move, insert } = useFieldArray(
+    {
+      control,
+      name: "options",
+    },
+  );
 
   const initialObj = product.specifications.attributes.reduce(
     (acc: Record<string, string>, attr: any) => {
@@ -33,31 +58,67 @@ const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
         v.available === true,
     );
 
+    if (variant != undefined) {
+      const variantIndex = product.specifications.variants.findIndex(
+        (v: any) =>
+          Object.entries(newAttributes).every(([key, val]) => v[key] === val) &&
+          v.available === true,
+      );
+      setCurrentVariant(variantIndex);
+    }
     setVariantAvailable(!!variant);
+  };
+
+  const onSubmit = async (data: any) => {
+    if (!variantAvailable) {
+      return;
+    }
+
+    try {
+      const result = await addToCart(product.id, currentVariant || 1, cartCounter);
+      if (result === "updated") {
+        toast.success("Cart item updated successfully!");
+      } else if (result === "added") {
+        toast.success("Item added to cart successfully!");
+      }else if (result === "customer_not_found") {
+        toast.error("Customer not found. Please sign in again.");
+        redirect("/home");
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        if (error.message === "NEXT_REDIRECT") {
+          redirect("/home");
+        } else {
+          toast.error(error.message);
+        }
+      }
+    }
+
+    console.log("Selected Attributes:", data);
   };
 
   return (
     <div className="flex flex-col gap-3 justify-between h-full mt-10 mb-5">
       <form
-        onSubmit={() => {}}
+        onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col justify-between h-full"
       >
         <div className="flex flex-col gap-5">
-          {product.specifications.attributes.map((attr: any) => (
+          {product.specifications.attributes.map((attr: any, index: number) => (
             <div key={attr.name}>
               <div className="flex justify-between mb-1">
                 <p>{attr.name}</p>
 
                 <select
-                  name={attr.name}
-                  id={attr.name}
-                  value={selectedAttributes[attr.name] || ""}
-                  onChange={(e) =>
-                    handleSelectChange(attr.name, e.target.value)
-                  }
+                  key={attr.name}
+                  {...register(`options.${index}.value`, {
+                    onChange: (e) =>
+                      handleSelectChange(attr.name, e.target.value),
+                  })}
+                  defaultValue={attr.values[0]}
                 >
-                  {attr.values.map((option: any) => (
-                    <option value={option} key={option}>
+                  {attr.values.map((option: string) => (
+                    <option key={option} value={option}>
                       {option}
                     </option>
                   ))}
@@ -69,6 +130,16 @@ const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
           {!variantAvailable && (
             <div className="text-red-500">
               Diese Variante ist nicht mehr verfügbar
+            </div>
+          )}
+          {errors.options && (
+            <div className="text-red-500">
+              {errors.options.message || "Please select valid options."}
+            </div>
+          )}
+          {errors.quantity && (
+            <div className="text-red-500">
+              {errors.quantity.message || "Please enter a valid quantity."}
             </div>
           )}
         </div>
@@ -93,14 +164,35 @@ const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
               >
                 +
               </button>
-              <p className="border-2 border-gray-200 h-full w-full flex items-center justify-center text-3xl">
-                {cartCounter}
-              </p>
+
+              <input
+                type="text"
+                min={1}
+                className="w-full text-center border-y-2 border-gray-200 text-3xl h-full outline-none"
+                value={cartCounter}
+                {...register("quantity", {
+                  onChange: (e) => {
+                    const val = e.target.value;
+
+                    if (val === "") {
+                      setCartCounter(0);
+                      return;
+                    }
+
+                    const num = Number(val);
+
+                    if (!isNaN(num) && num >= 1) {
+                      setCartCounter(num);
+                    }
+                  },
+                })}
+              />
+
               <button
                 type="button"
                 className="bg-gray-200 h-full w-full rounded-r-xl text-3xl"
                 onClick={() =>
-                  setCartCounter((prev) => (prev >= 2 ? prev - 1 : prev))
+                  setCartCounter((prev) => (prev > 1 ? prev - 1 : 1))
                 }
               >
                 -
