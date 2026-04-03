@@ -178,3 +178,27 @@ export async function deleteCartItem(params: { customerId: string; productId: st
 
   return "deleted";
 }
+
+export async function changeCartItemQuantity(params: { customerId: string; productId: string; variant: number; quantity: number }) {
+  const { customerId, productId, variant, quantity } = params;
+
+  const result = await db.user.shopping_cart_products.update({
+    where: {
+      customers_id_products_id_product_variant: {
+        customers_id: customerId,
+        products_id: productId,
+        product_variant: variant,
+      },
+    },
+    data: {
+      quantity: quantity,
+      updated_at: new Date(),
+    },
+  });
+
+  if (!result) {
+    throw new Error("Failed to update cart item quantity");
+  }
+
+  return "updated";
+}

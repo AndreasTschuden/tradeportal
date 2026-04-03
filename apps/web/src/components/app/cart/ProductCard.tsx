@@ -1,13 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
-import { deleteCartItem } from "@/actions/cart";
+import { useState, useEffect } from "react";
+import { deleteCartItem, changeCartItemQuantity } from "@/actions/cart";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 const ProductCard = ({ prod }: { prod: cartItemsWithAvgStars }) => {
-    const router = useRouter();
+  const router = useRouter();
   const [currentQuantity, setCurrentQuantity] = useState(prod.quantity);
 
   const attrName =
@@ -15,6 +15,29 @@ const ProductCard = ({ prod }: { prod: cartItemsWithAvgStars }) => {
       prod.products.specifications.attributes[0].name
     ];
   const imgName = prod.products.specifications.attributes[0].images[attrName];
+
+  const itemPrice = prod.products.base_price * prod.products.specifications.variants[prod.product_variant].priceModifier
+
+  console.log( prod.products.specifications.variants[prod.product_variant].priceModifier)
+
+  useEffect(() => {
+    const timeout = setTimeout(async () => {
+      try {
+        await changeCartItemQuantity({
+          customerId: prod.customers_id,
+          productId: prod.products_id,
+          variant: prod.product_variant,
+          quantity: currentQuantity,
+        });
+        router.refresh();
+      } catch (error) {
+        console.error("Failed to update quantity", error);
+        toast.error("Failed to update quantity");
+      }
+    }, 400);
+
+    return () => clearTimeout(timeout);
+  }, [currentQuantity]);
 
   return (
     <div className="w-full py-3 grid grid-cols-[2fr_1fr_1fr_1fr_80px] items-center">
@@ -53,12 +76,11 @@ const ProductCard = ({ prod }: { prod: cartItemsWithAvgStars }) => {
 
       <p className="text-center  font-medium text-lg">
         {prod.products.currency === "EUR" ? "€" : "$"}{" "}
-        {prod.products.base_price}
+        {itemPrice}
       </p>
 
       <div className="flex justify-center">
         <div className="flex items-center border rounded-md overflow-hidden">
-          {/* MINUS */}
           <button
             className="px-3 py-1 text-lg border-r hover:bg-gray-100"
             onClick={() => setCurrentQuantity((prev) => Math.max(1, prev - 1))}
@@ -98,7 +120,7 @@ const ProductCard = ({ prod }: { prod: cartItemsWithAvgStars }) => {
 
       <p className="text-center font-semibold text-lg">
         {prod.products.currency === "EUR" ? "€" : "$"}{" "}
-        {currentQuantity * prod.products.base_price}
+        {(currentQuantity * itemPrice)}
       </p>
 
       <div className="flex justify-center">
@@ -109,7 +131,7 @@ const ProductCard = ({ prod }: { prod: cartItemsWithAvgStars }) => {
               await deleteCartItem({
                 customerId: prod.customers_id,
                 productId: prod.products_id,
-                variant: prod.product_variant
+                variant: prod.product_variant,
               });
               toast.success("Item removed from cart!");
               router.refresh();
@@ -117,7 +139,6 @@ const ProductCard = ({ prod }: { prod: cartItemsWithAvgStars }) => {
               if (error instanceof Error) {
                 console.error("Error removing item from cart:", error.message);
                 toast.error("Failed to remove item from cart.");
-                
               }
             }
           }}
