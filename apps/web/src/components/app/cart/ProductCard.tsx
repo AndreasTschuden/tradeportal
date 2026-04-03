@@ -2,9 +2,12 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { set } from "zod";
+import { deleteCartItem } from "@/actions/cart";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const ProductCard = ({ prod }: { prod: cartItemsWithAvgStars }) => {
+    const router = useRouter();
   const [currentQuantity, setCurrentQuantity] = useState(prod.quantity);
 
   const attrName =
@@ -99,7 +102,26 @@ const ProductCard = ({ prod }: { prod: cartItemsWithAvgStars }) => {
       </p>
 
       <div className="flex justify-center">
-        <button className="border w-8 h-8 flex items-center justify-center text-red-500">
+        <button
+          className="border w-8 h-8 flex items-center justify-center text-red-500"
+          onClick={async () => {
+            try {
+              await deleteCartItem({
+                customerId: prod.customers_id,
+                productId: prod.products_id,
+                variant: prod.product_variant
+              });
+              toast.success("Item removed from cart!");
+              router.refresh();
+            } catch (error) {
+              if (error instanceof Error) {
+                console.error("Error removing item from cart:", error.message);
+                toast.error("Failed to remove item from cart.");
+                
+              }
+            }
+          }}
+        >
           ×
         </button>
       </div>

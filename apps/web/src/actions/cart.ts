@@ -158,3 +158,23 @@ export async function getCartItems(userId: string) {
   console.log(finalProducts);
   return finalProducts;
 }
+
+export async function deleteCartItem(params: { customerId: string; productId: string; variant: number }) {
+  const { customerId, productId, variant } = params;
+
+  const result = await db.user.shopping_cart_products.delete({
+    where: {
+      customers_id_products_id_product_variant: {
+        customers_id: customerId,
+        products_id: productId,
+        product_variant: variant,
+      },
+    },
+  });
+
+  if (!result) {
+    throw new Error("Failed to delete cart item");
+  }
+
+  return "deleted";
+}
