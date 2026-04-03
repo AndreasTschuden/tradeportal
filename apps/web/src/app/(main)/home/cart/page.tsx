@@ -27,6 +27,12 @@ const ShoppingCartPage = async () => {
 
   const products = await getCartItems(session.user.id);
 
+  const totalPrice = products.reduce((total, prod) => {
+    const price = prod.products.base_price;
+    const quantity = prod.quantity;
+    return total + price * quantity;
+  }, 0);
+
   return (
     <div>
       <nav className="flex my-2 mb-4 text-sm">
@@ -65,18 +71,14 @@ const ShoppingCartPage = async () => {
         </div>
         <div>
           <div className="w-full mt-15">
-            <div className="font-light flex justify-between items-center">
-              <div>
-                <p>Product</p>
-              </div>
-              <div className="flex gap-40">
-                <p>Price</p>
-                <p>Quantity</p>
-                <p>Total</p>
-                <p>Delete</p>
-              </div>
+            <div className="grid grid-cols-[2fr_1fr_1fr_1fr_80px] items-center">
+              <p>Product</p>
+              <p className="text-center">Price</p>
+              <p className="text-center">Quantity</p>
+              <p className="text-center">Total</p>
+              <p className="text-center">Delete</p>
             </div>
-            <div className="h-px bg-gray-300 w-full mt-1"></div>
+            <div className="h-px bg-gray-300 w-full mt-2"></div>
           </div>
           <main>
             <div className="mt-5 mb-5">
@@ -101,7 +103,7 @@ const ShoppingCartPage = async () => {
             <div className="flex flex-col gap-2 justify-end items-end">
               <p className="text-xl font-medium flex gap-5 items-baseline-last justify-center">
                 <span>TOTAL:</span>
-                <strong className="text-3xl font-medium">${860}</strong>
+                <strong className="text-3xl font-medium">${totalPrice.toFixed(2)}</strong>
               </p>
               <button className="px-10 py-3 bg-red-700 text-white">
                 Proceed to Checkout
