@@ -17,6 +17,12 @@ export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   console.log(pathname);
 
+  if(pathname === "/"){
+    const url = request.nextUrl.clone();
+    url.pathname = "/home";
+    return NextResponse.redirect(url);
+  }
+
   if (PUBLIC_ROUTES.includes(pathname)) {
     return NextResponse.next();
   }
