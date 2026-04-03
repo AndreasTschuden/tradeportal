@@ -154,7 +154,7 @@ export async function getDetailedProduct(id: string) {
   } else {
     prod.avgStars = 0;
   }
-  prod.specifications = JSON.parse(prod.specifications);
+  prod.specifications = typeof prod.specifications == "string" ? JSON.parse(prod.specifications) : prod.specifications;
 
   return prod;
 }
@@ -222,7 +222,7 @@ export async function getFourProductsByCategory(
   const finalProducts = productWithStats;
 
   finalProducts.forEach((prod) => {
-    prod.specifications = JSON.parse(prod.specifications);
+    prod.specifications =  typeof prod.specifications == "string" ? JSON.parse(prod.specifications) : prod.specifications;
     prod.base_price = Number(prod.base_price);
   });
 

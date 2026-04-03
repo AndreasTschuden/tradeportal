@@ -1058,7 +1058,7 @@ ADD CONSTRAINT amount_positive CHECK (amount >= 0);
 ALTER TABLE orders_products
 ADD CONSTRAINT unit_price_positive CHECK (unit_price >= 0);
 ALTER TABLE orders
-ADD CONSTRAINT status_check CHECK (status IN ('pending','paid','shipped','delivered','cancelled','refunded'));
+ADD CONSTRAINT status_check CHECK (status IN ('pending','shipped','delivered','cancelled'));
 ALTER TABLE admins
 ADD CONSTRAINT role_check CHECK (role IN ('admin','editor','reviewer'));
 
