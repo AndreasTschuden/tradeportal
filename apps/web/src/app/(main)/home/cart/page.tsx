@@ -7,7 +7,6 @@ import { ProductCard } from "@/components/app/cart/ProductCard";
 import { getCartItems } from "@/actions/cart";
 
 const ShoppingCartPage = async () => {
-
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -81,9 +80,33 @@ const ShoppingCartPage = async () => {
           </div>
           <main>
             <div className="mt-5 mb-5">
-              <ProductCard prod={products[0]}/>
+              {products.length > 0 ? (
+                products.map((prod) => (
+                  <div
+                    key={`${prod.customers_id}-${prod.products_id}-${prod.product_variant}`}
+                  >
+                    <ProductCard prod={prod} />
+                    <div className="h-px bg-gray-300 w-full mt-1"></div>
+                  </div>
+                ))
+              ) : (
+                <div>
+                  <p className="text-center text-gray-500">
+                    Your cart is empty.
+                  </p>
+                  <div className="h-px bg-gray-300 w-full mt-1"></div>
+                </div>
+              )}
             </div>
-              <div className="h-px bg-gray-300 w-full"></div>
+            <div className="flex flex-col gap-2 justify-end items-end">
+              <p className="text-xl font-medium flex gap-5 items-baseline-last justify-center">
+                <span>TOTAL:</span>
+                <strong className="text-3xl font-medium">${860}</strong>
+              </p>
+              <button className="px-10 py-3 bg-red-700 text-white">
+                Proceed to Checkout
+              </button>
+            </div>
           </main>
         </div>
       </div>
