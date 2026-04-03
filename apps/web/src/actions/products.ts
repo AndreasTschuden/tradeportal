@@ -52,7 +52,7 @@ export async function getProducts() {
   const finalProducts = productWithStats;
 
   finalProducts.forEach((prod) => {
-    prod.specifications = JSON.parse(prod.specifications);
+    prod.specifications = typeof prod.specifications == "string" ? JSON.parse(prod.specifications) : prod.specifications;
     prod.base_price = Number(prod.base_price);
   });
 
@@ -77,8 +77,14 @@ export async function getNewestProducts() {
 
   const finalProducts: newestProductsType[] = newestProducts;
 
+  if(!finalProducts){
+    throw new Error("there are no products yet")
+  }
+
+  console.log(finalProducts)
+
   finalProducts.forEach((prod) => {
-    prod.specifications = JSON.parse(prod.specifications);
+    prod.specifications = typeof prod.specifications == "string" ? JSON.parse(prod.specifications) : prod.specifications;
   });
 
   return finalProducts;
@@ -148,7 +154,7 @@ export async function getDetailedProduct(id: string) {
   } else {
     prod.avgStars = 0;
   }
-  prod.specifications = JSON.parse(prod.specifications);
+  prod.specifications = typeof prod.specifications == "string" ? JSON.parse(prod.specifications) : prod.specifications;
 
   return prod;
 }
@@ -216,7 +222,7 @@ export async function getFourProductsByCategory(
   const finalProducts = productWithStats;
 
   finalProducts.forEach((prod) => {
-    prod.specifications = JSON.parse(prod.specifications);
+    prod.specifications =  typeof prod.specifications == "string" ? JSON.parse(prod.specifications) : prod.specifications;
     prod.base_price = Number(prod.base_price);
   });
 
