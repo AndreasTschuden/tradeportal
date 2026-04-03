@@ -1,9 +1,13 @@
-import React from 'react'
+import React from "react";
+import CustomerOrders from "@/components/app/CustomerOrders";
 
-const page = () => {
+const page = async () => {
+
   return (
-    <div>page</div>
+    <div>
+    <CustomerOrders/>
+    </div>
   )
-}
+};
 
-export default page
+export default page;

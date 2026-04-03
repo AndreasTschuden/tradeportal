@@ -125,6 +125,7 @@ CREATE TABLE orders (
     shipper text  NOT NULL,
     tracking_number text  NOT NULL,
     status text  NOT NULL,
+    shipped_to text  NOT NULL,
     created_at timestamptz DEFAULT now() NOT NULL,
     updated_at timestamptz DEFAULT now() NOT NULL,
     CONSTRAINT orders_pk PRIMARY KEY (id)
@@ -134,11 +135,12 @@ CREATE TABLE orders (
 CREATE TABLE orders_products (
     products_id text  NOT NULL,
     orders_id text  NOT NULL,
+    product_variant int NOT NULL,
     unit_price numeric(12,2)  NOT NULL,
     quantity int  NOT NULL,
     discount numeric(3,2)  NOT NULL,
     specifications jsonb  NOT NULL,
-    CONSTRAINT orders_products_pk PRIMARY KEY (products_id,orders_id)
+    CONSTRAINT orders_products_pk PRIMARY KEY (products_id,orders_id,product_variant)
 );
 
 -- Table: products
@@ -462,7 +464,7 @@ ADD CONSTRAINT amount_positive CHECK (amount >= 0);
 ALTER TABLE orders_products
 ADD CONSTRAINT unit_price_positive CHECK (unit_price >= 0);
 ALTER TABLE orders
-ADD CONSTRAINT status_check CHECK (status IN ('pending','paid','shipped','delivered','cancelled','refunded'));
+ADD CONSTRAINT status_check CHECK (status IN ('pending','shipped','delivered','cancelled'));
 ALTER TABLE admins
 ADD CONSTRAINT role_check CHECK (role IN ('admin','editor','reviewer'));
 
@@ -953,25 +955,25 @@ GRANT better_auth_role TO better_auth;
 
 -- -- ORDERS
 -- INSERT INTO orders (
---     id, customers_id, order_date, shipper, tracking_number, status
+--     id, customers_id, order_date, shipper, tracking_number, status, shipped_to
 -- )
 -- SELECT
--- 'order_1', c.id, CURRENT_DATE, 'DHL', 'TRACK123', 'shipped' 
+-- 'order_1', c.id, CURRENT_DATE, 'DHL', 'TRACK123', 'shipped', 'Dr. Zakstraße 3' 
 -- from customers c 
 -- where c.name = 'Test User';
 
 -- -- ORDERS_PRODUCTS
 -- INSERT INTO orders_products (
---     products_id, orders_id, unit_price, quantity, discount, specifications
+--     products_id, orders_id, product_variant, unit_price, quantity, discount, specifications
 -- )
 -- VALUES
--- ('prod_1', 'order_1', 1200.00, 1, 0.00,$${
+-- ('prod_1', 'order_1', 2, 1200.00, 1, 0.00,$${
 --       "Color": "blue",
 --       "Size": "M",
 --       "available": true,
 --       "priceModifier": 1
 --     }$$::jsonb),  
--- ('prod_2', 'order_1', 800.00, 2, 0.10, $${
+-- ('prod_2', 'order_1', 1, 800.00, 2, 0.10, $${
 --       "Color": "black",
 --       "Size": "L",
 --       "available": true,
@@ -1007,4 +1009,4 @@ GRANT better_auth_role TO better_auth;
 
 -- COMMIT;
 
---  -- rollback
+-- -- rollback
