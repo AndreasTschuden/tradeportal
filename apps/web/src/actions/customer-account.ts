@@ -148,3 +148,59 @@ export async function handleCustomerDeletion(user: {
     },
   });
 }
+
+export async function customerOrders() {
+
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if(!session){
+    throw new Error("Couldnt get session")
+  }
+
+  const orders = await db.user.orders.findMany({
+    where: {
+      customers_id: session?.user.id,
+    },
+    select: {
+    id: true,
+    created_at: true,
+    updated_at: true,
+    customers_id: true,
+    order_date: true,
+    shipped_date: true,
+    shipper: true,
+    tracking_number: true,
+    status: true,
+    shipped_to: true,
+      orders_products : {
+        select : {
+            products_id: true,
+            orders_id: true,
+            product_variant: true,
+            unit_price: true,
+            quantity: true,
+            discount: true,
+            specifications: true,
+            products : {
+              select : {
+                name: true,
+                currency: true
+              }
+            }
+          }
+        }
+      }
+  });
+
+
+
+  if(orders.length == 0){
+    throw new Error("You do not have any orders")
+  }
+
+  return JSON.stringify(orders)
+}
+
+

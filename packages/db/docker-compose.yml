@@ -29,7 +29,7 @@ services:
         - "443:9000" 
         - "9001:9001"
       volumes:
-        - minio_data:/data
+        - minio_data:/mnt/data
         - minio_license:/licenses  
         - minio_certs:/etc/minio/certs
       command: minio server /mnt/data --license /licenses/minio.license --certs-dir /etc/minio/certs
