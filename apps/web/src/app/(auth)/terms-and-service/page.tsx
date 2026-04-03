@@ -4,7 +4,11 @@ const page = () => {
   return (
     <div>
       <nav className="flex my-2 mb-4 text-sm">
-        <Link href="/signin" className="text-gray-400">
+        <Link href="/home" className="text-gray-400">
+          Home
+        </Link>
+          <p className="px-3 text-gray-400">/</p>
+         <Link href="/signin" className="text-gray-400">
           Sign in
         </Link>
         <p className="px-3 text-gray-400">/</p>

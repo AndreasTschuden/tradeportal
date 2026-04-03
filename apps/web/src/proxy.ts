@@ -6,6 +6,7 @@ const PUBLIC_ROUTES = [
   "/signin",
   "/signup",
   "/signup/company",
+  "/terms-and-service",
 ];
 
 const COMPANY_ROUTES = ["/home/company/publish-product, /home/company/account"];
