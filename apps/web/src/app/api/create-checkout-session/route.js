@@ -8,33 +8,38 @@ export async function POST(request) {
     const productsJson = formData.get("products");
 
     if (!productsJson || !accountId) {
-      return NextResponse.json({ error: "Missing accountId or products" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Missing accountId or products" },
+        { status: 400 },
+      );
     }
 
     const products = JSON.parse(productsJson);
 
-    const lineItems = products.map(p => ({
+    const lineItems = products.map((p) => ({
       price_data: {
-        currency: p.currency,
-        product_data: { name: p.name },
+        currency: "eur",
+        product_data: {
+          name: p.name,
+          metadata: {
+            sellerId: p.sellerId,
+          },
+        },
         unit_amount: p.price,
       },
       quantity: p.quantity,
     }));
 
-    const total = lineItems.reduce((sum, item) => sum + item.price_data.unit_amount * item.quantity, 0);
-    const applicationFee = Math.round(total * 0.10);
+    const total = lineItems.reduce(
+      (sum, item) => sum + item.price_data.unit_amount * item.quantity,
+      0,
+    );
+    const applicationFee = Math.round(total * 0.1);
 
     const session = await secretStripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: lineItems,
       mode: "payment",
-      payment_intent_data: {
-        application_fee_amount: applicationFee,
-        transfer_data: {
-          destination: accountId,
-        },
-      },
       success_url: `https://yourdomain.com/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/home/cart`,
     });

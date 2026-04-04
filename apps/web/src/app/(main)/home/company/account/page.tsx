@@ -12,6 +12,8 @@ import { StripeRegister } from "@/components/app/company/StripeRegister";
 const page = async () => {
   const Information = await getBasicInformation();
 
+  const stripe = Information.stripe_account_id ? true : false;
+
   return (
     <div>
       <nav className="flex my-2 mb-6 text-sm">
@@ -75,7 +77,7 @@ const page = async () => {
           </p>
           <div className="mt-20 ml-12 mb-10">
             <p className="text-gray-400">Approved by</p>
-            <p className="">Andreas Tschuden</p>
+            <p className="">{Information.approved_by || "Approver not found"}</p>
           </div>
         </div>
 
@@ -87,7 +89,16 @@ const page = async () => {
             Link your Account with stripe
           </p>
           <div className="mt-20 ml-12 mb-10">
-           <StripeRegister email={Information.email} />
+            {stripe ? (
+              <>
+                <p className="text-[#635BFF] text-xl">
+                  Your account is already linked with Stripe.
+                </p>
+                <p className="text-gray-400">Account ID: <strong className="text-black">{Information.stripe_account_id}</strong></p>
+              </>
+            ) : (
+              <StripeRegister email={Information.email} />
+            )}
           </div>
         </div>
 

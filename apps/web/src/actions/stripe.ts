@@ -95,3 +95,7 @@ export async function startOnboarding(email: string, countryCode: string) {
 
   redirect(url);
 }
+
+export async function startCheckoutSession(){
+
+}

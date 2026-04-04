@@ -127,7 +127,12 @@ export async function getCartItems(userId: string) {
           },
         },
       },
-    },
+          },
+    orderBy:{
+      products : {
+        created_at: "asc"
+      }
+    }
   });
 
   let avg = 0;
