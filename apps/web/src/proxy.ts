@@ -6,6 +6,7 @@ const PUBLIC_ROUTES = [
   "/signin",
   "/signup",
   "/signup/company",
+  "/terms-and-service",
 ];
 
 const COMPANY_ROUTES = ["/home/company/publish-product, /home/company/account"];
@@ -15,6 +16,12 @@ const CUSTOMER_ROUTES = ["/home/account"]
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   console.log(pathname);
+
+  if(pathname === "/"){
+    const url = request.nextUrl.clone();
+    url.pathname = "/home";
+    return NextResponse.redirect(url);
+  }
 
   if (PUBLIC_ROUTES.includes(pathname)) {
     return NextResponse.next();
