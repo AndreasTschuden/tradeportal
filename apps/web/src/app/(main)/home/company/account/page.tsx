@@ -7,6 +7,7 @@ import { ChangePasswordForm } from "@/components/app/company/ChangePasswordForm"
 import RemoveAccount from "@/components/app/company/RemoveAccount";
 import { signOutAction } from "@/actions/auth";
 import { LogOut } from "lucide-react";
+import { StripeRegister } from "@/components/app/company/StripeRegister";
 
 const page = async () => {
   const Information = await getBasicInformation();
@@ -75,6 +76,18 @@ const page = async () => {
           <div className="mt-20 ml-12 mb-10">
             <p className="text-gray-400">Approved by</p>
             <p className="">Andreas Tschuden</p>
+          </div>
+        </div>
+
+        <div className="relative w-full h-full border-2 border-gray-200 rounded-2xl flex justify-between">
+          <span className="absolute -top-4 left-10 bg-white px-2 text-2xl font-medium flex gap-2 justify-center items-center">
+            <img src="/Stripe_Logo,_revised_2016.png" alt="" className="h-8" />
+          </span>
+          <p className="absolute top-4 left-12 text-md text-gray-400 font-light">
+            Link your Account with stripe
+          </p>
+          <div className="mt-20 ml-12 mb-10">
+           <StripeRegister email={Information.email} />
           </div>
         </div>
 

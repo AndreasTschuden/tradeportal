@@ -1,63 +1,46 @@
 import { NextResponse } from "next/server";
 import { secretStripe } from "@/lib/stripe";
 
-// Create checkout session
 export async function POST(request) {
-  const formData = await request.formData();
-  const accountId = formData.get("accountId");
-  const products = formData.get("products"); //in there will be all the products which we'll use to create the seesion params (multiple products? just expand the array)
+  try {
+    const formData = await request.formData();
+    const accountId = formData.get("accountId");
+    const productsJson = formData.get("products");
 
-  if (products) {
-    const sessionParams = {
-      line_items: [
-        {
-          price_data: {
-            currency: "currency from product in json in db",
-            product_data: {
-              name: "name from product in db",
-            },
-            unit_amount: priceFromProductInDB, //in smallest currency possible e.g. cents
-          },
-          quantity: amountFrombasket, //how many were in basket in db
-        },
-      ],
-      mode: "payment",
-      ui_mode: "embedded",
-      return_url:
-        "https://example.com/checkout/return?session_id={CHECKOUT_SESSION_ID}",
-    };
-
-    let session;
-
-    if (accountId) {
-      // For marketplace model, use transfer_data
-      sessionParams.payment_intent_data = {
-        application_fee_amount:
-          "here the variable after mathing out 10% of the amount in smallest unit",
-        transfer_data: {
-          destination: accountId, //account id must still be added to company table in db
-        },
-      };
-
-      session = await secretStripe.checkout.sessions.create(sessionParams);
-
-      if (
-        session /*still need to check what sripe returns into session if error on create checkout session*/
-      ) {
-        return NextResponse.json({ clientSecret: session.client_secret });
-      } else {
-        return NextResponse.json({
-          error: "stripe checkout error: couldnt create the session",
-        });
-      }
-    } else {
-      return NextResponse.json({
-        error: "stripe checkout error: no account id provided",
-      });
+    if (!productsJson || !accountId) {
+      return NextResponse.json({ error: "Missing accountId or products" }, { status: 400 });
     }
-  } else {
-    return NextResponse.json({
-      error: "stripe checkout error: no products provided",
+
+    const products = JSON.parse(productsJson);
+
+    const lineItems = products.map(p => ({
+      price_data: {
+        currency: p.currency,
+        product_data: { name: p.name },
+        unit_amount: p.price,
+      },
+      quantity: p.quantity,
+    }));
+
+    const total = lineItems.reduce((sum, item) => sum + item.price_data.unit_amount * item.quantity, 0);
+    const applicationFee = Math.round(total * 0.10);
+
+    const session = await secretStripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: lineItems,
+      mode: "payment",
+      payment_intent_data: {
+        application_fee_amount: applicationFee,
+        transfer_data: {
+          destination: accountId,
+        },
+      },
+      success_url: `https://yourdomain.com/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/home/cart`,
     });
+
+    return NextResponse.json({ url: session.url });
+  } catch (error) {
+    return NextResponse.json({ error: error.message }, { status: 400 });
   }
 }
