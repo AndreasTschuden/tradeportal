@@ -30,17 +30,17 @@ export async function POST(req) {
       expand: ["line_items.data.price.product", "payment_intent"],
     });
 
-    console.log(chargeStripe)
-
     for (const item of session.line_items.data) {
       const sellerId = item.price.product.metadata.sellerId;
       const amount = item.price.unit_amount * item.quantity;
+      const tradePortalFee = Math.round(amount * parseFloat(process.env.STRIPE_TRADE_PORTAL_FEE));
+      const sellerAmount = amount - tradePortalFee;
 
       if (sellerId && amount > 0) {
         try {
 
           const transfer = await stripe.transfers.create({
-            amount: amount,
+            amount: sellerAmount,
             currency: "eur",
             destination: sellerId,
             transfer_group: `ORDER_${new Date()}`,
