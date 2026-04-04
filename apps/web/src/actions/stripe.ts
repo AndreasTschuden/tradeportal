@@ -80,5 +80,18 @@ export async function startOnboarding(email: string, countryCode: string) {
 
   console.log("Stripe Onboarding URL:", url);
 
+  const updatedCompany = await db.company.companies.update({
+    where: { id: company.id },
+    data: {
+      stripe_account_id: accountId,
+      onboarding_started_at: new Date().toISOString(),
+    },
+  });
+
+  if(updatedCompany){
+    console.log("Company updated with Stripe account ID:", updatedCompany.stripe_account_id);
+    throw new Error("Company already has a Stripe account ID");
+  }
+
   redirect(url);
 }
