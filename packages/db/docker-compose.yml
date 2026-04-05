@@ -15,8 +15,8 @@ services:
       - "443:443"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./certs:/certs:ro
-      - ./dynamic:/dynamic:ro
+      # - ./certs:/certs:ro
+      # - ./dynamic:/dynamic:ro
       - ./letsencrypt:/letsencrypt
     command:
       # EntryPoints
@@ -26,8 +26,8 @@ services:
       - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
       - "--entrypoints.websecure.address=:443"
       - "--entrypoints.websecure.http.tls=true"
-      # Attach the static configuration tls.yaml file that contains the tls configuration settings
-      - "--providers.file.filename=/dynamic/tls.yaml"
+      # Attach the static configuration tls.yaml file that contains the tls configuration settings (got replaced by letsencrypt)
+      # - "--providers.file.filename=/dynamic/tls.yaml"
       # Providers 
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
