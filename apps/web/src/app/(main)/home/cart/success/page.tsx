@@ -2,6 +2,7 @@ import Link from "next/link";
 import { verifyStripeSession } from "@/lib/verify-session";
 import { clearCart } from "@/actions/cart"
 import { redirect } from "next/navigation";
+import { ProceedToCheckout } from "@/components/app/cart/ProceedToCheckout"
 
 // Next.js Pages erhalten searchParams direkt als Prop
 interface Props {
@@ -40,31 +41,34 @@ const SuccessPage = async ({ searchParams }: Props) => {
       <nav className="flex my-4 text-sm">
         <Link href="/home" className="text-gray-400">Home</Link>
         <p className="px-3 text-gray-400">/</p>
-        <Link href="/home/cart" className="text-gray-400">Cart</Link>
-        <p className="px-3 text-gray-400">/</p>
-        <span className="text-red-700 font-bold">Order Completed</span>
+        <Link href="/home/cart" className="text-red-700 font-bold">Cart</Link>
       </nav>
 
       <div className="flex flex-col gap-10">
-        <div className="h-px bg-gray-300 w-full"></div>
-        
-        <div className="flex flex-col md:flex-row gap-10 md:gap-20 items-center justify-center">
-          <div className="flex gap-5 items-center justify-center opacity-50">
-            <div className="bg-gray-200 text-black font-medium text-2xl w-12 h-12 rounded-full flex items-center justify-center">
-              1
+        <div className="flex flex-col gap-10">
+          <div className="h-px bg-gray-300 w-full"></div>
+          <div className="flex gap-20 items-center justify-center">
+            <div className="flex gap-5 items-center justify-center">
+              <div className="bg-gray-200 text-black font-medium text-2xl w-13 h-13 rounded-full flex items-center justify-center">
+                1
+              </div>
+              <h1 className="text-xl font-bold">CART ITEMS</h1>
             </div>
-            <h1 className="text-xl font-bold">CART ITEMS</h1>
-          </div>
-          
-          <div className="flex gap-5 items-center justify-center">
-            <div className="bg-red-700 text-white font-medium text-2xl w-12 h-12 rounded-full flex items-center justify-center">
-              2
+            <div className="flex gap-5 items-center justify-center">
+              <div className="bg-gray-200 text-black font-medium text-2xl w-13 h-13 rounded-full flex items-center justify-center">
+                2
+              </div>
+              <h1 className="text-xl font-bold">CHECKOUT</h1>
             </div>
-            <h1 className="text-xl font-bold">ORDER COMPLETE</h1>
+            <div className="flex gap-5 items-center justify-center">
+              <div className="bg-red-700 text-white font-medium text-2xl w-13 h-13 rounded-full flex items-center justify-center">
+                3
+              </div>
+              <h1 className="text-xl font-bold">ORDER COMPLETE</h1>
+            </div>
           </div>
+          <div className="h-px bg-gray-300 w-full"></div>
         </div>
-
-        <div className="h-px bg-gray-300 w-full"></div>
 
         <div className="text-center py-10">
           <h2 className="text-3xl font-bold mb-4">Vielen Dank für deine Bestellung!</h2>
@@ -78,12 +82,7 @@ const SuccessPage = async ({ searchParams }: Props) => {
           >
             Weiter einkaufen
           </Link>
-           <Link 
-            href="/home" 
-            className="mt-8 inline-block border border-red-700 text-red-700 px-8 py-3 rounded-md font-medium"
-          >
-            Bestellung ansehen
-          </Link>
+  <ProceedToCheckout/>
           </div>
         </div>
       </div>
