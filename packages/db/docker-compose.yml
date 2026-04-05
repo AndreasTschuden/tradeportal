@@ -15,8 +15,8 @@ services:
       - "443:443"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      # - ./certs:/certs:ro
-      # - ./dynamic:/dynamic:ro
+      - ./certs:/certs:ro
+      - ./dynamic:/dynamic:ro
       - ./letsencrypt:/letsencrypt
     command:
       # EntryPoints
@@ -27,7 +27,7 @@ services:
       - "--entrypoints.websecure.address=:443"
       - "--entrypoints.websecure.http.tls=true"
       # Attach the static configuration tls.yaml file that contains the tls configuration settings (got replaced by letsencrypt)
-      # - "--providers.file.filename=/dynamic/tls.yaml"
+      - "--providers.file.filename=/dynamic/tls.yaml"
       # Providers 
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
@@ -39,11 +39,11 @@ services:
       - "--log.level=INFO"
       - "--accesslog=true"
       - "--metrics.prometheus=true"
-      - "--certificatesresolvers.le.acme.email=schauby@edu.htl-villach.at"
-      - "--certificatesresolvers.le.acme.storage=/letsencrypt/acme.json" # Path inside container volume
-      - "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
-      # Optionally make 'le' the default resolver for TLS-enabled routers
-      - "--entrypoints.websecure.http.tls.certresolver=le"
+      # - "--certificatesresolvers.le.acme.email=schauby@edu.htl-villach.at"
+      # - "--certificatesresolvers.le.acme.storage=/letsencrypt/acme.json" # Path inside container volume
+      # - "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
+      # # Optionally make 'le' the default resolver for TLS-enabled routers
+      # - "--entrypoints.websecure.http.tls.certresolver=le"
   # Traefik Dynamic configuration via Docker labels
     labels:
       # Enable self‑routing
