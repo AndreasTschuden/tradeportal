@@ -2,7 +2,6 @@ import Link from "next/link";
 import { verifyStripeSession } from "@/lib/verify-session";
 import { clearCart } from "@/actions/cart"
 import { redirect } from "next/navigation";
-import { ProceedToCheckout } from "@/components/app/cart/ProceedToCheckout"
 
 // Next.js Pages erhalten searchParams direkt als Prop
 interface Props {
@@ -82,7 +81,12 @@ const SuccessPage = async ({ searchParams }: Props) => {
           >
             Weiter einkaufen
           </Link>
-  <ProceedToCheckout/>
+           <Link 
+            href="/home" 
+            className="mt-8 inline-block border border-red-700 text-red-700 px-8 py-3 rounded-md font-medium"
+          >
+            Bestellung ansehen
+          </Link>
           </div>
         </div>
       </div>

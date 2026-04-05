@@ -1,16 +1,19 @@
-import React from "react";
+"use client"
+
+import { createOrder } from "@/actions/orders" 
 
 const ProceedToCheckout = () => {
+
   const handleOnClick = async () => {
-    
+    await createOrder()
   };
 
   return (
     <button
       onClick={() => handleOnClick()}
-      className="mt-8 inline-block border border-red-700 text-red-700 px-8 py-3 rounded-md font-medium"
+      className="inline-block border bg-red-700 text-white px-10 py-3 font-light"
     >
-      Bestellung ansehen
+      Proceed To Checkout
     </button>
   );
 };

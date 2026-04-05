@@ -5,6 +5,7 @@ import { db } from "@/lib/prisma";
 import Link from "next/link";
 import { ProductCard } from "@/components/app/cart/ProductCard";
 import { getCartItems } from "@/actions/cart";
+import { ProceedToCheckout } from "@/components/app/cart/ProceedToCheckout"
 
 const ShoppingCartPage = async () => {
   const session = await auth.api.getSession({
@@ -109,12 +110,7 @@ const ShoppingCartPage = async () => {
                     ${totalPrice.toFixed(2)}
                   </strong>
                 </p>
-                <Link
-                  href="/home/cart/checkout"
-                  className="px-10 py-3 bg-red-700 text-white"
-                >
-                  Proceed to Checkout
-                </Link>
+                <ProceedToCheckout/>
               </div>
             )}
           </main>
