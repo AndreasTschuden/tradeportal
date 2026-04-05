@@ -138,7 +138,7 @@ export async function startCheckoutSession() {
     name : string
     price : number
     quantity : number
-    sellersId : string
+    sellerId : string
   }
 
   const products = cartItems.reduce((acc : prods[], prod) => {
@@ -151,7 +151,7 @@ export async function startCheckoutSession() {
       name: prod.products.name,
       price: realPrice * 100,
       quantity: prod.quantity,
-      sellersId: prod.products.companies.stripe_account_id,
+      sellerId: prod.products.companies.stripe_account_id,
     });
     return acc;
   }, []);
