@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { verifyStripeSession } from "@/lib/verify-session";
+import { clearCart } from "@/actions/cart"
 import { redirect } from "next/navigation";
 
 // Next.js Pages erhalten searchParams direkt als Prop
@@ -29,6 +30,8 @@ const SuccessPage = async ({ searchParams }: Props) => {
       </div>
     );
   }
+
+  await clearCart()
 
   
 
@@ -68,12 +71,20 @@ const SuccessPage = async ({ searchParams }: Props) => {
           <p className="text-gray-600">
             Eine Bestätigung wurde an <span className="font-semibold">{result.customer}</span> gesendet.
           </p>
+          <div className="flex gap-3 items-center justify-center">
           <Link 
             href="/home" 
             className="mt-8 inline-block bg-red-700 text-white px-8 py-3 rounded-md font-medium"
           >
             Weiter einkaufen
           </Link>
+           <Link 
+            href="/home" 
+            className="mt-8 inline-block border border-red-700 text-red-700 px-8 py-3 rounded-md font-medium"
+          >
+            Bestellung ansehen
+          </Link>
+          </div>
         </div>
       </div>
     </div>

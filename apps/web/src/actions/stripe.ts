@@ -5,7 +5,11 @@ import { db } from "@/lib/prisma";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-export async function startOnboarding(email: string, countryCode: string, companyId : string) {
+export async function startOnboarding(
+  email: string,
+  countryCode: string,
+  companyId: string,
+) {
   console.log("Starting Stripe onboarding process for email:", email);
 
   const session = await auth.api.getSession({
@@ -41,7 +45,7 @@ export async function startOnboarding(email: string, countryCode: string, compan
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, countryCode , companyId }),
+      body: JSON.stringify({ email, countryCode, companyId }),
     },
   );
 
@@ -87,13 +91,94 @@ export async function startOnboarding(email: string, countryCode: string, compan
     },
   });
 
-  if(!updatedCompany){
+  if (!updatedCompany) {
     throw new Error("Company already has a Stripe account ID");
   }
 
   redirect(url);
 }
 
-export async function startCheckoutSession(){
+export async function startCheckoutSession() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
+  if (!session?.user) {
+    redirect("/signin");
+  }
+
+  const customer = await db.user.customers.findFirst({
+    where: {
+      id: session.user.id,
+    },
+  });
+
+  if (!customer) {
+    redirect("/home");
+  }
+
+  const cartItems = await db.user.shopping_cart_products.findMany({
+    where: {
+      customers_id: customer.id,
+    },
+    include: {
+      products: {
+        include: {
+          companies: {
+            select: {
+              stripe_account_id: true,
+            },
+          },
+        },
+      },
+    },
+  });
+  
+  type prods = {
+    name : string
+    price : number
+    quantity : number
+    sellersId : string
+  }
+
+  const products = cartItems.reduce((acc : prods[], prod) => {
+    const price = Number(cartItems[0].products.base_price);
+    const variant = prod.product_variant;
+    const specificationen = JSON.parse(prod.products.specifications as string);
+    const priceMultiplier = specificationen.variants[variant];
+    const realPrice = price * priceMultiplier.priceModifier;
+    acc.push({
+      name: prod.products.name,
+      price: realPrice * 100,
+      quantity: prod.quantity,
+      sellersId: prod.products.companies.stripe_account_id,
+    });
+    return acc;
+  }, []);
+
+  console.log(products);
+
+  const form = new FormData();
+  form.append("accountId", "acct_1TIQoQIURzxvDsy2");
+  form.append(
+    "products",
+    JSON.stringify(products),
+  );
+
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/create-checkout-session`,
+    {
+      method: "POST",
+      body: form,
+    },
+  );
+
+  const data = await res.json();
+
+  if (data.url) {
+    // direkt zur Stripe Checkout Seite weiterleiten
+    redirect(data.url);
+  } else {
+    console.error("Fehler beim Erstellen der Session:", data.error);
+  }
 }

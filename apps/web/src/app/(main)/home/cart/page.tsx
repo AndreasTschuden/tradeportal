@@ -5,6 +5,7 @@ import { db } from "@/lib/prisma";
 import Link from "next/link";
 import { ProductCard } from "@/components/app/cart/ProductCard";
 import { getCartItems } from "@/actions/cart";
+import { CheckoutButton } from "@/components/app/cart/CheckoutButton";
 
 const ShoppingCartPage = async () => {
   const session = await auth.api.getSession({
@@ -28,7 +29,9 @@ const ShoppingCartPage = async () => {
   const products = await getCartItems(session.user.id);
 
   const totalPrice = products.reduce((total, prod) => {
-    const price = prod.products.base_price * prod.products.specifications.variants[prod.product_variant].priceModifier;
+    const price =
+      prod.products.base_price *
+      prod.products.specifications.variants[prod.product_variant].priceModifier;
     const quantity = prod.quantity;
     return total + price * quantity;
   }, 0);
@@ -101,9 +104,7 @@ const ShoppingCartPage = async () => {
                     ${totalPrice.toFixed(2)}
                   </strong>
                 </p>
-                <button className="px-10 py-3 bg-red-700 text-white">
-                  Proceed to Checkout
-                </button>
+                <CheckoutButton />
               </div>
             )}
           </main>

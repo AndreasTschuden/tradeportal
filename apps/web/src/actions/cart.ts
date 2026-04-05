@@ -209,5 +209,28 @@ export async function changeCartItemQuantity(params: { customerId: string; produ
 }
 
 export async function clearCart(){
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session?.user) {
+    redirect("/signin");
+  }
+
+  const customer = await db.user.customers.findFirst({
+    where: {
+      id: session.user.id,
+    },
+  });
+
+  if (!customer) {
+    return null;
+  }
+
+  const clearedCart = await db.user.shopping_cart_products.deleteMany({
+    where:{
+      customers_id : customer.id
+    }
+  })
   
 }
