@@ -15,8 +15,8 @@ export async function POST(request) {
     // Erstellt den Onboarding-Link
     const accountLink = await secretStripe.accountLinks.create({
       account: accountId,
-      refresh_url: `${process.env.NEXT_PUBLIC_BASE_URL}/onboarding-retry`, // Falls der Link abläuft
-      return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/dashboard`,        // Wenn er fertig ist (oder abbricht)
+      refresh_url: `${process.env.NEXT_PUBLIC_BASE_URL}/home/company/account`, // Falls der Link abläuft
+      return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/home/company/account`,        // Wenn er fertig ist (oder abbricht)
       type: "account_onboarding",
       // Optional: collect: "currently_due" (Standard) oder "eventually_due"
     });

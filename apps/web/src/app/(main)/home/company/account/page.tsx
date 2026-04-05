@@ -92,7 +92,7 @@ const page = async () => {
             {stripe ? (
               <>
                 <p className="text-[#635BFF] text-xl">
-                  Your account is already linked with Stripe.
+                  Your account is linked with Stripe.
                 </p>
                 <p className="text-gray-400">Account ID: <strong className="text-black">{Information.stripe_account_id}</strong></p>
               </>
