@@ -1,47 +1,32 @@
 import { NextResponse } from "next/server";
-import { secretStripe } from "@/lib/stripe"; //pnpm install stripe --save
-
-// steps for stripe:
-// creat-connect-account: create stripe account (save stripe_account_id and onboarding_started_at into db)
-// create-account-link: verify company with stripe, also to send them to verify if they stopped in the middle (need to create a new link every time)
-// account status: check if company has the rights to receive money before every money movement, if not => create-account-link (save onboarding_completed_at into db when ok for the first time)
+import { secretStripe } from "@/lib/stripe";
 
 export async function POST(request) {
   try {
-    const { email, countryCode /*input: where is the company based at*/ } =
-      await request.json();
+    const { accountId } = await request.json();
 
-    // Create a Connect account with the specified controller properties
-    const account = await secretStripe.accounts.create({
-      country: countryCode,
-      email: email,
-      controller: {
-        // Platform controls fee collection - connected account pays fees
-        fees: {
-          payer: "account",
-        },
-        // Stripe handles payment disputes and losses
-        losses: {
-          payments: "stripe",
-        },
-        // Connected account gets full access to Stripe dashboard
-        stripe_dashboard: {
-          type: "full",
-        },
-      },
-      capabilities: {
-        card_payments: { requested: true },
-        transfers: { requested: true },
-      },
+    if (!accountId) {
+      return NextResponse.json(
+        { error: { message: "AccountId ist erforderlich" } },
+        { status: 400 }
+      );
+    }
+
+    // Erstellt den Onboarding-Link
+    const accountLink = await secretStripe.accountLinks.create({
+      account: accountId,
+      refresh_url: `${process.env.NEXT_PUBLIC_BASE_URL}/onboarding-retry`, // Falls der Link abläuft
+      return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/dashboard`,        // Wenn er fertig ist (oder abbricht)
+      type: "account_onboarding",
+      // Optional: collect: "currently_due" (Standard) oder "eventually_due"
     });
 
-    return NextResponse.json({ accountId: account.id });
+    return NextResponse.json({ url: accountLink.url });
   } catch (error) {
-    console.error("Error creating Stripe account:", error);
+    console.error("Error creating account link:", error);
     return NextResponse.json(
       { error: { message: error.message } },
-      { status: 400 },
+      { status: 500 } // 500 ist hier passender für Server-Fehler
     );
   }
 }
-

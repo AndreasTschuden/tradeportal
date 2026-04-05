@@ -7,7 +7,7 @@ import { stripeSchema, stripeType } from "@/lib/zod";
 import { startOnboarding } from "@/actions/stripe";
 import { Spinner } from "@/components/ui/spinner"
 
-const StripeRegister = ({ email }: { email: string }) => {
+const StripeRegister = ({ email , companyId}: { email: string , companyId : string}) => {
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -26,7 +26,7 @@ const StripeRegister = ({ email }: { email: string }) => {
   const onSubmit = async (data: stripeType) => {
     try {
       setLoading(true);
-      await startOnboarding(data.email, data.countryCode);
+      await startOnboarding(data.email, data.countryCode, companyId);
     } catch (e) {
       setLoading(false);
       if (e instanceof Error) {

@@ -55,14 +55,8 @@ const ShoppingCartPage = async () => {
               <h1 className="text-xl font-bold">CART ITEMS</h1>
             </div>
             <div className="flex gap-5 items-center justify-center">
-              <div className="bg-gray-300 text-black font-medium text-2xl w-13 h-13 rounded-full flex items-center justify-center">
+              <div className="bg-gray-200 text-black font-medium text-2xl w-13 h-13 rounded-full flex items-center justify-center">
                 2
-              </div>
-              <h1 className="text-xl font-bold">CHECKOUT</h1>
-            </div>
-            <div className="flex gap-5 items-center justify-center">
-              <div className="bg-gray-300 text-black font-medium text-2xl w-13 h-13 rounded-full flex items-center justify-center">
-                3
               </div>
               <h1 className="text-xl font-bold">ORDER COMPLETE</h1>
             </div>

@@ -97,7 +97,7 @@ const page = async () => {
                 <p className="text-gray-400">Account ID: <strong className="text-black">{Information.stripe_account_id}</strong></p>
               </>
             ) : (
-              <StripeRegister email={Information.email} />
+              <StripeRegister email={Information.email} companyId={Information.id}/>
             )}
           </div>
         </div>

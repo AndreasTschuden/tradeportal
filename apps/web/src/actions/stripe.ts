@@ -5,7 +5,7 @@ import { db } from "@/lib/prisma";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-export async function startOnboarding(email: string, countryCode: string) {
+export async function startOnboarding(email: string, countryCode: string, companyId : string) {
   console.log("Starting Stripe onboarding process for email:", email);
 
   const session = await auth.api.getSession({
@@ -41,7 +41,7 @@ export async function startOnboarding(email: string, countryCode: string) {
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, countryCode }),
+      body: JSON.stringify({ email, countryCode , companyId }),
     },
   );
 
@@ -83,13 +83,11 @@ export async function startOnboarding(email: string, countryCode: string) {
   const updatedCompany = await db.company.companies.update({
     where: { id: company.id },
     data: {
-      stripe_account_id: accountId,
       onboarding_started_at: new Date().toISOString(),
     },
   });
 
-  if(updatedCompany){
-    console.log("Company updated with Stripe account ID:", updatedCompany.stripe_account_id);
+  if(!updatedCompany){
     throw new Error("Company already has a Stripe account ID");
   }
 

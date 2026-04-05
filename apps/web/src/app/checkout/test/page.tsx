@@ -6,8 +6,8 @@ async function handleCheckout() {
   form.append(
     "products",
     JSON.stringify([
-      { name: "Test T Shirt", price: 2000, currency: "usd", quantity: 1, sellerId: "acct_1TIQoQIURzxvDsy2"},
-      { name: "Test T Shirt", price: 5000, currency: "usd", quantity: 1, sellerId: "acct_1TIQoQIURzxvDsy2"},
+      { name: "Test T Shirt", price: 2000, quantity: 1, sellerId: "acct_1TIQoQIURzxvDsy2"},
+      { name: "Test T Shirt", price: 5000, quantity: 1, sellerId: "acct_1TImd2EczFvsYrgQ"},
     ])
   );
 

@@ -207,3 +207,7 @@ export async function changeCartItemQuantity(params: { customerId: string; produ
 
   return "updated";
 }
+
+export async function clearCart(){
+  
+}

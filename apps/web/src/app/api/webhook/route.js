@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
+import { db } from "@/lib/prisma";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
   apiVersion: "2024-04-10",
@@ -33,17 +34,20 @@ export async function POST(req) {
     for (const item of session.line_items.data) {
       const sellerId = item.price.product.metadata.sellerId;
       const amount = item.price.unit_amount * item.quantity;
-      const tradePortalFee = Math.round(amount * parseFloat(process.env.STRIPE_TRADE_PORTAL_FEE));
+
+      const tradePortalFee = Math.round(
+        amount * parseFloat(process.env.STRIPE_TRADE_PORTAL_FEE),
+      );
+
       const sellerAmount = amount - tradePortalFee;
 
       if (sellerId && amount > 0) {
         try {
-
           const transfer = await stripe.transfers.create({
             amount: sellerAmount,
             currency: "eur",
             destination: sellerId,
-            transfer_group: `ORDER_${new Date()}`,
+            transfer_group: session.payment_intent.transfer_group,
           });
 
           console.log(transfer);
@@ -53,6 +57,26 @@ export async function POST(req) {
             err.message,
           );
         }
+      }
+    }
+  }
+
+  if (event.type === "account.updated") {
+    const account = event.data.object;
+    const isFinished = account.details_submitted && account.charges_enabled;
+    const internalCompanyId = account.metadata.companyId;
+
+    if (isFinished) {
+      const update = await db.company.companies.update({
+        where: { id: internalCompanyId },
+        data: {
+          stripe_account_id : account.id,
+          onboarding_completed_at : new Date().toISOString()
+        },
+      });
+
+      if(!update){
+         return NextResponse.json({ error: "Failed to update your Account" }, { status: 400 });
       }
     }
   }

@@ -30,17 +30,17 @@ export async function POST(request) {
       quantity: p.quantity,
     }));
 
-    const total = lineItems.reduce(
-      (sum, item) => sum + item.price_data.unit_amount * item.quantity,
-      0,
-    );
-    const applicationFee = Math.round(total * 0.1);
+    const now = new Date();
+    const formatted = now.toISOString().replace(/[:.]/g, "-");
 
     const session = await secretStripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: lineItems,
       mode: "payment",
-      success_url: `https://yourdomain.com/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+      payment_intent_data: {
+        transfer_group: "ORDER_" + formatted,
+      },
+      success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/home/cart/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/home/cart`,
     });
 
