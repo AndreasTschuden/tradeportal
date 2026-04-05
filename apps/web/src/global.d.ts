@@ -237,24 +237,28 @@ type cartItemsWithAvgStars = {
 }
 
 type orderType = {
-    orders_products: {
-        products_id: string;
-        product_variant: number;
-        quantity: number;
+    orders_products: ({
+        products: {
+            name: string;
+        };
+    } & {
         specifications: JsonValue;
+        products_id: string;
         orders_id: string;
+        product_variant: number;
         unit_price: Decimal;
+        quantity: number;
         discount: Decimal;
-    }[];
+    })[];
 } & {
     id: string;
-    created_at: Date;
-    updated_at: Date;
+    customers_id: string;
     order_date: Date;
     shipped_date: Date | null;
     shipper: string;
     tracking_number: string;
     status: string;
     shipped_to: string;
-    customers_id: string;
+    created_at: Date;
+    updated_at: Date;
 }

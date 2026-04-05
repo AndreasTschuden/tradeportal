@@ -21,6 +21,28 @@ const CheckoutPage = async ({ params }: Props) => {
     return sum + Number(prod.unit_price) * prod.quantity;
   }, 0);
 
+  const products = order.orders_products.reduce(
+    (
+      acc: {
+        product_name: string;
+        sellerId: string;
+        quantity: number;
+        unit_amount: number;
+      }[],
+      prod,
+    ) => {
+      const specs = prod.specifications as { sellerId: string };
+      acc.push({
+        product_name: prod.products.name,
+        sellerId: specs.sellerId,
+        quantity: prod.quantity,
+        unit_amount: Number(prod.unit_price),
+      });
+      return acc;
+    },
+    [],
+  );
+
   return (
     <div className="max-w-7xl mx-auto">
       <nav className="flex items-center my-2 mb-4 text-sm">
@@ -37,7 +59,6 @@ const CheckoutPage = async ({ params }: Props) => {
       </nav>
 
       <div className="flex flex-col gap-8">
-
         <div className="flex flex-col gap-10">
           <div className="h-px bg-gray-300 w-full"></div>
           <div className="flex gap-20 items-center justify-center">
@@ -64,7 +85,6 @@ const CheckoutPage = async ({ params }: Props) => {
         </div>
 
         <section className="pb-12">
-
           <div className="grid grid-cols-1 xl:grid-cols-[1.2fr_0.8fr] gap-8 items-start">
             <div className="border border-gray-200 rounded-lg bg-white overflow-hidden">
               <div className="px-5 py-4 border-b border-gray-200">
@@ -78,13 +98,17 @@ const CheckoutPage = async ({ params }: Props) => {
                   return (
                     <div
                       className="px-5 py-4 flex items-center justify-between gap-4"
-                      key={prod.orders_id + prod.products_id + prod.product_variant}
+                      key={
+                        prod.orders_id + prod.products_id + prod.product_variant
+                      }
                     >
                       <div className="min-w-0">
                         <p className="font-medium text-gray-900 truncate">
                           {prod.products.name}
                         </p>
-                        <p className="text-sm text-gray-500">Menge: {prod.quantity}x</p>
+                        <p className="text-sm text-gray-500">
+                          Menge: {prod.quantity}x
+                        </p>
                       </div>
                       <p className="font-semibold text-gray-900 whitespace-nowrap">
                         {itemTotal.toFixed(2)} €
@@ -104,7 +128,7 @@ const CheckoutPage = async ({ params }: Props) => {
 
             <div className="border border-gray-200 rounded-lg bg-white p-5 md:p-6">
               <h3 className="text-lg font-semibold mb-5">Versandadresse</h3>
-              <ShippingForm />
+              <ShippingForm order_id={order.id} products={products} />
             </div>
           </div>
         </section>

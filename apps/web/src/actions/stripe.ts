@@ -98,7 +98,16 @@ export async function startOnboarding(
   redirect(url);
 }
 
-export async function startCheckoutSession() {
+export async function startCheckoutSession(
+  shippingAdress: string,
+  order_id : string,
+  products: {
+    product_name: string;
+    sellerId: string;
+    quantity: number;
+    unit_amount: number;
+  }[],
+) {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -117,52 +126,30 @@ export async function startCheckoutSession() {
     redirect("/home");
   }
 
-  const cartItems = await db.user.shopping_cart_products.findMany({
+  const updatedOrder = await db.user.orders.update({
     where: {
-      customers_id: customer.id,
+      id: order_id,
     },
-    include: {
-      products: {
-        include: {
-          companies: {
-            select: {
-              stripe_account_id: true,
-            },
-          },
-        },
-      },
+    data: {
+      shipped_to: shippingAdress,
     },
   });
-  
-  type prods = {
-    name : string
-    price : number
-    quantity : number
-    sellerId : string
-  }
 
-  const products = cartItems.reduce((acc : prods[], prod) => {
-    const price = Number(cartItems[0].products.base_price);
-    const variant = prod.product_variant;
-    const specificationen = JSON.parse(prod.products.specifications as string);
-    const priceMultiplier = specificationen.variants[variant];
-    const realPrice = price * priceMultiplier.priceModifier;
-    acc.push({
-      name: prod.products.name,
-      price: realPrice * 100,
-      quantity: prod.quantity,
-      sellerId: prod.products.companies.stripe_account_id,
-    });
-    return acc;
-  }, []);
+  console.log(updatedOrder);
 
-  console.log(products);
+  const apiProducts = products.map((prod) => ({
+    name: prod.product_name,
+    price: prod.unit_amount * 100,
+    quantity: prod.quantity,
+    sellerId: prod.sellerId,
+  }));
+
 
   const form = new FormData();
   form.append("accountId", "acct_1TIQoQIURzxvDsy2");
   form.append(
     "products",
-    JSON.stringify(products),
+    JSON.stringify(apiProducts),
   );
 
   const res = await fetch(
