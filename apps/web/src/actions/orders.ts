@@ -116,6 +116,59 @@ export async function createOrder() {
   redirect(`/home/cart/checkout/${newOrder.id}`)
 }
 
-export async function getOrder(){
+export async function checkOrder(id : string){
+ const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
+  if (!session?.user) {
+    redirect("/signin");
+  }
+
+  const customer = await db.user.customers.findFirst({
+    where: {
+      id: session.user.id,
+    },
+  });
+
+  if (!customer) {
+    redirect("/home");
+  }
+
+  const order = await db.user.orders.findFirst({
+    where: {
+        id : id,
+        customers_id : customer.id
+    }
+  })
+
+  if(!order){
+    redirect("/home/cart")
+  }
+}
+
+export async function getOrderById(orderId : string){
+
+    const order = await db.user.orders.findUnique({
+        where:{
+            id : orderId
+        },
+        include:{
+            orders_products : {
+                include : {
+                    products : {
+                        select : {
+                            name : true
+                        }
+                    }
+                }
+            }
+        }
+    })
+
+    if(!order){
+        redirect("/home/cart")
+    }
+
+    return order
 }
