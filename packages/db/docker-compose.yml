@@ -77,7 +77,7 @@ services:
       TZ: Europe/Vienna
       PGADMIN_CONFIG_UPGRADE_CHECK_ENABLED: "False"
     depends_on:
-      db:
+      postgres:
         condition: service_healthy
     volumes:
       - pgadmin_data:/var/lib/pgadmin
