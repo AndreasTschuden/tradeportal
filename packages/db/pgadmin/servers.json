@@ -1,0 +1,13 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "Tradeportal (Docker)",
+      "Group": "Servers",
+      "Host": "postgres",
+      "Port": 5432,
+      "MaintenanceDB": "tradeportal",
+      "Username": "postgres",
+      "SSLMode": "prefer"
+    }
+  }
+}
