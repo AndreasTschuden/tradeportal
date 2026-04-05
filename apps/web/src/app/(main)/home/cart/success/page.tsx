@@ -2,25 +2,26 @@ import Link from "next/link";
 import { verifyStripeSession } from "@/lib/verify-session";
 import { clearCart } from "@/actions/cart"
 import { redirect } from "next/navigation";
+import { updateOrderStatus } from "@/actions/orders"
 
-// Next.js Pages erhalten searchParams direkt als Prop
 interface Props {
-  searchParams: Promise<{ session_id?: string }>;
+  searchParams: Promise<{ session_id?: string , orderId?:string}>;
 }
 
 const SuccessPage = async ({ searchParams }: Props) => {
-  // 1. Warte auf die SearchParams (in Next.js 15+ sind diese ein Promise)
-  const { session_id } = await searchParams;
+  const { session_id , orderId} = await searchParams;
 
-  // 2. Sicherheitscheck: Wenn keine ID da ist, zurück zum Warenkorb
-  if (!session_id) {
+
+  if (!session_id || !orderId) {
     redirect("/home/cart");
   }
 
-  // 3. Session bei Stripe verifizieren
-  const result = await verifyStripeSession(session_id);
+  await updateOrderStatus(orderId)
 
-  // 4. Wenn die Zahlung nicht erfolgreich war, Fehlermeldung oder Redirect
+
+  const result = await verifyStripeSession(session_id);
+  
+
   if (!result.success) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
@@ -72,7 +73,7 @@ const SuccessPage = async ({ searchParams }: Props) => {
         <div className="text-center py-10">
           <h2 className="text-3xl font-bold mb-4">Vielen Dank für deine Bestellung!</h2>
           <p className="text-gray-600">
-            Eine Bestätigung wurde an <span className="font-semibold">{result.customer}</span> gesendet.
+            Die Bestellung ist erfolgreich abgeschlossen.
           </p>
           <div className="flex gap-3 items-center justify-center">
           <Link 

@@ -146,7 +146,7 @@ export async function startCheckoutSession(
 
 
   const form = new FormData();
-  form.append("accountId", "acct_1TIQoQIURzxvDsy2");
+  form.append("order_id", updatedOrder.id);
   form.append(
     "products",
     JSON.stringify(apiProducts),

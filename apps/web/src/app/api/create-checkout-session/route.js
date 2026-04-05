@@ -4,10 +4,10 @@ import { secretStripe } from "@/lib/stripe";
 export async function POST(request) {
   try {
     const formData = await request.formData();
-    const accountId = formData.get("accountId");
     const productsJson = formData.get("products");
+    const order_id = formData.get("order_id");
 
-    if (!productsJson || !accountId) {
+    if (!productsJson || !order_id) {
       return NextResponse.json(
         { error: "Missing accountId or products" },
         { status: 400 },
@@ -40,7 +40,7 @@ export async function POST(request) {
       payment_intent_data: {
         transfer_group: "ORDER_" + formatted,
       },
-      success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/home/cart/success?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/home/cart/success?session_id={CHECKOUT_SESSION_ID}&orderId=${order_id}`,
       cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/home/cart`,
     });
 

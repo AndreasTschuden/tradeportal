@@ -172,3 +172,20 @@ export async function getOrderById(orderId : string){
 
     return order
 }
+
+export async function updateOrderStatus(id : string){
+
+  const updatedOrder = await db.user.orders.update({
+    where:{
+      id: id
+    },
+    data:{
+      status : "shipped"
+    }
+  })
+
+  if(!updatedOrder){
+    throw new Error("failed updating OrderStatus")
+  }
+
+}
