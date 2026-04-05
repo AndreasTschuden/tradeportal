@@ -88,7 +88,7 @@ services:
     labels:
       traefik.enable: "true"
       traefik.docker.network: web
-      traefik.http.routers.pgadmin.rule: Host(`${PGADMIN_HOST}`)
+      traefik.http.routers.pgadmin.rule: Host(`pgadmin.reactor-core.de`)
       traefik.http.routers.pgadmin.entrypoints: websecure
       traefik.http.routers.pgadmin.tls: "true"
       traefik.http.routers.pgadmin.tls.certresolver: letsencrypt
