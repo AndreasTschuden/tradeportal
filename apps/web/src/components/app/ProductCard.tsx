@@ -12,7 +12,7 @@ const ProductCard = ({prod} : { prod : productWithStatsType}) => {
 
     const handleAddToCart = async () => {
       try {
-        await addToCart(prod.id, 1, 1);
+        await addToCart(prod.id, 0, 1);
         toast.success("Product added to cart!");
       } catch (error) {
         if (error instanceof Error) {
@@ -27,7 +27,7 @@ const ProductCard = ({prod} : { prod : productWithStatsType}) => {
           <div key={prod.id} className="">
             <div className="relative group w-full aspect-square rounded-md overflow-hidden">
               <Image
-                src={`https://minio.tschudea.de/images/products/${Object.values(prod.specifications.attributes[0].images)[0]}`}
+                src={`https://minio.tschudea.de:8999/images/products/${Object.values(prod.specifications.attributes[0].images)[0]}`}
                 fill
                 alt={prod.name}
                 className="w-full h-full object-cover"

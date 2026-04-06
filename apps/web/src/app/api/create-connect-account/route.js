@@ -8,13 +8,16 @@ import { secretStripe } from "@/lib/stripe"; //pnpm install stripe --save
 
 export async function POST(request) {
   try {
-    const { email, countryCode /*input: where is the company based at*/ } =
+    const { email, countryCode, companyId} =
       await request.json();
 
     // Create a Connect account with the specified controller properties
     const account = await secretStripe.accounts.create({
       country: countryCode,
       email: email,
+      metadata: {
+        companyId: companyId, // Hier speicherst du deine interne ID
+      },
       controller: {
         // Platform controls fee collection - connected account pays fees
         fees: {

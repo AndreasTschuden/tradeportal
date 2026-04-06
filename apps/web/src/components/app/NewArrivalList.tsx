@@ -20,7 +20,7 @@ const NewArrivalList = ({
           onClick={() => router.push(`/home/products/product/${newestProducts[0].id}`)}
         >
           <Image
-            src={`https://minio.tschudea.de/images/products/${Object.values(newestProducts[0].specifications.attributes[0].images)[0]}`}
+            src={`https://minio.tschudea.de:8999/images/products/${Object.values(newestProducts[0].specifications.attributes[0].images)[0]}`}
             alt={newestProducts[0].name}
             fill
             className="object-cover"
@@ -45,7 +45,7 @@ const NewArrivalList = ({
             </div>
         </div>
       ) : (
-        <div className="relative bg-gray-300 lg:w-1/2 w-full aspect-square"></div>
+        <div className="relative bg-gray-200 lg:w-1/2 w-full aspect-square"></div>
       )}
 
       {/* RIGHT SIDE */}
@@ -56,7 +56,7 @@ const NewArrivalList = ({
             onClick={() => router.push(`/home/products/product/${newestProducts[1].id}`)}
           >
             <Image
-              src={`https://minio.tschudea.de/images/products/${Object.values(newestProducts[1].specifications.attributes[0].images)[0]}`}
+              src={`https://minio.tschudea.de:8999/images/products/${Object.values(newestProducts[1].specifications.attributes[0].images)[0]}`}
               alt={newestProducts[1].name}
               fill
               className="object-cover"
@@ -80,7 +80,7 @@ const NewArrivalList = ({
             </div>
           </div>
         ) : (
-          <div className="relative w-full aspect-2/1 bg-gray-300"></div>
+          <div className="relative w-full aspect-2/1 bg-gray-200"></div>
         )}
 
         {/* BOTTOM GRID */}
@@ -93,7 +93,7 @@ const NewArrivalList = ({
               }
             >
               <Image
-               src={`https://minio.tschudea.de/images/products/${Object.values(newestProducts[2].specifications.attributes[0].images)[0]}`}
+               src={`https://minio.tschudea.de:8999/images/products/${Object.values(newestProducts[2].specifications.attributes[0].images)[0]}`}
                 alt={newestProducts[2].name}
                 fill
                 className="object-cover"
@@ -117,7 +117,7 @@ const NewArrivalList = ({
             </div>
             </div>
           ) : (
-            <div className="relative w-1/2 aspect-square bg-gray-300"></div>
+            <div className="relative w-1/2 aspect-square bg-gray-200"></div>
           )}
 
           {newestProducts[3] ? (
@@ -128,7 +128,7 @@ const NewArrivalList = ({
               }
             >
               <Image
-                src={`https://minio.tschudea.de/images/products/${Object.values(newestProducts[3].specifications.attributes[0].images)[0]}`}
+                src={`https://minio.tschudea.de:8999/images/products/${Object.values(newestProducts[3].specifications.attributes[0].images)[0]}`}
                 alt={newestProducts[3].name}
                 fill
                 className="object-cover"
