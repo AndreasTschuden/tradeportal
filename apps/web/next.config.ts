@@ -1,14 +1,13 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   images: {
     remotePatterns: [
       {
         protocol: "https",
         hostname: "minio.tschudea.de",
-        port: "",
-        pathname: "/**", // erlaubt alle Pfade unter dieser Domain
-      },
+        port: "8999",               // Als STRING
+        pathname: "/images/products/**",
+      }
     ],
   },
   reactStrictMode: false,

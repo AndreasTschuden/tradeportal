@@ -20,7 +20,7 @@ const NewArrivalList = ({
           onClick={() => router.push(`/home/products/product/${newestProducts[0].id}`)}
         >
           <Image
-            src={`https://minio.tschudea.de/images/products/${Object.values(newestProducts[0].specifications.attributes[0].images)[0]}`}
+            src={`https://minio.tschudea.de:8999/images/products/${Object.values(newestProducts[0].specifications.attributes[0].images)[0]}`}
             alt={newestProducts[0].name}
             fill
             className="object-cover"
@@ -56,7 +56,7 @@ const NewArrivalList = ({
             onClick={() => router.push(`/home/products/product/${newestProducts[1].id}`)}
           >
             <Image
-              src={`https://minio.tschudea.de/images/products/${Object.values(newestProducts[1].specifications.attributes[0].images)[0]}`}
+              src={`https://minio.tschudea.de:8999/images/products/${Object.values(newestProducts[1].specifications.attributes[0].images)[0]}`}
               alt={newestProducts[1].name}
               fill
               className="object-cover"
@@ -93,7 +93,7 @@ const NewArrivalList = ({
               }
             >
               <Image
-               src={`https://minio.tschudea.de/images/products/${Object.values(newestProducts[2].specifications.attributes[0].images)[0]}`}
+               src={`https://minio.tschudea.de:8999/images/products/${Object.values(newestProducts[2].specifications.attributes[0].images)[0]}`}
                 alt={newestProducts[2].name}
                 fill
                 className="object-cover"
@@ -128,7 +128,7 @@ const NewArrivalList = ({
               }
             >
               <Image
-                src={`https://minio.tschudea.de/images/products/${Object.values(newestProducts[3].specifications.attributes[0].images)[0]}`}
+                src={`https://minio.tschudea.de:8999/images/products/${Object.values(newestProducts[3].specifications.attributes[0].images)[0]}`}
                 alt={newestProducts[3].name}
                 fill
                 className="object-cover"
