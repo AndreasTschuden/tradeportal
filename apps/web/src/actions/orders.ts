@@ -72,7 +72,7 @@ export async function createOrder() {
   };
 
   const orderProducts = cartItems.reduce((acc: orderProductsType[], prod) => {
-    const specs = JSON.parse(prod.products.specifications as string);
+    const specs = prod.products.specifications as any;
     const variant = specs.variants[prod.product_variant];
     const imgVariant = Object.values(variant)[0] as string;
 

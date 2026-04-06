@@ -156,7 +156,7 @@ export async function getCartItems(userId: string) {
   const finalProducts = productWithStats;
 
   finalProducts.forEach((prod) => {
-    prod.products.specifications = JSON.parse(prod.products.specifications);
+    prod.products.specifications = typeof prod.products.specifications == "string" ? JSON.parse(prod.products.specifications) : prod.products.specifications;
     prod.products.base_price = Number(prod.products.base_price);
   });
 
