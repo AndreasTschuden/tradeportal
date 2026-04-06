@@ -24,12 +24,21 @@ export async function startOnboarding(
     where: {
       owner_id: session.user.id,
       deleted_at: null,
-      is_verified: true,
     },
   });
 
   if (!company) {
     redirect("/home");
+  }
+
+  const test = await db.company.companies.findFirst({
+    where: {
+      is_verified: true,
+    },
+  });
+
+  if(!test){
+    throw new Error("Your Company is not verified")
   }
 
   if (company.stripe_account_id) {

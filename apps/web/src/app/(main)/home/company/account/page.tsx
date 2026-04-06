@@ -67,17 +67,33 @@ const page = async () => {
         <div className="relative w-full h-full border-2 border-gray-200 rounded-2xl flex justify-between">
           <span className="absolute -top-4 left-10 bg-white px-2 text-2xl font-medium flex gap-2 justify-center items-center">
             Verification
-            <div className="bg-[#00800030] text-sm text-[#008000] justify-center items-center flex gap-2 px-3 py-0.5 rounded-full">
-              <div className="bg-[#008000] rounded-full aspect-square h-3 font-light"></div>
-              Verified
+            <div
+              className={`text-sm justify-center items-center flex gap-2 px-3 py-0.5 rounded-full ${
+                Information.is_verified
+                  ? "bg-[#00800030] text-[#008000]"
+                  : "bg-[#FF000030] text-[#FF0000]"
+              }`}
+            >
+              <div
+                className={`rounded-full aspect-square h-3 font-light ${
+                  Information.is_verified ? "bg-[#008000]" : "bg-[#FF0000]"
+                }`}
+              ></div>
+              {Information.is_verified ? "Verified" : "Not Verified"}
             </div>
           </span>
           <p className="absolute top-4 left-12 text-md text-gray-400 font-light">
-            The certificate was real and the company is now verified.
+            {Information.is_verified
+              ? "The certificate was real and the company is now verified."
+              : "Your company is not verified yet."}
           </p>
           <div className="mt-20 ml-12 mb-10">
             <p className="text-gray-400">Approved by</p>
-            <p className="">{Information.approved_by || "Approver not found"}</p>
+            <p className="">
+              {Information.is_verified
+                ? Information.approved_by || "Approver not found"
+                : "-"}
+            </p>
           </div>
         </div>
 
@@ -94,10 +110,18 @@ const page = async () => {
                 <p className="text-[#635BFF] text-xl">
                   Your account is linked with Stripe.
                 </p>
-                <p className="text-gray-400">Account ID: <strong className="text-black">{Information.stripe_account_id}</strong></p>
+                <p className="text-gray-400">
+                  Account ID:{" "}
+                  <strong className="text-black">
+                    {Information.stripe_account_id}
+                  </strong>
+                </p>
               </>
             ) : (
-              <StripeRegister email={Information.email} companyId={Information.id}/>
+              <StripeRegister
+                email={Information.email}
+                companyId={Information.id}
+              />
             )}
           </div>
         </div>
