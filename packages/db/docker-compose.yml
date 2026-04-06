@@ -100,6 +100,43 @@ services:
       traefik.http.routers.pgadmin.tls.certresolver: le
       traefik.http.services.pgadmin.loadbalancer.server.port: "80"
   
+  next:
+    build:
+      context: ../../apps/web
+      dockerfile: Dockerfile
+      args:
+        - DIRECT_URL=${DIRECT_URL}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - default
+      - web
+    environment:
+      - DATABASE_URL_BETTER_AUTH=${DATABASE_URL_BETTER_AUTH}
+      - DATABASE_URL_USER=${DATABASE_URL_USER}
+      - DATABASE_URL_COMPANY=${DATABASE_URL_COMPANY}
+      - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
+      - BETTER_AUTH_URL=${BETTER_AUTH_URL}
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - STRIPE_PUBLIC_KEY=${STRIPE_PUBLIC_KEY}
+      - NEXT_PUBLIC_CAPTCHA_SITE_KEY=${NEXT_PUBLIC_CAPTCHA_SITE_KEY}
+      - CAPTCHA_SECRET_KEY=${CAPTCHA_SECRET_KEY}
+      - RESEND_API_KEY=${RESEND_API_KEY}
+      - RESEND_FROM_EMAIL=${RESEND_FROM_EMAIL}
+      - MINIO_BUCKET_CUSTOMER_ACCESS_KEY=${MINIO_BUCKET_CUSTOMER_ACCESS_KEY}
+      - MINIO_BUCKET_CUSTOMER_SECRET_KEY=${MINIO_BUCKET_CUSTOMER_SECRET_KEY}
+      - MINIO_BUCKET_COMPANY_ACCESS_KEY=${MINIO_BUCKET_COMPANY_ACCESS_KEY}
+      - MINIO_BUCKET_COMPANY_SECRET_KEY=${MINIO_BUCKET_COMPANY_SECRET_KEY}
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: web
+      traefik.http.routers.tradeportal.rule: Host(`tradeportal.reactor-core.de`)
+      traefik.http.routers.tradeportal.entrypoints: websecure
+      traefik.http.routers.tradeportal.tls: "true"
+      traefik.http.routers.tradeportal.tls.certresolver: le
+      traefik.http.services.tradeportal.loadbalancer.server.port: "3000"
+
   minio:
       image: quay.io/minio/aistor/minio
       container_name: tradeportal-buckets
