@@ -106,6 +106,9 @@ services:
       dockerfile: Dockerfile
       args:
         - DIRECT_URL=${DIRECT_URL}
+        - DATABASE_URL_BETTER_AUTH=${DATABASE_URL_BETTER_AUTH}
+        - DATABASE_URL_USER=${DATABASE_URL_USER}
+        - DATABASE_URL_COMPANY=${DATABASE_URL_COMPANY}
     depends_on:
       postgres:
         condition: service_healthy
@@ -113,9 +116,6 @@ services:
       - default
       - web
     environment:
-      - DATABASE_URL_BETTER_AUTH=${DATABASE_URL_BETTER_AUTH}
-      - DATABASE_URL_USER=${DATABASE_URL_USER}
-      - DATABASE_URL_COMPANY=${DATABASE_URL_COMPANY}
       - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
       - BETTER_AUTH_URL=${BETTER_AUTH_URL}
       - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
