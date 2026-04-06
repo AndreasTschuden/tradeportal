@@ -21,7 +21,7 @@ export default function RootLayout({
       </header>
         <MainNav/>
       <main>{children}</main>
-      <div className="md:px-30 px-5 bg-gray-300">
+      <div className="md:px-30 px-5 bg-gray-100">
       <Footer/>
       </div>
     </>

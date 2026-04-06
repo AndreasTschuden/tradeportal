@@ -45,7 +45,7 @@ const NewArrivalList = ({
             </div>
         </div>
       ) : (
-        <div className="relative bg-gray-300 lg:w-1/2 w-full aspect-square"></div>
+        <div className="relative bg-gray-200 lg:w-1/2 w-full aspect-square"></div>
       )}
 
       {/* RIGHT SIDE */}
@@ -80,7 +80,7 @@ const NewArrivalList = ({
             </div>
           </div>
         ) : (
-          <div className="relative w-full aspect-2/1 bg-gray-300"></div>
+          <div className="relative w-full aspect-2/1 bg-gray-200"></div>
         )}
 
         {/* BOTTOM GRID */}
@@ -117,7 +117,7 @@ const NewArrivalList = ({
             </div>
             </div>
           ) : (
-            <div className="relative w-1/2 aspect-square bg-gray-300"></div>
+            <div className="relative w-1/2 aspect-square bg-gray-200"></div>
           )}
 
           {newestProducts[3] ? (

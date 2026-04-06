@@ -7,7 +7,13 @@ const nextConfig = {
         hostname: "minio.tschudea.de",
         port: "8999",               // Als STRING
         pathname: "/images/products/**",
-      }
+      },
+        {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
   reactStrictMode: false,
