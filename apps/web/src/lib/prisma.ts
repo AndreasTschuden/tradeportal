@@ -2,8 +2,8 @@ import "dotenv/config";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../generated/prisma/client";
 
-const userConnectionString = `${process.env.DATABASE_URL_USER!}`;
-const companyConnectionString = `${process.env.DATABASE_URL_COMPANY!}`;
+const userConnectionString = `${process.env.DIRECT_URL!}`;
+const companyConnectionString = `${process.env.DIRECT_URL!}`;
 
 const userAdapter = new PrismaPg({ connectionString: userConnectionString });
 const companyAdapter = new PrismaPg({ connectionString: companyConnectionString });

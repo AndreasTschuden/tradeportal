@@ -12,7 +12,7 @@ import { hashPassword, verifyPassword } from "./password";
 import { Resend } from "resend";
 import { db } from "@/lib/prisma";
 
-const connectionString = `${process.env.DATABASE_URL_BETTER_AUTH}`;
+const connectionString = `${process.env.DIRECT_URL}`;
 
 const resend = new Resend(process.env.RESEND_API_KEY!);
 
