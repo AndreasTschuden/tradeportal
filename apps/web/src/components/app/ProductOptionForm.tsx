@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { Heart, ShoppingCart } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { variantOptionSchema } from "@/lib/zod";
@@ -9,29 +9,9 @@ import { addToCart } from "@/actions/cart";
 import { toast } from "sonner";
 import { redirect } from "next/navigation";
 
-
 const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
   const [cartCounter, setCartCounter] = useState<number>(1);
   const [toggleFavourite, setToggleFavourite] = useState<boolean>(false);
-  const [variantAvailable, setVariantAvailable] = useState<boolean>(true);
-  const [currentVariant, setCurrentVariant] = useState<number | null>(null);
-
-
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm({
-    resolver: zodResolver(variantOptionSchema),
-  });
-
-  const { fields, append, prepend, remove, swap, move, insert } = useFieldArray(
-    {
-      control,
-      name: "options",
-    },
-  );
 
   const initialObj = product.specifications.attributes.reduce(
     (acc: Record<string, string>, attr: any) => {
@@ -44,6 +24,31 @@ const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
   const [selectedAttributes, setSelectedAttributes] =
     useState<Record<string, string>>(initialObj);
 
+  const findVariantIndex = (attributes: Record<string, string>) => {
+    return product.specifications.variants.findIndex(
+      (v: any) =>
+        Object.entries(attributes).every(([key, val]) => v[key] === val) &&
+        v.available === true,
+    );
+  };
+
+  const [currentVariant, setCurrentVariant] = useState<number | null>(null);
+  const [variantAvailable, setVariantAvailable] = useState<boolean>(true);
+
+  useEffect(() => {
+    const index = findVariantIndex(initialObj);
+    setCurrentVariant(index !== -1 ? index : null);
+    setVariantAvailable(index !== -1);
+  }, []);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(variantOptionSchema),
+  });
+
   const handleSelectChange = (name: string, value: string) => {
     const newAttributes = {
       ...selectedAttributes,
@@ -52,35 +57,27 @@ const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
 
     setSelectedAttributes(newAttributes);
 
-    const variant = product.specifications.variants.find(
-      (v: any) =>
-        Object.entries(newAttributes).every(([key, val]) => v[key] === val) &&
-        v.available === true,
-    );
+    const index = findVariantIndex(newAttributes);
 
-    if (variant != undefined) {
-      const variantIndex = product.specifications.variants.findIndex(
-        (v: any) =>
-          Object.entries(newAttributes).every(([key, val]) => v[key] === val) &&
-          v.available === true,
-      );
-      setCurrentVariant(variantIndex);
-    }
-    setVariantAvailable(!!variant);
+    setCurrentVariant(index !== -1 ? index : null);
+    setVariantAvailable(index !== -1);
   };
 
   const onSubmit = async (data: any) => {
-    if (!variantAvailable) {
-      return;
-    }
+    if (!variantAvailable) return;
 
     try {
-      const result = await addToCart(product.id, currentVariant || 1, cartCounter);
+      const result = await addToCart(
+        product.id,
+        currentVariant ?? 0,
+        cartCounter
+      );
+
       if (result === "updated") {
         toast.success("Cart item updated successfully!");
       } else if (result === "added") {
         toast.success("Item added to cart successfully!");
-      }else if (result === "customer_not_found") {
+      } else if (result === "customer_not_found") {
         toast.error("Customer not found. Please sign in again.");
         redirect("/home");
       }
@@ -93,8 +90,6 @@ const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
         }
       }
     }
-
-    console.log("Selected Attributes:", data);
   };
 
   return (
@@ -110,7 +105,6 @@ const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
                 <p>{attr.name}</p>
 
                 <select
-                  key={attr.name}
                   {...register(`options.${index}.value`, {
                     onChange: (e) =>
                       handleSelectChange(attr.name, e.target.value),
@@ -127,16 +121,19 @@ const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
               <div className="border border-gray-300"></div>
             </div>
           ))}
+
           {!variantAvailable && (
             <div className="text-red-500">
               Diese Variante ist nicht mehr verfügbar
             </div>
           )}
+
           {errors.options && (
             <div className="text-red-500">
               {errors.options.message || "Please select valid options."}
             </div>
           )}
+
           {errors.quantity && (
             <div className="text-red-500">
               {errors.quantity.message || "Please enter a valid quantity."}
@@ -148,6 +145,7 @@ const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
           <p className="font-bold text-4xl">
             {product.currency === "EUR" ? "€" : "$"} {product.base_price}
           </p>
+
           <div className="flex gap-7 h-15">
             <button
               className="w-full bg-red-700 rounded-xl text-white font-medium flex items-center justify-center gap-2"
@@ -156,6 +154,7 @@ const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
               <ShoppingCart />
               <p>Add to cart</p>
             </button>
+
             <div className="flex w-2/4 justify-between items-center">
               <button
                 type="button"
@@ -167,7 +166,6 @@ const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
 
               <input
                 type="text"
-                min={1}
                 className="w-full text-center border-y-2 border-gray-200 text-3xl h-full outline-none"
                 value={cartCounter}
                 {...register("quantity", {
@@ -180,7 +178,6 @@ const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
                     }
 
                     const num = Number(val);
-
                     if (!isNaN(num) && num >= 1) {
                       setCartCounter(num);
                     }
@@ -198,6 +195,7 @@ const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
                 -
               </button>
             </div>
+
             <button
               type="button"
               className="bg-gray-200 aspect-square rounded-xl flex justify-center items-center"

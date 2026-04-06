@@ -23,6 +23,8 @@ export async function GET(request, { params }) {
     const { accountId } = await params;
 
     const account = await secretStripe.accounts.retrieve(accountId);
+    
+        console.log("Stripe Account Status:", account);
 
     return NextResponse.json({
       id: account.id,
@@ -31,7 +33,9 @@ export async function GET(request, { params }) {
       detailsSubmitted: account.details_submitted,
       requirements: account.requirements,
     });
+
   } catch (error) {
+
     console.error("Error retrieving account status:", error);
     return NextResponse.json(
       { error: { message: error.message } },

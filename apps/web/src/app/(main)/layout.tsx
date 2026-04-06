@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { MainNav } from "@/components/app/navigation/MainNav"
 import "@/app/globals.css";
+import Footer from "@/components/app/Footer";
 
 export const metadata: Metadata = {
   title: "TradePortal | Marketplace",
@@ -20,9 +21,9 @@ export default function RootLayout({
       </header>
         <MainNav/>
       <main>{children}</main>
-      <footer className="bg-gray-200 h-[40vh] flex items-center justify-center md:px-30 px-5">
-        <h1>Footer</h1>
-      </footer>
+      <div className="md:px-30 px-5 bg-gray-100">
+      <Footer/>
+      </div>
     </>
   );
 }
