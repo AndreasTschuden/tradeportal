@@ -303,7 +303,7 @@ export async function getProductsByCompany(){
   const finalProducts = productWithStats;
 
   finalProducts.forEach((prod) => {
-    prod.specifications = JSON.parse(prod.specifications);
+    prod.specifications = typeof prod.specifications == "string" ? JSON.parse(prod.specifications) : prod.specifications;
     prod.base_price = Number(prod.base_price);
   });
 
