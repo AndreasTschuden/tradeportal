@@ -84,7 +84,7 @@ export async function signUpCompanyAction(data: SignUpCompanyFormData) {
       owner_id: result.user.id,
       stripe_account_id: "",
       onboarding_started_at: new Date(),
-      is_verified: true, //for now its true but after the the verification functionality this will be false as default
+      is_verified: false,
       company_name: company_name,
       email: email,
       phone_number: phone,

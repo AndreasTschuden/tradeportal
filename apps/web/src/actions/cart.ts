@@ -69,7 +69,6 @@ export async function addToCart(
 
     const result = await db.user.shopping_cart_products.update({
       where: {
-        // Composite Primary Key
         customers_id_products_id_product_variant: {
           customers_id: product.customers_id,
           products_id: product.products_id,

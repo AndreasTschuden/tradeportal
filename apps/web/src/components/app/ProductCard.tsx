@@ -12,7 +12,7 @@ const ProductCard = ({prod} : { prod : productWithStatsType}) => {
 
     const handleAddToCart = async () => {
       try {
-        await addToCart(prod.id, 1, 1);
+        await addToCart(prod.id, 0, 1);
         toast.success("Product added to cart!");
       } catch (error) {
         if (error instanceof Error) {

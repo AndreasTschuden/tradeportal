@@ -83,7 +83,7 @@ const SuccessPage = async ({ searchParams }: Props) => {
             Weiter einkaufen
           </Link>
            <Link 
-            href="/home" 
+            href="/home/orders" 
             className="mt-8 inline-block border border-red-700 text-red-700 px-8 py-3 rounded-md font-medium"
           >
             Bestellung ansehen

@@ -15,9 +15,6 @@ const SubNav = () => {
           <Link href="home/products" className="text-white font-normal text-sm">
             Products
           </Link>
-          <Link href="home/contact" className="text-white font-normal text-sm">
-            Contact
-          </Link>
         </div>
       </div>
       <div className="lg:block hidden">

@@ -6,7 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SignUpCompanyFormData } from "@/lib/zod";
 import { signupCompany } from "@/lib/zod";
 import { useState } from "react";
-import { inputClass, buttonClass } from "@/components/ui/FormControls";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 export function SignupCompany() {
@@ -35,14 +34,17 @@ export function SignupCompany() {
     });
 
     const result = await response.json();
-    if (!result.success) return;
+    if (!result.success) {
+      setError("reCAPTCHA verification failed");
+      setLoading(false);
+      return;
+    }
 
     try {
       await signUpCompanyAction(formData);
-    } catch (err: unknown) {
-      const maybeError = err as { message?: string };
-      if (maybeError?.message !== "NEXT_REDIRECT") {
-        setError(maybeError?.message || "Sign in failed");
+    } catch (err: any) {
+      if (err?.message !== "NEXT_REDIRECT") {
+        setError(err?.message || "Signup failed");
       }
     } finally {
       setLoading(false);
@@ -50,70 +52,80 @@ export function SignupCompany() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3 w-full max-w-lg">
-      {/* Address */}
+    <div className="w-full max-w-md">
+      {/* Title */}
+      <h2 className="text-3xl font-bold mb-2">Create Company Account</h2>
+      <p className="text-gray-400 mb-6">
+        Register your company to start using TradePortal
+      </p>
 
-      <input
-        {...register("company_name")}
-        type="text"
-        placeholder="Company Name"
-        className={`${errors.company_name ? "border-red-500" : "border-slate-300"} ${inputClass}`}
-      />
-      {errors.company_name && (
-        <p className="text-red-500 text-sm mt-1">
-          {errors.company_name.message}
-        </p>
-      )}
-      <input
-        {...register("email")}
-        type="email"
-        placeholder="Email"
-        className={`${errors.email ? "border-red-500" : "border-slate-300"} ${inputClass}`}
-      />
-      {errors.email && (
-        <p className="text-red-500 text-sm">{errors.email.message}</p>
-      )}
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+        <input
+          {...register("company_name")}
+          placeholder="Company Name"
+          className={`border rounded-lg px-4 py-2 outline-none ${
+            errors.company_name ? "border-red-500" : "border-gray-300"
+          }`}
+        />
+        {errors.company_name && (
+          <p className="text-red-500 text-sm">{errors.company_name.message}</p>
+        )}
 
-      <input
-        {...register("phone")}
-        type="text"
-        placeholder="Phone"
-        className={`${errors.phone ? "border-red-500" : "border-slate-300"} ${inputClass}`}
-      />
-      {errors.phone && (
-        <p className="text-red-500 text-sm">{errors.phone.message}</p>
-      )}
+        <input
+          {...register("email")}
+          type="email"
+          placeholder="Email"
+          className={`border rounded-lg px-4 py-2 outline-none ${
+            errors.email ? "border-red-500" : "border-gray-300"
+          }`}
+        />
+        {errors.email && (
+          <p className="text-red-500 text-sm">{errors.email.message}</p>
+        )}
 
-      <input
-        {...register("password")}
-        type="password"
-        placeholder="Password"
-        className={`${errors.password ? "border-red-500" : "border-slate-300"} ${inputClass}`}
-      />
-      {errors.password && (
-        <p className="text-red-500 text-sm">{errors.password.message}</p>
-      )}
+        <input
+          {...register("phone")}
+          placeholder="Phone"
+          className={`border rounded-lg px-4 py-2 outline-none ${
+            errors.phone ? "border-red-500" : "border-gray-300"
+          }`}
+        />
+        {errors.phone && (
+          <p className="text-red-500 text-sm">{errors.phone.message}</p>
+        )}
 
-      <input
-        {...register("confirmPassword")}
-        type="password"
-        placeholder="Confirm Password"
-        className={`${errors.confirmPassword ? "border-red-500" : "border-slate-300"} ${inputClass}`}
-      />
-      {errors.confirmPassword && (
-        <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>
-      )}
+        <input
+          {...register("password")}
+          type="password"
+          placeholder="Password"
+          className={`border rounded-lg px-4 py-2 outline-none ${
+            errors.password ? "border-red-500" : "border-gray-300"
+          }`}
+        />
+        {errors.password && (
+          <p className="text-red-500 text-sm">{errors.password.message}</p>
+        )}
 
-      {error && (
-        <p className="text-red-500 text-sm bg-red-100 p-3 rounded-md">
-          {error}
-        </p>
-      )}
+        <input
+          {...register("confirmPassword")}
+          type="password"
+          placeholder="Confirm Password"
+          className={`border rounded-lg px-4 py-2 outline-none ${
+            errors.confirmPassword ? "border-red-500" : "border-gray-300"
+          }`}
+        />
+        {errors.confirmPassword && (
+          <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>
+        )}
 
-      {/* Button */}
-      <button type="submit" disabled={loading} className={buttonClass}>
-        {loading ? "Signing up..." : "Sign up"}
-      </button>
-    </form>
+        <button
+          type="submit"
+          disabled={loading}
+          className="bg-red-700 text-white py-3 rounded-lg font-medium hover:bg-red-800 transition"
+        >
+          {loading ? "Signing up..." : "Create Company Account"}
+        </button>
+      </form>
+    </div>
   );
 }
