@@ -8,7 +8,7 @@ import { auth } from "@/lib/auth";
 export async function getProducts() {
   const products = await db.user.products.findMany({
     where: {
-      // isactive: true 
+      isactive: true 
     },
     select: {
       id: true,
@@ -62,7 +62,7 @@ export async function getProducts() {
 export async function getNewestProducts() {
   const newestProducts = await db.user.products.findMany({
     where: {
-      // isactive: true 
+      isactive: true 
     },
     select: {
       id: true,
@@ -94,6 +94,7 @@ export async function getDetailedProduct(id: string) {
   const product = await db.user.products.findUnique({
     where: {
       id: id,
+      isactive: true 
     },
     select: {
       id: true,
@@ -165,6 +166,7 @@ export async function getFourProductsByCategory(
 ) {
   const products = await db.user.products.findMany({
     where: {
+      isactive: true, 
       AND: [
         {
           id: {
@@ -225,7 +227,6 @@ export async function getFourProductsByCategory(
     prod.specifications =  typeof prod.specifications == "string" ? JSON.parse(prod.specifications) : prod.specifications;
     prod.base_price = Number(prod.base_price);
   });
-
   return finalProducts;
 }
 
@@ -302,7 +303,7 @@ export async function getProductsByCompany(){
   const finalProducts = productWithStats;
 
   finalProducts.forEach((prod) => {
-    prod.specifications = JSON.parse(prod.specifications);
+      prod.specifications = typeof prod.specifications == "string" ? JSON.parse(prod.specifications) : prod.specifications;
     prod.base_price = Number(prod.base_price);
   });
 
@@ -344,6 +345,9 @@ export async function updateProductAvailability(value : boolean, productId : str
 
 export async function getAllProducts(){
   const products = await db.user.products.findMany({
+    where:{
+      isactive: true 
+    },
     include:{
       reviews: {},
       _count: {
@@ -363,7 +367,7 @@ export async function getAllProducts(){
     }
   });
 
-   let avg = 0;
+  let avg = 0;
   let count = 0;
 
   let productWithStats: allProductsType[] = products;
@@ -384,7 +388,7 @@ export async function getAllProducts(){
   const finalProducts = productWithStats;
 
   finalProducts.forEach((prod) => {
-    prod.specifications = JSON.parse(prod.specifications);
+    prod.specifications = typeof prod.specifications == "string" ? JSON.parse(prod.specifications) : prod.specifications;
     prod.base_price = Number(prod.base_price);
   });
 

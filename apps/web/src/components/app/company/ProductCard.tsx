@@ -27,7 +27,7 @@ const ProductCard = ({ product }: { product: productWithStatsType }) => {
     <div className="flex justify-between p-3 border-gray-400 border rounded-2xl items-center px-5">
       <div className="relative h-20 aspect-square">
         <Image
-          src={`https://minio.tschudea.de/images/products/${Object.values(product.specifications.attributes[0].images)[0]}`}
+          src={`https://minio.tschudea.de:8999/images/products/${Object.values(product.specifications.attributes[0].images)[0]}`}
           alt={product.name}
           fill
           className="object-cover rounded-xl"

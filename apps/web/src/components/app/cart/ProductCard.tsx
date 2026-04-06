@@ -45,7 +45,7 @@ const ProductCard = ({ prod }: { prod: cartItemsWithAvgStars }) => {
       <div className="flex gap-6 items-center">
         <div className="relative w-40 h-40 bg-gray-100 rounded-md overflow-hidden">
           <Image
-            src={`https://minio.tschudea.de/images/products/${imgName}`}
+            src={`https://minio.tschudea.de:8999/images/products/${imgName}`}
             alt={prod.products.name}
             fill
             className="object-cover"

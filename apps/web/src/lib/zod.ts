@@ -322,3 +322,9 @@ export const variantOptionSchema = z.object({
 });
 
 export type variantOptionType = z.infer<typeof variantOptionSchema>;
+
+export const stripeSchema = z.object({
+  email: z.email("Please enter a valid email address"),
+  countryCode: z.string().length(2, "Country code must be exactly 2 characters"),
+});
+export type stripeType = z.infer<typeof stripeSchema>;

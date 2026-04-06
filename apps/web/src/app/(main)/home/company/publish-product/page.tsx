@@ -21,7 +21,7 @@ const PublishProductsPage = async () => {
     where: {
       AND: [
         { owner_id: session?.user.id },
-        { is_verified: true }   // nur verifizierte Firmen
+        { is_verified: true }
       ],
     },
   });
