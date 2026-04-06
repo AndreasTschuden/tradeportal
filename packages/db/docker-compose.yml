@@ -131,7 +131,7 @@ services:
       traefik.http.routers.tradeportal.tls: "true"
       traefik.http.routers.tradeportal.tls.certresolver: le
       traefik.http.services.tradeportal.loadbalancer.server.port: "3000"
-    command: npx prisma db pull && npx prisma generate && npm run start
+    command: npx prisma db pull && npx prisma generate && npm run build && npm run start
 
   minio:
       image: quay.io/minio/aistor/minio
