@@ -554,19 +554,19 @@ GRANT SELECT ON categories, categories_products, companies, customers, orders, o
 ALTER DEFAULT PRIVILEGES IN SCHEMA public
 GRANT SELECT ON TABLES TO migration_role, company_role, user_role;
 
-CREATE USER migration_bot WITH PASSWORD 'xLZX$95db2N29p@2mv3P';
+CREATE USER migration_bot WITH PASSWORD 'nqcEj99JJcW3fZZUEgUT7csfruuX9dMNcA9w';
 GRANT migration_role TO migration_bot;
 
-CREATE USER app_user WITH PASSWORD '&$YnfebHZERsn49NEe9U';
+CREATE USER app_user WITH PASSWORD 'uti5Db97C7T4eEpZrCWiYNreYXu3WAJyrgQk';
 GRANT user_role TO app_user;
 
-CREATE USER app_company WITH PASSWORD '2fD7dFtU&@pAobLYtYgx';
+CREATE USER app_company WITH PASSWORD '3hoePso2JVAuuyLjsjo9VKHV3UW7WzSpkf42';
 GRANT company_role TO app_company;
 
-CREATE USER report_bot WITH PASSWORD 'YHRKQcq&%D5VDAnP4eVa';
+CREATE USER report_bot WITH PASSWORD 'TQpLqmrrhidsgdgAZWHMaw5tPLXtAJoHrMiH';
 GRANT report_role TO report_bot;
 
-CREATE USER better_auth WITH PASSWORD '4KAxLTdFnT#WhveEC3&C';
+CREATE USER better_auth WITH PASSWORD 'qrmY39rAwDNa4Pxxs2UUZ4zdvo54tu4SFHjt';
 GRANT better_auth_role TO better_auth;
 
  GRANT USAGE ON SCHEMA public TO better_auth;
