@@ -23,7 +23,7 @@ export async function POST(req) {
     return NextResponse.json({ error: err.message }, { status: 400 });
   }
 
-  if (event.type === "checkout.session.completed") {
+   if (event.type === "checkout.session.completed") {
     const sessionId = event.data.object.id;
 
     // Vollständige Session mit PaymentIntent und Line Items abrufen
@@ -57,26 +57,6 @@ export async function POST(req) {
             err.message,
           );
         }
-      }
-    }
-  }
-
-  if (event.type === "account.updated") {
-    const account = event.data.object;
-    const isFinished = account.details_submitted && account.charges_enabled;
-    const internalCompanyId = account.metadata.companyId;
-
-    if (isFinished) {
-      const update = await db.company.companies.update({
-        where: { id: internalCompanyId },
-        data: {
-          stripe_account_id : account.id,
-          onboarding_completed_at : new Date().toISOString()
-        },
-      });
-
-      if(!update){
-         return NextResponse.json({ error: "Failed to update your Account" }, { status: 400 });
       }
     }
   }
