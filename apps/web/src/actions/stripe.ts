@@ -33,7 +33,10 @@ export async function startOnboarding(
 
   const test = await db.company.companies.findFirst({
     where: {
-      is_verified: true,
+      AND :{
+          is_verified: true,
+          owner_id : session.user.id
+      }
     },
   });
 

@@ -33,6 +33,10 @@ export async function publishProduct(formData: ProductType) {
   const company = await db.company.companies.findFirst({
     where: {
       owner_id: session.user.id,
+      is_verified: true,
+      stripe_account_id: {
+        not: "",
+      },
     },
   });
 

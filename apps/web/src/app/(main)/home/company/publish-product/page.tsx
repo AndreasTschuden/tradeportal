@@ -18,18 +18,19 @@ const PublishProductsPage = async () => {
   }
 
   const company = await db.user.companies.findFirst({
-    where: {
-      AND: [
-        { owner_id: session?.user.id },
-        { is_verified: true }
-      ],
+   where: {
+      owner_id: session.user.id,
+      is_verified: true,
+      stripe_account_id: {
+        not: "",
+      },
     },
   });
 
   if(!company){
     return (
       <div className='flex items-center justify-center h-screen'>
-        <h1 className='font-bold text-red-500 text-5xl'>This Page is only accessable for verified Companies</h1>
+        <h1 className='font-bold text-red-500 text-5xl'>This Page is only accessable for verified Companies and you have your account has to be linked with Stripe</h1>
       </div>
   )}
 
