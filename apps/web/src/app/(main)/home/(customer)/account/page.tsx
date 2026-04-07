@@ -31,6 +31,14 @@ const page = async () => {
               Lorem ipsum dolor sit amet, consetetur sadipscing elitr
             </p>
           </div>
+          <div className="flex gap-3 mt-5">
+            <Link
+              href="/home/orders"
+              className="ring-1 ring-red-700 py-2 px-7 text-red-700 rounded-xl font-medium"
+            >
+              View your Orders
+            </Link>
+          </div>
         </div>
         <div className="w-full min-h-35 h-full border-2 border-gray-200 rounded-2xl flex justify-between px-20">
           <div className="flex gap-3 justify-center items-center">

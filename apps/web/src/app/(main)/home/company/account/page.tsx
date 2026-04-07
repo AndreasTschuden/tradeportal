@@ -7,9 +7,12 @@ import { ChangePasswordForm } from "@/components/app/company/ChangePasswordForm"
 import RemoveAccount from "@/components/app/company/RemoveAccount";
 import { signOutAction } from "@/actions/auth";
 import { LogOut } from "lucide-react";
+import { StripeRegister } from "@/components/app/company/StripeRegister";
 
 const page = async () => {
   const Information = await getBasicInformation();
+
+  const stripe = Information.stripe_account_id ? true : false;
 
   return (
     <div>
@@ -64,17 +67,62 @@ const page = async () => {
         <div className="relative w-full h-full border-2 border-gray-200 rounded-2xl flex justify-between">
           <span className="absolute -top-4 left-10 bg-white px-2 text-2xl font-medium flex gap-2 justify-center items-center">
             Verification
-            <div className="bg-[#00800030] text-sm text-[#008000] justify-center items-center flex gap-2 px-3 py-0.5 rounded-full">
-              <div className="bg-[#008000] rounded-full aspect-square h-3 font-light"></div>
-              Verified
+            <div
+              className={`text-sm justify-center items-center flex gap-2 px-3 py-0.5 rounded-full ${
+                Information.is_verified
+                  ? "bg-[#00800030] text-[#008000]"
+                  : "bg-[#FF000030] text-[#FF0000]"
+              }`}
+            >
+              <div
+                className={`rounded-full aspect-square h-3 font-light ${
+                  Information.is_verified ? "bg-[#008000]" : "bg-[#FF0000]"
+                }`}
+              ></div>
+              {Information.is_verified ? "Verified" : "Not Verified"}
             </div>
           </span>
           <p className="absolute top-4 left-12 text-md text-gray-400 font-light">
-            The certificate was real and the company is now verified.
+            {Information.is_verified
+              ? "The certificate was real and the company is now verified."
+              : "Your company is not verified yet."}
           </p>
           <div className="mt-20 ml-12 mb-10">
             <p className="text-gray-400">Approved by</p>
-            <p className="">Andreas Tschuden</p>
+            <p className="">
+              {Information.is_verified
+                ? Information.approved_by || "Approver not found"
+                : "-"}
+            </p>
+          </div>
+        </div>
+
+        <div className="relative w-full h-full border-2 border-gray-200 rounded-2xl flex justify-between">
+          <span className="absolute -top-4 left-10 bg-white px-2 text-2xl font-medium flex gap-2 justify-center items-center">
+            <img src="/Stripe_Logo,_revised_2016.png" alt="" className="h-8" />
+          </span>
+          <p className="absolute top-4 left-12 text-md text-gray-400 font-light">
+            Link your Account with stripe
+          </p>
+          <div className="mt-20 ml-12 mb-10">
+            {stripe ? (
+              <>
+                <p className="text-[#635BFF] text-xl">
+                  Your account is linked with Stripe.
+                </p>
+                <p className="text-gray-400">
+                  Account ID:{" "}
+                  <strong className="text-black">
+                    {Information.stripe_account_id}
+                  </strong>
+                </p>
+              </>
+            ) : (
+              <StripeRegister
+                email={Information.email}
+                companyId={Information.id}
+              />
+            )}
           </div>
         </div>
 

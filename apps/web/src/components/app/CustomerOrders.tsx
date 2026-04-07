@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import { useState, useEffect } from "react";
 import { customerOrders } from "@/actions/customer-account";
 import { toast } from "sonner";
@@ -80,7 +79,7 @@ const CustomerOrders = () => {
             }))
           : orderArrAfterStatus;
       console.log(orderArrAfterName);
-      setTotalPrice([])
+      setTotalPrice([]);
       orderArrAfterName.map((obj) => {
         let price = 0;
         obj.orders_products.map((obj) => {
@@ -96,13 +95,23 @@ const CustomerOrders = () => {
     <>
       <div className="flex relative">
         <div className="flex flex-col">
-          <div className="text-gray-400">
-            Home / <span className="text-red-600">Orders</span>
+          <nav className="flex my-2 mb-4 text-sm">
+            <Link href="/home" className="text-gray-400">
+              Home
+            </Link>
+            <p className="px-3 text-gray-400">/</p>
+            <Link href="/home/orders" className="text-red-700 font-bold">
+              Orders
+            </Link>
+          </nav>
+          <div className="flex flex-row justify-between">
+            <div>
+              <h2 className="text-3xl font-bold">Your Orders</h2>
+              <p className="text-gray-400">
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr
+              </p>
+            </div>
           </div>
-          <p className="text-5xl font-bold mt-3 mb-1.5">Your Orders</p>
-          <p className="text-gray-400 text-2xl">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          </p>
           <div className="flex mt-2 gap-2">
             <button
               className="bg-gray-200 rounded-xl px-4 py-2 hover:bg-gray-300"
@@ -131,105 +140,121 @@ const CustomerOrders = () => {
           onChange={(event) => setNameFilter(event.target.value.trim())}
         />
       </div>
-      {typeof displayArr != "string" && displayArr ? (
-        displayArr.map((obj, index) => (
-          <div className="border rounded-xl mt-6" key={obj.id}>
-            <div className="flex mt-2 mx-4 gap-auto gap-[18%]">
-              {" "}
-              {/*Ka ohnung wie i dos center, des deina Andi*/}
-              <div className="flex flex-col">
-                <p>Order date</p>
-                <p className="text-black font-semibold">
-                  {new Date(obj.order_date).toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                  })}
-                </p>
-              </div>
-              <div className="flex flex-col">
-                <p>Total amount</p>
-                <p className="text-black font-semibold">
-                  {totalPrice[index] +
-                    ` ${obj.orders_products[index].products.currency}`}
-                </p>
-              </div>
-              <div className="flex flex-col">
-                <p>Ship to</p>
-                <p className="text-black font-semibold">{obj.shipped_to}</p>
-              </div>
-              <div className="flex flex-col">
-                <p>Tracking number</p>
-                <p className="text-black font-semibold">
-                  {obj.tracking_number}
-                </p>
-              </div>
-              <div className="flex flex-col">
-                <p className={(obj.status == "pending" || obj.status == "shipped") ? "text-amber-400 px-6 py-2 rounded-xl bg-amber-200" : obj.status == "cancelled" ? "text-red-500 px-6 py-2 rounded-xl bg-red-300" : "text-green-500 px-6 py-2 rounded-xl bg-green-300"}>
-                  {obj.status}
-                </p>
-              </div>
-            </div>
-            <div className="border border-gray-200 mx-4 my-6"></div>
-            <div className="flex ml-4">
-              <p className="text-4xl font-bold pr-1">
-                {obj.shipped_date
-                  ? " shipped " + obj.shipped_date
-                  : "Not shipped yet"}
-              </p>{" "}
-              {/*Dont knw how to put the text to the bottom, your job andi*/}
-              <p>
-                <span className="text-gray-300 text-xl font-semibold ml-3">
-                  shipper:
-                </span>{" "}
-                {obj.shipper}{" "}
+      {displayArr?.map((order, index) => (
+        <div key={order.id} className="border rounded-2xl mt-6 p-6 ">
+          {/* TOP BAR */}
+          <div className="grid grid-cols-5 gap-6 items-center text-sm">
+            <div>
+              <p className="text-gray-400">Order Date:</p>
+              <p className="font-semibold">
+                {new Date(order.order_date).toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                })}
               </p>
             </div>
-            <div className="ml-4">
-              {obj.orders_products.map((obj) => (
-                <div
-                  className="flex my-4"
-                  key={obj.orders_id + obj.products_id + obj.product_variant}
-                >
-                  <img
-                    src={obj.specifications.image}
-                    alt=""
-                    className="h-40 w-40"
-                  />
-                  <div className="flex flex-col ml-4">
-                    <p className="font-bold text-xl">{obj.products.name}</p>
-                    <p className="text-gray-400">
-                      Variant:{" "}
-                      {Object.keys(obj.specifications)
-                        .filter(
-                          (key) =>
-                            key != "image" &&
-                            key != "available" &&
-                            key != "priceModifier",
-                        )
-                        .map((key) => `${key}: ${obj.specifications[key]} `)}
-                    </p>
-                    <p className="text-gray-400 mt-auto">
-                      Quantity: {obj.quantity}
-                    </p>
-                    <p className="text-gray-400 mb-auto">
-                      Price: {obj.unit_price * (1 - obj.discount)}
-                    </p>
-                    <Link
-                      className="text-red-600 hover:underline"
-                      href={"/home/products/product/" + obj.products_id}
-                    >
-                      View Product
-                    </Link>
-                  </div>
-                </div>
-              ))}
+
+            <div>
+              <p className="text-gray-400">Total Amount:</p>
+              <p className="font-semibold">$ {totalPrice[index]?.toFixed(2)}</p>
+            </div>
+
+            <div className="col-span-2">
+              <p className="text-gray-400">Ship to:</p>
+              <p className="font-semibold">{order.shipped_to}</p>
+            </div>
+
+            <div className="flex justify-between items-center">
+              <div>
+                <p className="text-gray-400">Tracking Number:</p>
+                <p className="font-semibold">#{order.tracking_number}</p>
+              </div>
+
+              <span
+                className={`ml-4 px-4 py-1 rounded-lg text-sm font-medium
+            ${
+              order.status === "completed"
+                ? "bg-green-200 text-green-700"
+                : order.status === "cancelled"
+                  ? "bg-red-200 text-red-600"
+                  : "bg-amber-200 text-amber-600"
+            }`}
+              >
+                {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+              </span>
             </div>
           </div>
-        ))
-      ) : (
-        <>loading...</>
-      )}
+
+          {/* DIVIDER */}
+          <div className="border-t my-6"></div>
+
+          {/* SHIPPING LINE */}
+          <div className="flex items-center gap-4 mb-6">
+            <h2 className="text-2xl font-bold">
+              {order.shipped_date
+                ? `Shipped ${new Date(order.shipped_date).toLocaleDateString(
+                    "en-US",
+                    { month: "long", day: "numeric", year: "numeric" },
+                  )}`
+                : "Not shipped yet"}
+            </h2>
+
+            <p className="text-gray-500">
+              <span className="text-gray-400">Shipped by:</span> {order.shipper}
+            </p>
+          </div>
+
+          {/* PRODUCTS */}
+          <div className="flex flex-col gap-6">
+            {order.orders_products.map((item) => (
+              <div
+                key={item.orders_id + item.products_id + item.product_variant}
+                className="flex gap-6"
+              >
+                <img
+                  src={item.specifications.image}
+                  alt=""
+                  className="w-32 h-32 bg-gray-200 rounded-lg object-cover"
+                />
+
+                <div className="flex flex-col">
+                  <p className="font-bold text-lg">{item.products.name}</p>
+
+                  <p className="text-gray-500 mt-1">
+                    Variante:{" "}
+                    {Object.keys(item.specifications)
+                      .filter(
+                        (key) =>
+                          key !== "image" &&
+                          key !== "available" &&
+                          key !== "priceModifier" &&
+                          key !== "sellerId",
+                      )
+                      .map((key) => `${key} - ${item.specifications[key]}`)
+                      .join(", ")}
+                  </p>
+
+                  <p className="text-gray-500 mt-2">
+                    Quantity : {item.quantity}
+                  </p>
+
+                  <p className="text-gray-500">
+                    Price : {item.unit_price * (1 - item.discount)} $
+                  </p>
+
+                  <Link
+                    href={"/home/products/product/" + item.products_id}
+                    className="text-red-600 mt-3 hover:underline"
+                  >
+                    View Product
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
     </>
   );
 };

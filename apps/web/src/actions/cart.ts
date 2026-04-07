@@ -69,7 +69,6 @@ export async function addToCart(
 
     const result = await db.user.shopping_cart_products.update({
       where: {
-        // Composite Primary Key
         customers_id_products_id_product_variant: {
           customers_id: product.customers_id,
           products_id: product.products_id,
@@ -127,7 +126,12 @@ export async function getCartItems(userId: string) {
           },
         },
       },
-    },
+          },
+    orderBy:{
+      products : {
+        created_at: "asc"
+      }
+    }
   });
 
   let avg = 0;
@@ -151,7 +155,7 @@ export async function getCartItems(userId: string) {
   const finalProducts = productWithStats;
 
   finalProducts.forEach((prod) => {
-    prod.products.specifications = JSON.parse(prod.products.specifications);
+    prod.products.specifications = typeof prod.products.specifications == "string" ? JSON.parse(prod.products.specifications) : prod.products.specifications;
     prod.products.base_price = Number(prod.products.base_price);
   });
 
@@ -201,4 +205,31 @@ export async function changeCartItemQuantity(params: { customerId: string; produ
   }
 
   return "updated";
+}
+
+export async function clearCart(){
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session?.user) {
+    redirect("/signin");
+  }
+
+  const customer = await db.user.customers.findFirst({
+    where: {
+      id: session.user.id,
+    },
+  });
+
+  if (!customer) {
+    return null;
+  }
+
+  const clearedCart = await db.user.shopping_cart_products.deleteMany({
+    where:{
+      customers_id : customer.id
+    }
+  })
+  
 }

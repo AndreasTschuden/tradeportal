@@ -7,6 +7,7 @@ import { publishProductSchema } from "@/lib/zod";
 import { z } from "zod";
 import { createUploadImageUrl } from "@/actions/bucket";
 import { auth } from "@/lib/auth";
+import * as Prisma from "@prisma/client";
 
 type ProductType = z.infer<typeof publishProductSchema>;
 
@@ -32,6 +33,10 @@ export async function publishProduct(formData: ProductType) {
   const company = await db.company.companies.findFirst({
     where: {
       owner_id: session.user.id,
+      is_verified: true,
+      stripe_account_id: {
+        not: "",
+      },
     },
   });
 
@@ -68,7 +73,7 @@ export async function publishProduct(formData: ProductType) {
     variants: formData.variants,
   };
 
-  const specifications = JSON.stringify(productData);
+  const specifications = productData;
 
   const product = await db.company.products.create({
     data: {
@@ -77,7 +82,7 @@ export async function publishProduct(formData: ProductType) {
       base_price : formData.basePrice,
       short_description : formData.shortDescription,
       long_description : formData.longDescription,
-      specifications: specifications,
+      specifications: specifications as any,
       companies_id: company.id,
       isactive: true,
     },
