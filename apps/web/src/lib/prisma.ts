@@ -6,17 +6,19 @@ const userConnectionString = `${process.env.DATABASE_URL_USER!}`;
 const companyConnectionString = `${process.env.DATABASE_URL_COMPANY!}`;
 
 const userAdapter = new PrismaPg({ connectionString: userConnectionString });
-const companyAdapter = new PrismaPg({ connectionString: companyConnectionString });
+const companyAdapter = new PrismaPg({
+	connectionString: companyConnectionString,
+});
 
 const prismaUser = new PrismaClient({
-  adapter: userAdapter,
+	adapter: userAdapter,
 });
 
 const prismaCompany = new PrismaClient({
-  adapter: companyAdapter,
+	adapter: companyAdapter,
 });
 
 export const db = {
-  user: prismaUser,
-  company: prismaCompany
+	user: prismaUser,
+	company: prismaCompany,
 };

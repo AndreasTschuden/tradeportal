@@ -19,27 +19,25 @@ import { secretStripe } from "@/lib/stripe";
 // }
 
 export async function GET(request, { params }) {
-  try {
-    const { accountId } = await params;
+	try {
+		const { accountId } = await params;
 
-    const account = await secretStripe.accounts.retrieve(accountId);
-    
-        console.log("Stripe Account Status:", account);
+		const account = await secretStripe.accounts.retrieve(accountId);
 
-    return NextResponse.json({
-      id: account.id,
-      chargesEnabled: account.charges_enabled,
-      payoutsEnabled: account.payouts_enabled,
-      detailsSubmitted: account.details_submitted,
-      requirements: account.requirements,
-    });
+		console.log("Stripe Account Status:", account);
 
-  } catch (error) {
-
-    console.error("Error retrieving account status:", error);
-    return NextResponse.json(
-      { error: { message: error.message } },
-      { status: 400 },
-    );
-  }
+		return NextResponse.json({
+			id: account.id,
+			chargesEnabled: account.charges_enabled,
+			payoutsEnabled: account.payouts_enabled,
+			detailsSubmitted: account.details_submitted,
+			requirements: account.requirements,
+		});
+	} catch (error) {
+		console.error("Error retrieving account status:", error);
+		return NextResponse.json(
+			{ error: { message: error.message } },
+			{ status: 400 },
+		);
+	}
 }

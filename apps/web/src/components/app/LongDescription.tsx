@@ -1,10 +1,9 @@
-import React from 'react'
+import React from "react";
 
-export const LongDescription = ({longDescription} : {longDescription : string}) => {
-  return (
-        <div>
-       {longDescription}
-    </div>
-  )
-}
-
+export const LongDescription = ({
+	longDescription,
+}: {
+	longDescription: string;
+}) => {
+	return <div>{longDescription}</div>;
+};
