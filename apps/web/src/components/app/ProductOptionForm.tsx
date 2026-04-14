@@ -39,7 +39,7 @@ const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
 		const index = findVariantIndex(initialObj);
 		setCurrentVariant(index !== -1 ? index : null);
 		setVariantAvailable(index !== -1);
-	}, []);
+	}, [initialObj, findVariantIndex]);
 
 	const {
 		register,
@@ -63,7 +63,7 @@ const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
 		setVariantAvailable(index !== -1);
 	};
 
-	const onSubmit = async (data: any) => {
+	const onSubmit = async (_data: any) => {
 		if (!variantAvailable) return;
 
 		try {
@@ -178,7 +178,7 @@ const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
 										}
 
 										const num = Number(val);
-										if (!isNaN(num) && num >= 1) {
+										if (!Number.isNaN(num) && num >= 1) {
 											setCartCounter(num);
 										}
 									},

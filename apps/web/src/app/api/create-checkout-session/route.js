@@ -38,7 +38,7 @@ export async function POST(request) {
 			line_items: lineItems,
 			mode: "payment",
 			payment_intent_data: {
-				transfer_group: "ORDER_" + formatted,
+				transfer_group: `ORDER_${formatted}`,
 			},
 			success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/home/cart/success?session_id={CHECKOUT_SESSION_ID}&orderId=${order_id}`,
 			cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/home/cart`,

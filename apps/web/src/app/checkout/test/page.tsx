@@ -40,7 +40,7 @@ async function handleCheckout() {
 }
 
 export default function Page() {
-	async function action(formData: FormData) {
+	async function action(_formData: FormData) {
 		"use server";
 
 		await handleCheckout();

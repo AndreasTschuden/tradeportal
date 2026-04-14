@@ -1,13 +1,13 @@
 "use client";
 
-import { SquarePen, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
 import { updateProductAvailability } from "@/actions/products";
 
 const ProductCard = ({ product }: { product: productWithStatsType }) => {
-	const [enabled, setEnabled] = useState(product.isactive ? true : false);
+	const [enabled, setEnabled] = useState(!!product.isactive);
 
 	const handleActiveToggle = async () => {
 		try {

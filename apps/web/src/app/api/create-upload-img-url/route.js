@@ -27,7 +27,7 @@ export async function POST(request) {
 			{
 				error: error.message
 					? error.message
-					: "Error while connecting to bucket: " + error,
+					: `Error while connecting to bucket: ${error}`,
 			},
 			{ status: 400 },
 		);

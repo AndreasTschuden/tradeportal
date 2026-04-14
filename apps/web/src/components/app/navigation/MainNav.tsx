@@ -1,4 +1,4 @@
-import { Search, ShoppingCart, UserRound } from "lucide-react";
+import { ShoppingCart, UserRound } from "lucide-react";
 import Link from "next/link";
 import { handleUserLink } from "@/actions/auth";
 import { getCartItemsCount } from "@/actions/cart";

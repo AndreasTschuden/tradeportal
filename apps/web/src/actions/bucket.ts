@@ -22,11 +22,11 @@ export async function createUploadImageUrl(
 	if (data.error) {
 		const obj: errorArray = JSON.parse(data.error);
 		obj.map((err) => {
-			console.log(err.message, "at place: " + Number(err.path[0] + 1));
+			console.log(err.message, `at place: ${Number(err.path[0] + 1)}`);
 		});
 	} else {
 		data.map(async (obj: { url: string }, index: number) => {
-			const response = await fetch(obj.url, {
+			const _response = await fetch(obj.url, {
 				method: "PUT",
 				body: fileArr[index], // raw File object
 				headers: { "Content-Type": fileArr[index].type },
@@ -53,7 +53,7 @@ export async function createImgUrl(
 	if (data.error) {
 		const obj: errorArray = JSON.parse(data.error);
 		obj.map((err) => {
-			console.log(err.message, "at place: " + Number(err.path[0] + 1));
+			console.log(err.message, `at place: ${Number(err.path[0] + 1)}`);
 		});
 	}
 }

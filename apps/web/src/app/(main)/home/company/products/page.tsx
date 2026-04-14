@@ -1,4 +1,3 @@
-import React from "react";
 import { getCategories } from "@/actions/categories";
 import { getProductsByCompany } from "@/actions/products";
 import { OwnProducts } from "@/components/app/company/OwnProducts";

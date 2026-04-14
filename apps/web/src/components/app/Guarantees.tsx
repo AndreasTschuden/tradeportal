@@ -1,5 +1,4 @@
 import { Headset, ShieldCheck, Truck } from "lucide-react";
-import React from "react";
 
 const Guarantees = () => {
 	return (

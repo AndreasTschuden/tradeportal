@@ -12,7 +12,7 @@ import { StripeRegister } from "@/components/app/company/StripeRegister";
 const page = async () => {
 	const Information = await getBasicInformation();
 
-	const stripe = Information.stripe_account_id ? true : false;
+	const stripe = !!Information.stripe_account_id;
 
 	return (
 		<div>

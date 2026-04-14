@@ -13,7 +13,7 @@ const PaginationControl = ({
 	const router = useRouter();
 	const searchParams = useSearchParams();
 
-	const itemsPerPage = 4;
+	const _itemsPerPage = 4;
 
 	const handlePageChange = (page: number) => {
 		const params = new URLSearchParams(searchParams.toString());

@@ -192,7 +192,7 @@ export async function customerOrders() {
 		},
 	});
 
-	if (orders.length == 0) {
+	if (orders.length === 0) {
 		throw new Error("You do not have any orders");
 	}
 

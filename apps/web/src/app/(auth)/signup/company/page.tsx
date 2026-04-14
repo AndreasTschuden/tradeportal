@@ -1,4 +1,3 @@
-import React from "react";
 import { SignupCompany } from "@/components/app/SignupCompany";
 
 const Page = async () => {

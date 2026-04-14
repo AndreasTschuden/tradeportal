@@ -18,7 +18,7 @@ import { secretStripe } from "@/lib/stripe";
 //   }
 // }
 
-export async function GET(request, { params }) {
+export async function GET(_request, { params }) {
 	try {
 		const { accountId } = await params;
 

@@ -9,7 +9,7 @@ import { type SignUpCompanyFormData, signupCompany } from "@/lib/zod";
 
 export function SignupCompany() {
 	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState<string | null>(null);
+	const [_error, setError] = useState<string | null>(null);
 	const { executeRecaptcha } = useGoogleReCaptcha();
 
 	const {

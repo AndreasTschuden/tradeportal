@@ -41,7 +41,13 @@ const ProductCard = ({ prod }: { prod: cartItemsWithAvgStars }) => {
 		}, 400);
 
 		return () => clearTimeout(timeout);
-	}, [currentQuantity]);
+	}, [
+		currentQuantity,
+		router.refresh,
+		prod.products_id,
+		prod.product_variant,
+		prod.customers_id,
+	]);
 
 	return (
 		<div className="w-full py-3 grid grid-cols-[2fr_1fr_1fr_1fr_80px] items-center">
@@ -105,7 +111,7 @@ const ProductCard = ({ prod }: { prod: cartItemsWithAvgStars }) => {
 
 							const num = Number(val);
 
-							if (!isNaN(num) && num >= 1) {
+							if (!Number.isNaN(num) && num >= 1) {
 								setCurrentQuantity(num);
 							}
 						}}

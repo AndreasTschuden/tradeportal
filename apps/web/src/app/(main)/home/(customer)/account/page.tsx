@@ -1,6 +1,5 @@
 import { LogOut } from "lucide-react";
 import Link from "next/link";
-import React from "react";
 import { signOutAction } from "@/actions/auth";
 import { getCustomerInformation } from "@/actions/customer-account";
 import { ChangePasswordForm } from "@/components/app/company/ChangePasswordForm";

@@ -37,7 +37,7 @@ export async function getProducts() {
 	const productWithStats: productWithStatsType[] = products;
 
 	productWithStats.forEach((prod) => {
-		if (prod._count.reviews != 0) {
+		if (prod._count.reviews !== 0) {
 			prod.reviews.forEach((review) => {
 				avg += review.stars;
 				count = count + 1;
@@ -53,7 +53,7 @@ export async function getProducts() {
 
 	finalProducts.forEach((prod) => {
 		prod.specifications =
-			typeof prod.specifications == "string"
+			typeof prod.specifications === "string"
 				? JSON.parse(prod.specifications)
 				: prod.specifications;
 		prod.base_price = Number(prod.base_price);
@@ -88,7 +88,7 @@ export async function getNewestProducts() {
 
 	finalProducts.forEach((prod) => {
 		prod.specifications =
-			typeof prod.specifications == "string"
+			typeof prod.specifications === "string"
 				? JSON.parse(prod.specifications)
 				: prod.specifications;
 	});
@@ -151,7 +151,7 @@ export async function getDetailedProduct(id: string) {
 	let avg = 0;
 	let count = 0;
 
-	if (prod._count.reviews != 0) {
+	if (prod._count.reviews !== 0) {
 		prod.reviews.forEach((review) => {
 			avg += review.stars;
 			count = count + 1;
@@ -162,7 +162,7 @@ export async function getDetailedProduct(id: string) {
 		prod.avgStars = 0;
 	}
 	prod.specifications =
-		typeof prod.specifications == "string"
+		typeof prod.specifications === "string"
 			? JSON.parse(prod.specifications)
 			: prod.specifications;
 
@@ -218,7 +218,7 @@ export async function getFourProductsByCategory(
 	const productWithStats: productWithStatsType[] = products;
 
 	productWithStats.forEach((prod) => {
-		if (prod._count.reviews != 0) {
+		if (prod._count.reviews !== 0) {
 			prod.reviews.forEach((review) => {
 				avg += review.stars;
 				count = count + 1;
@@ -234,7 +234,7 @@ export async function getFourProductsByCategory(
 
 	finalProducts.forEach((prod) => {
 		prod.specifications =
-			typeof prod.specifications == "string"
+			typeof prod.specifications === "string"
 				? JSON.parse(prod.specifications)
 				: prod.specifications;
 		prod.base_price = Number(prod.base_price);
@@ -299,7 +299,7 @@ export async function getProductsByCompany() {
 	const productWithStats: productsForCompanyType[] = products;
 
 	productWithStats.forEach((prod) => {
-		if (prod._count.reviews != 0) {
+		if (prod._count.reviews !== 0) {
 			prod.reviews.forEach((review) => {
 				avg += review.stars;
 				count = count + 1;
@@ -315,7 +315,7 @@ export async function getProductsByCompany() {
 
 	finalProducts.forEach((prod) => {
 		prod.specifications =
-			typeof prod.specifications == "string"
+			typeof prod.specifications === "string"
 				? JSON.parse(prod.specifications)
 				: prod.specifications;
 		prod.base_price = Number(prod.base_price);
@@ -347,7 +347,7 @@ export async function updateProductAvailability(
 		redirect("/home");
 	}
 
-	const result = await db.company.products.update({
+	const _result = await db.company.products.update({
 		where: {
 			id: productId,
 		},
@@ -387,7 +387,7 @@ export async function getAllProducts() {
 	const productWithStats: allProductsType[] = products;
 
 	productWithStats.forEach((prod) => {
-		if (prod._count.reviews != 0) {
+		if (prod._count.reviews !== 0) {
 			prod.reviews.forEach((review) => {
 				avg += review.stars;
 				count = count + 1;
@@ -403,7 +403,7 @@ export async function getAllProducts() {
 
 	finalProducts.forEach((prod) => {
 		prod.specifications =
-			typeof prod.specifications == "string"
+			typeof prod.specifications === "string"
 				? JSON.parse(prod.specifications)
 				: prod.specifications;
 		prod.base_price = Number(prod.base_price);

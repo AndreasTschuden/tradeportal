@@ -24,7 +24,7 @@ export const auth = betterAuth({
 	user: {
 		deleteUser: {
 			enabled: true,
-			afterDelete: async (user, request) => {
+			afterDelete: async (user, _request) => {
 				const company = await db.company.companies.findFirst({
 					where: {
 						owner_id: user.id,
@@ -45,7 +45,7 @@ export const auth = betterAuth({
 					await handleCustomerDeletion(user);
 				}
 			},
-			sendDeleteAccountVerification: async ({ user, url, token }, request) => {
+			sendDeleteAccountVerification: async ({ user, url, token }, _request) => {
 				const result = await resend.emails.send({
 					from: process.env.RESEND_FROM_EMAIL!,
 					to: user.email,

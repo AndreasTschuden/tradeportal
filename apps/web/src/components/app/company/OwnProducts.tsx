@@ -53,7 +53,7 @@ const OwnProducts = ({
 	useEffect(() => {
 		applyFilters();
 		setCurrentPage(1);
-	}, [search, selectedCategory, currentOrder]);
+	}, [applyFilters]);
 
 	const handleDateFilter = () => {
 		setCurrentOrder((prev) => !prev);

@@ -1,6 +1,5 @@
 import { headers } from "next/headers";
 import Link from "next/link";
-import { signOutAction } from "@/actions/auth";
 import { auth } from "@/lib/auth";
 
 export default async function Home() {

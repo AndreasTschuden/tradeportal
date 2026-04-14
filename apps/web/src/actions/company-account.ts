@@ -142,7 +142,7 @@ export async function handleCompanyDeletion(user: {
 		redirect("/home");
 	}
 
-	const result = await db.company.companies.update({
+	const _result = await db.company.companies.update({
 		where: {
 			id: company.id,
 		},

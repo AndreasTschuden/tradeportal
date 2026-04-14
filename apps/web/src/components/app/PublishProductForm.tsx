@@ -27,7 +27,7 @@ export default function ProductForm({
 
 	const [attributes, setAttributes] = useState<Attribute[]>([]);
 	const [variants, setVariants] = useState<Variant[]>([]);
-	const [finalJSON, setFinalJSON] = useState<string | null>(null);
+	const [_finalJSON, setFinalJSON] = useState<string | null>(null);
 	const [zodErrors, setZodErrors] = useState<Record<string, string>>({});
 	const [images, setImages] = useState<string[]>([]);
 	const [serverErrors, setServerErrors] = useState<string>("");
@@ -125,7 +125,7 @@ export default function ProductForm({
 		index: number,
 		value: string,
 	) => {
-		if (e.target.files && e.target.files[0]) {
+		if (e.target.files?.[0]) {
 			updateAttributeImage(index, value, e.target.files[0]);
 			const uploadedImages = attributes[0].images;
 			if (uploadedImages) {
@@ -183,239 +183,234 @@ export default function ProductForm({
 	};
 
 	return (
-		<>
-			<div className="min-h-screen bg-gray-100 p-4">
-				<div className="max-w-400 mx-auto xl:h-[calc(100vh-2rem)] flex flex-col xl:flex-row gap-6">
-					{/* ================= LEFT SIDE ================= */}
-					<div className="flex-1 flex flex-col gap-6 overflow-hidden">
-						{/* ---------- FORM CARD ---------- */}
-						<div className="bg-white rounded-2xl shadow-xl border p-6">
-							<h1 className="text-2xl font-bold mb-6">Produkt erstellen</h1>
-							<div className="overflow-y-auto bg-white max-h-[60vh]">
-								<form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-									<div>
-										<label className="block mb-1 font-medium">
-											Produktname
-										</label>
-										<input
-											{...register("title")}
-											className="w-full border rounded-md p-2"
-										/>
-										{errors.title && (
-											<p className="text-red-500 text-sm">
-												{errors.title.message}
-											</p>
-										)}
-									</div>
-
-									<div>
-										<label className="block mb-1 font-medium">Basispreis</label>
-										<input
-											type="number"
-											{...register("basePrice", { valueAsNumber: true })}
-											className="w-full border rounded-md p-2"
-										/>
-										{errors.basePrice && (
-											<p className="text-red-500 text-sm">
-												{errors.basePrice.message}
-											</p>
-										)}
-									</div>
-
-									<div>
-										<label className="block mb-1 font-medium">Currency</label>
-										<input
-											type="text"
-											{...register("currency")}
-											className="w-full border rounded-md p-2"
-										/>
-										{errors.currency && (
-											<p className="text-red-500 text-sm">
-												{errors.currency.message}
-											</p>
-										)}
-									</div>
-									<div>
-										<label className="block mb-1 font-medium">Category</label>
-										<select
-											id="categories"
-											{...register("category", {
-												required: "Category is required",
-											})}
-										>
-											{categories.map((cat) => (
-												<option key={cat.id} value={Number(cat.id)}>
-													{cat.name}
-												</option>
-											))}
-										</select>
-										{errors.category && (
-											<p className="text-red-500 text-sm">
-												{errors.category.message}
-											</p>
-										)}
-									</div>
-
-									<div>
-										<label className="block mb-1 font-medium">
-											Short Description
-										</label>
-										<textarea
-											{...register("shortDescription")}
-											className="w-full border rounded-md p-2 h-50"
-										/>
-										{errors.shortDescription && (
-											<p className="text-red-500 text-sm">
-												{errors.shortDescription.message}
-											</p>
-										)}
-									</div>
-
-									<div>
-										<label className="block mb-1 font-medium">
-											Long Description
-										</label>
-										<textarea
-											{...register("longDescription")}
-											className="w-full border rounded-md p-2 h-96"
-										/>
-										{errors.longDescription && (
-											<p className="text-red-500 text-sm">
-												{errors.longDescription.message}
-											</p>
-										)}
-									</div>
-
-									{attributes.map((attr, i) => (
-										<div
-											key={i}
-											className="p-4 border rounded-xl bg-gray-50 space-y-3"
-										>
-											<div className="flex flex-col md:flex-row gap-4">
-												<input
-													placeholder="Attributname"
-													value={attr.name}
-													onChange={(e) =>
-														updateAttributeName(i, e.target.value)
-													}
-													className="flex-1 border rounded-md p-2"
-												/>
-												<input
-													placeholder="Werte (kommagetrennt)"
-													value={attr.values.join(",")}
-													onChange={(e) =>
-														updateAttributeValues(i, e.target.value)
-													}
-													className="flex-1 border rounded-md p-2"
-												/>
-											</div>
-
-											{i === 0 && attr.values.length > 0 && (
-												<div className="flex flex-wrap gap-4">
-													{attr.values.map((val, idx) => (
-														<div key={idx}>
-															<label className="text-sm block mb-1">
-																{val} Bild
-															</label>
-															<input
-																type="file"
-																accept="image/*"
-																onChange={(e) => handleFileChange(e, i, val)}
-																className="text-sm"
-															/>
-														</div>
-													))}
-												</div>
-											)}
-										</div>
-									))}
-
-									{zodErrors.attributes && (
-										<p className="text-red-500">{zodErrors.attributes}</p>
+		<div className="min-h-screen bg-gray-100 p-4">
+			<div className="max-w-400 mx-auto xl:h-[calc(100vh-2rem)] flex flex-col xl:flex-row gap-6">
+				{/* ================= LEFT SIDE ================= */}
+				<div className="flex-1 flex flex-col gap-6 overflow-hidden">
+					{/* ---------- FORM CARD ---------- */}
+					<div className="bg-white rounded-2xl shadow-xl border p-6">
+						<h1 className="text-2xl font-bold mb-6">Produkt erstellen</h1>
+						<div className="overflow-y-auto bg-white max-h-[60vh]">
+							<form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+								<div>
+									<label className="block mb-1 font-medium">Produktname</label>
+									<input
+										{...register("title")}
+										className="w-full border rounded-md p-2"
+									/>
+									{errors.title && (
+										<p className="text-red-500 text-sm">
+											{errors.title.message}
+										</p>
 									)}
-									<div className="flex gap-4 flex-wrap">
-										<button
-											type="button"
-											onClick={addAttribute}
-											className="px-4 py-2 bg-green-600 text-white rounded-md"
-										>
-											Neues Attribut hinzufügen
-										</button>
-										<button
-											type="button"
-											onClick={generateVariants}
-											className="px-4 py-2 bg-black text-white rounded-md"
-										>
-											Weiter
-										</button>
+								</div>
 
-										<button
-											type="submit"
-											className="px-4 py-2 bg-black text-white rounded-md"
-										>
-											Publish
-										</button>
+								<div>
+									<label className="block mb-1 font-medium">Basispreis</label>
+									<input
+										type="number"
+										{...register("basePrice", { valueAsNumber: true })}
+										className="w-full border rounded-md p-2"
+									/>
+									{errors.basePrice && (
+										<p className="text-red-500 text-sm">
+											{errors.basePrice.message}
+										</p>
+									)}
+								</div>
 
-										{serverErrors && (
-											<p className="text-red-500">{serverErrors}</p>
-										)}
-									</div>
-								</form>
-							</div>
-						</div>
+								<div>
+									<label className="block mb-1 font-medium">Currency</label>
+									<input
+										type="text"
+										{...register("currency")}
+										className="w-full border rounded-md p-2"
+									/>
+									{errors.currency && (
+										<p className="text-red-500 text-sm">
+											{errors.currency.message}
+										</p>
+									)}
+								</div>
+								<div>
+									<label className="block mb-1 font-medium">Category</label>
+									<select
+										id="categories"
+										{...register("category", {
+											required: "Category is required",
+										})}
+									>
+										{categories.map((cat) => (
+											<option key={cat.id} value={Number(cat.id)}>
+												{cat.name}
+											</option>
+										))}
+									</select>
+									{errors.category && (
+										<p className="text-red-500 text-sm">
+											{errors.category.message}
+										</p>
+									)}
+								</div>
 
-						{/* ---------- IMAGE CARD ---------- */}
-						<div className="bg-white rounded-2xl shadow-xl border p-6 flex-1 overflow-auto">
-							<h1 className="text-2xl font-bold mb-4">Bilder</h1>
+								<div>
+									<label className="block mb-1 font-medium">
+										Short Description
+									</label>
+									<textarea
+										{...register("shortDescription")}
+										className="w-full border rounded-md p-2 h-50"
+									/>
+									{errors.shortDescription && (
+										<p className="text-red-500 text-sm">
+											{errors.shortDescription.message}
+										</p>
+									)}
+								</div>
 
-							{images && images.length > 0 ? (
-								<div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-									{images.map((image, index) => (
-										<div
-											key={index}
-											className="aspect-square overflow-hidden rounded-xl border bg-gray-50"
-										>
-											<img
-												src={image}
-												alt={`Bild ${index + 1}`}
-												className="w-full h-full object-cover"
+								<div>
+									<label className="block mb-1 font-medium">
+										Long Description
+									</label>
+									<textarea
+										{...register("longDescription")}
+										className="w-full border rounded-md p-2 h-96"
+									/>
+									{errors.longDescription && (
+										<p className="text-red-500 text-sm">
+											{errors.longDescription.message}
+										</p>
+									)}
+								</div>
+
+								{attributes.map((attr, i) => (
+									<div
+										key={i}
+										className="p-4 border rounded-xl bg-gray-50 space-y-3"
+									>
+										<div className="flex flex-col md:flex-row gap-4">
+											<input
+												placeholder="Attributname"
+												value={attr.name}
+												onChange={(e) => updateAttributeName(i, e.target.value)}
+												className="flex-1 border rounded-md p-2"
+											/>
+											<input
+												placeholder="Werte (kommagetrennt)"
+												value={attr.values.join(",")}
+												onChange={(e) =>
+													updateAttributeValues(i, e.target.value)
+												}
+												className="flex-1 border rounded-md p-2"
 											/>
 										</div>
-									))}
+
+										{i === 0 && attr.values.length > 0 && (
+											<div className="flex flex-wrap gap-4">
+												{attr.values.map((val, idx) => (
+													<div key={idx}>
+														<label className="text-sm block mb-1">
+															{val} Bild
+														</label>
+														<input
+															type="file"
+															accept="image/*"
+															onChange={(e) => handleFileChange(e, i, val)}
+															className="text-sm"
+														/>
+													</div>
+												))}
+											</div>
+										)}
+									</div>
+								))}
+
+								{zodErrors.attributes && (
+									<p className="text-red-500">{zodErrors.attributes}</p>
+								)}
+								<div className="flex gap-4 flex-wrap">
+									<button
+										type="button"
+										onClick={addAttribute}
+										className="px-4 py-2 bg-green-600 text-white rounded-md"
+									>
+										Neues Attribut hinzufügen
+									</button>
+									<button
+										type="button"
+										onClick={generateVariants}
+										className="px-4 py-2 bg-black text-white rounded-md"
+									>
+										Weiter
+									</button>
+
+									<button
+										type="submit"
+										className="px-4 py-2 bg-black text-white rounded-md"
+									>
+										Publish
+									</button>
+
+									{serverErrors && (
+										<p className="text-red-500">{serverErrors}</p>
+									)}
 								</div>
-							) : (
-								<p className="text-gray-500">Keine Bilder vorhanden</p>
-							)}
+							</form>
 						</div>
 					</div>
 
-					{/* ================= RIGHT SIDE ================= */}
-					<div className="w-full xl:w-150 bg-white rounded-2xl shadow-xl border p-6 flex flex-col overflow-hidden">
-						<h1 className="text-2xl font-bold mb-6">Varianten</h1>
+					{/* ---------- IMAGE CARD ---------- */}
+					<div className="bg-white rounded-2xl shadow-xl border p-6 flex-1 overflow-auto">
+						<h1 className="text-2xl font-bold mb-4">Bilder</h1>
 
-						{variants.length > 0 ? (
-							<div className="flex-1 overflow-auto">
-								<table className="w-full border-collapse">
-									<thead>
-										<tr className="bg-gray-200 text-left">
-											<th className="p-2 border"></th>
-											{attributes.map((a, i) => (
-												<th key={i} className="p-2 border">
-													{a.name}
-												</th>
-											))}
-											<th className="p-2 border">Price Modifier</th>
-										</tr>
-									</thead>
-									<tbody>
-										{variants.map((v, i) => (
-											<tr key={i}>
-												<td className="p-2 border w-1">
-													<input
-														type="checkbox"
-														checked={v.available}
-														onChange={() => toggleAvailable(i)}
-														className="
+						{images && images.length > 0 ? (
+							<div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+								{images.map((image, index) => (
+									<div
+										key={index}
+										className="aspect-square overflow-hidden rounded-xl border bg-gray-50"
+									>
+										<img
+											src={image}
+											alt={`Bild ${index + 1}`}
+											className="w-full h-full object-cover"
+										/>
+									</div>
+								))}
+							</div>
+						) : (
+							<p className="text-gray-500">Keine Bilder vorhanden</p>
+						)}
+					</div>
+				</div>
+
+				{/* ================= RIGHT SIDE ================= */}
+				<div className="w-full xl:w-150 bg-white rounded-2xl shadow-xl border p-6 flex flex-col overflow-hidden">
+					<h1 className="text-2xl font-bold mb-6">Varianten</h1>
+
+					{variants.length > 0 ? (
+						<div className="flex-1 overflow-auto">
+							<table className="w-full border-collapse">
+								<thead>
+									<tr className="bg-gray-200 text-left">
+										<th className="p-2 border"></th>
+										{attributes.map((a, i) => (
+											<th key={i} className="p-2 border">
+												{a.name}
+											</th>
+										))}
+										<th className="p-2 border">Price Modifier</th>
+									</tr>
+								</thead>
+								<tbody>
+									{variants.map((v, i) => (
+										<tr key={i}>
+											<td className="p-2 border w-1">
+												<input
+													type="checkbox"
+													checked={v.available}
+													onChange={() => toggleAvailable(i)}
+													className="
                           w-5 h-5
                           rounded-md
                           border-2 border-gray-300
@@ -424,40 +419,39 @@ export default function ProductForm({
                           focus:ring-offset-1
                           cursor-pointer
                         "
-													/>
-												</td>
+												/>
+											</td>
 
-												{attributes.map((a, j) => (
-													<td key={j} className="p-2 border">
-														{v[a.name]}
-													</td>
-												))}
-
-												<td className="p-2 border">
-													<input
-														type="number"
-														step="0.01"
-														min={0}
-														value={v.priceModifier}
-														className="w-20 border rounded-md p-1"
-														onChange={(e) =>
-															updatePriceModifier(i, Number(e.target.value))
-														}
-													/>
+											{attributes.map((a, j) => (
+												<td key={j} className="p-2 border">
+													{v[a.name]}
 												</td>
-											</tr>
-										))}
-									</tbody>
-								</table>
-							</div>
-						) : (
-							<div className="flex-1 flex items-center justify-center border rounded-xl">
-								<p>Keine Varianten generiert</p>
-							</div>
-						)}
-					</div>
+											))}
+
+											<td className="p-2 border">
+												<input
+													type="number"
+													step="0.01"
+													min={0}
+													value={v.priceModifier}
+													className="w-20 border rounded-md p-1"
+													onChange={(e) =>
+														updatePriceModifier(i, Number(e.target.value))
+													}
+												/>
+											</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						</div>
+					) : (
+						<div className="flex-1 flex items-center justify-center border rounded-xl">
+							<p>Keine Varianten generiert</p>
+						</div>
+					)}
 				</div>
 			</div>
-		</>
+		</div>
 	);
 }

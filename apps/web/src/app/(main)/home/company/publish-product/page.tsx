@@ -1,7 +1,6 @@
 import { headers } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import React from "react";
 import { getCategories } from "@/actions/categories";
 import PublishProductForm from "@/components/app/PublishProductForm";
 import { auth } from "@/lib/auth";

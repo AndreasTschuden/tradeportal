@@ -5,14 +5,15 @@
 		"clientKind": "git",
 		"useIgnoreFile": true
 	},
+
 	"files": {
 		"includes": [
+			"src/**/*.{ts,tsx,js,jsx}",
 			"**",
 			"!**/public/generated",
 			"!!**/components/ui",
 			"!**/src/app/globals.css"
-		],
-		"ignoreUnknown": false
+		]
 	},
 	"formatter": {
 		"enabled": true,

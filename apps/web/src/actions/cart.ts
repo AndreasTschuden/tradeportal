@@ -140,7 +140,7 @@ export async function getCartItems(userId: string) {
 	const productWithStats: cartItemsWithAvgStars[] = cartItems;
 
 	productWithStats.forEach((prod) => {
-		if (prod.products._count.reviews != 0) {
+		if (prod.products._count.reviews !== 0) {
 			prod.products.reviews.forEach((review) => {
 				avg += review.stars;
 				count = count + 1;
@@ -156,7 +156,7 @@ export async function getCartItems(userId: string) {
 
 	finalProducts.forEach((prod) => {
 		prod.products.specifications =
-			typeof prod.products.specifications == "string"
+			typeof prod.products.specifications === "string"
 				? JSON.parse(prod.products.specifications)
 				: prod.products.specifications;
 		prod.products.base_price = Number(prod.products.base_price);
@@ -238,7 +238,7 @@ export async function clearCart() {
 		return null;
 	}
 
-	const clearedCart = await db.user.shopping_cart_products.deleteMany({
+	const _clearedCart = await db.user.shopping_cart_products.deleteMany({
 		where: {
 			customers_id: customer.id,
 		},

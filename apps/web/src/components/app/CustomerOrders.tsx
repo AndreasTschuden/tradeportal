@@ -44,7 +44,7 @@ const CustomerOrders = () => {
 				const ordersResponse: Orders = JSON.parse(response);
 				setOrders(ordersResponse);
 			} catch (error: any) {
-				if (error.message == "NEXT_REDIRECT") return;
+				if (error.message === "NEXT_REDIRECT") return;
 				if (error instanceof Error) {
 					toast.error("Failed to get orders", {
 						description: error.message,
@@ -70,7 +70,7 @@ const CustomerOrders = () => {
 				: orders;
 			console.log(orderArrAfterStatus);
 			const orderArrAfterName =
-				nameFilter != "" && nameFilter
+				nameFilter !== "" && nameFilter
 					? orderArrAfterStatus.map((object) => ({
 							...object,
 							orders_products: object.orders_products.filter((obj) =>
@@ -244,7 +244,7 @@ const CustomerOrders = () => {
 									</p>
 
 									<Link
-										href={"/home/products/product/" + item.products_id}
+										href={`/home/products/product/${item.products_id}`}
 										className="text-red-600 mt-3 hover:underline"
 									>
 										View Product
