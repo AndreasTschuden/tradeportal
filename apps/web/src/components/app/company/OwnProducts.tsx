@@ -101,6 +101,7 @@ const OwnProducts = ({
 					<div>
 						<div className="flex gap-1 mt-5">
 							<button
+								type="button"
 								onClick={handleDateFilter}
 								className="aspect-square h-10 bg-gray-100 border border-gray-200 rounded-sm flex items-center justify-center"
 							>
@@ -115,7 +116,7 @@ const OwnProducts = ({
 										}
 									>
 										<option value={100}>All Categories</option>
-										{categories.map((cat: any) => (
+										{categories.map((cat: CategoryType) => (
 											<option key={cat.id} value={cat.id}>
 												{cat.name}
 											</option>

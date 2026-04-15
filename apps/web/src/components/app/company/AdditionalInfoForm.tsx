@@ -16,7 +16,7 @@ const AdditionalInfoForm = ({ Information }: { Information: Companyinfos }) => {
 		register,
 		handleSubmit,
 		formState: { errors },
-	} = useForm<additionalInfoType>({
+	} = useForm({
 		resolver: zodResolver(additionalInfoSchema),
 		defaultValues: {
 			website: Information.website || "",
@@ -48,8 +48,11 @@ const AdditionalInfoForm = ({ Information }: { Information: Companyinfos }) => {
 			className="grid grid-cols-2 gap-x-10 gap-y-4 w-[50vw]"
 		>
 			<div className="flex flex-col">
-				<label className="text-sm text-gray-500 mb-1">Website</label>
+				<label className="text-sm text-gray-500 mb-1" htmlFor="website">
+					Website
+				</label>
 				<input
+					id="website"
 					{...register("website")}
 					placeholder="Enter the companys website url"
 					className={`bg-[#F5F7FA] rounded-sm px-4 py-3 outline placeholder:text-gray-400 ${
@@ -64,10 +67,15 @@ const AdditionalInfoForm = ({ Information }: { Information: Companyinfos }) => {
 			</div>
 
 			<div className="flex flex-col">
-				<label className="text-sm text-gray-500 mb-1 flex gap-1 items-center">
+				<label
+					className="text-sm text-gray-500 mb-1 flex gap-1 items-center"
+					htmlFor="linked_in"
+				>
 					Linked In
 				</label>
+
 				<input
+					id="linked_in"
 					{...register("linked_in")}
 					placeholder="Enter the companys linked in url"
 					className={`bg-[#F5F7FA] rounded-sm px-4 py-3 outline placeholder:text-gray-400 ${

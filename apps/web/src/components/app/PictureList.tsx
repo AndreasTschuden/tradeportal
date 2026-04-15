@@ -9,6 +9,7 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
+import { buttonClass } from "../ui/FormControls";
 
 const PictureList = ({ images }: { images: Record<string, string> }) => {
 	const imageNames: string[] = [];
@@ -68,7 +69,8 @@ const PictureList = ({ images }: { images: Record<string, string> }) => {
 
 			<div className="flex flex-col w-1/4 gap-4">
 				{imageNamesState[1] ? (
-					<div
+					<button
+						type="button"
 						className="relative bg-gray-100 rounded-2xl aspect-square"
 						onClick={() => swapPictures(1)}
 					>
@@ -78,13 +80,14 @@ const PictureList = ({ images }: { images: Record<string, string> }) => {
 							fill
 							className="object-cover rounded-2xl"
 						/>
-					</div>
+					</button>
 				) : (
 					<div className="aspect-square" />
 				)}
 
 				{imageNamesState[2] ? (
-					<div
+					<button
+						type="button"
 						className="relative bg-gray-100 rounded-2xl aspect-square"
 						onClick={() => swapPictures(2)}
 					>
@@ -94,13 +97,14 @@ const PictureList = ({ images }: { images: Record<string, string> }) => {
 							fill
 							className="object-cover rounded-2xl"
 						/>
-					</div>
+					</button>
 				) : (
 					<div className="aspect-square" />
 				)}
 
 				{imageNamesState.length === 4 ? (
-					<div
+					<button
+						type="button"
 						className="relative bg-gray-100 rounded-2xl aspect-square"
 						onClick={() => swapPictures(3)}
 					>
@@ -110,11 +114,14 @@ const PictureList = ({ images }: { images: Record<string, string> }) => {
 							fill
 							className="object-cover rounded-2xl"
 						/>
-					</div>
+					</button>
 				) : imageNamesState.length > 4 ? (
 					<Dialog open={open} onOpenChange={setOpen}>
 						<DialogTrigger asChild>
-							<button className="aspect-square w-full flex items-center justify-center border border-gray-300 rounded-2xl font-medium">
+							<button
+								type="button"
+								className="aspect-square w-full flex items-center justify-center border border-gray-300 rounded-2xl font-medium"
+							>
 								{imageNamesState.length - 3} more...
 							</button>
 						</DialogTrigger>
@@ -126,16 +133,24 @@ const PictureList = ({ images }: { images: Record<string, string> }) => {
 
 							<div className="grid grid-cols-3 gap-4">
 								{imageNamesState.map((name, index) => (
-									<img
-										key={index}
-										src={`https://minio.tschudea.de:8999/images/products/${name}`}
-										alt={name}
-										className="w-full aspect-square object-cover rounded-xl"
+									<button
+										key={name}
+										type="button"
 										onClick={() => {
 											swapPictures(index);
 											setOpen(false);
 										}}
-									/>
+										className="w-full"
+									>
+										<div className="relative w-full aspect-square">
+											<Image
+												src={`https://minio.tschudea.de:8999/images/products/${name}`}
+												alt={name}
+												fill
+												className="object-cover rounded-xl"
+											/>
+										</div>
+									</button>
 								))}
 							</div>
 						</DialogContent>

@@ -64,13 +64,23 @@ export async function publishProduct(formData: ProductType) {
 		}
 		await createUploadImageUrl(imgArr, fileArr);
 	}
+	const cleanAttributes = formData.attributes.map((attr) => ({
+		name: attr.name,
+		values: attr.values,
+		images: attr.images
+			? Object.fromEntries(
+					Object.entries(attr.images).map(([k, v]) => [
+						k,
+						typeof v === "string" ? v : null,
+					]),
+				)
+			: null,
+	}));
 
-	const productData = {
-		attributes: formData.attributes,
+	const specifications = {
+		attributes: cleanAttributes,
 		variants: formData.variants,
 	};
-
-	const specifications = productData;
 
 	const product = await db.company.products.create({
 		data: {
@@ -79,7 +89,7 @@ export async function publishProduct(formData: ProductType) {
 			base_price: formData.basePrice,
 			short_description: formData.shortDescription,
 			long_description: formData.longDescription,
-			specifications: specifications as any,
+			specifications: specifications,
 			companies_id: company.id,
 			isactive: true,
 		},

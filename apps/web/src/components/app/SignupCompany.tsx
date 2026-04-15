@@ -41,9 +41,13 @@ export function SignupCompany() {
 
 		try {
 			await signUpCompanyAction(formData);
-		} catch (err: any) {
-			if (err?.message !== "NEXT_REDIRECT") {
-				setError(err?.message || "Signup failed");
+		} catch (err: unknown) {
+			if (err instanceof Error) {
+				if (err.message !== "NEXT_REDIRECT") {
+					setError(err.message || "Signup failed");
+				}
+			} else {
+				setError("Signup failed");
 			}
 		} finally {
 			setLoading(false);

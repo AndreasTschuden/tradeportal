@@ -14,7 +14,7 @@ const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
 	const [toggleFavourite, setToggleFavourite] = useState<boolean>(false);
 
 	const initialObj = product.specifications.attributes.reduce(
-		(acc: Record<string, string>, attr: any) => {
+		(acc: Record<string, string>, attr: Record<string, string>) => {
 			acc[attr.name] = attr.values[0];
 			return acc;
 		},
@@ -26,7 +26,7 @@ const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
 
 	const findVariantIndex = (attributes: Record<string, string>) => {
 		return product.specifications.variants.findIndex(
-			(v: any) =>
+			(v: Record<string, unknown>) =>
 				Object.entries(attributes).every(([key, val]) => v[key] === val) &&
 				v.available === true,
 		);
@@ -63,7 +63,7 @@ const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
 		setVariantAvailable(index !== -1);
 	};
 
-	const onSubmit = async (_data: any) => {
+	const onSubmit = async () => {
 		if (!variantAvailable) return;
 
 		try {
@@ -99,28 +99,30 @@ const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
 				className="flex flex-col justify-between h-full"
 			>
 				<div className="flex flex-col gap-5">
-					{product.specifications.attributes.map((attr: any, index: number) => (
-						<div key={attr.name}>
-							<div className="flex justify-between mb-1">
-								<p>{attr.name}</p>
+					{product.specifications.attributes.map(
+						(attr: Attribute, index: number) => (
+							<div key={attr.name}>
+								<div className="flex justify-between mb-1">
+									<p>{attr.name}</p>
 
-								<select
-									{...register(`options.${index}.value`, {
-										onChange: (e) =>
-											handleSelectChange(attr.name, e.target.value),
-									})}
-									defaultValue={attr.values[0]}
-								>
-									{attr.values.map((option: string) => (
-										<option key={option} value={option}>
-											{option}
-										</option>
-									))}
-								</select>
+									<select
+										{...register(`options.${index}.value`, {
+											onChange: (e) =>
+												handleSelectChange(attr.name, e.target.value),
+										})}
+										defaultValue={attr.values[0]}
+									>
+										{attr.values.map((option: string) => (
+											<option key={option} value={option}>
+												{option}
+											</option>
+										))}
+									</select>
+								</div>
+								<div className="border border-gray-300"></div>
 							</div>
-							<div className="border border-gray-300"></div>
-						</div>
-					))}
+						),
+					)}
 
 					{!variantAvailable && (
 						<div className="text-red-500">

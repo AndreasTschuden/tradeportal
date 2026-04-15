@@ -65,6 +65,7 @@ const FilterSideBar = ({
 			<div className="w-full border-b border-gray-500 flex justify-between items-center">
 				<h3 className="text-2xl font-bold">Filters</h3>
 				<button
+					type="button"
 					onClick={handleClearFilters}
 					className="text-gray-400 font-light"
 				>
@@ -119,7 +120,8 @@ const FilterSideBar = ({
 			<div className="border-b border-gray-500 pb-3">
 				<h4 className="font-normal text-lg">Company</h4>
 				{companies.map((comp) => (
-					<div
+					<button
+						type="button"
 						key={comp.id}
 						className={`cursor-pointer p-2 rounded ${
 							selected[0] === comp.id ? "bg-red-200 font-semibold" : ""
@@ -127,7 +129,7 @@ const FilterSideBar = ({
 						onClick={() => selectCompany(comp.id)}
 					>
 						{comp.company_name}
-					</div>
+					</button>
 				))}
 			</div>
 
@@ -154,11 +156,11 @@ const FilterSideBar = ({
 								}}
 							/>
 							<div className="flex items-center gap-0.5">
-								{Array.from({ length: 5 }).map((_, i) => (
+								{[1, 2, 3, 4, 5].map((star) => (
 									<Star
-										key={i}
+										key={`rating-${rating}-star-${star}`}
 										size={20}
-										fill={i < rating ? "orange" : "lightgray"}
+										fill={star <= rating ? "orange" : "lightgray"}
 										stroke="none"
 									/>
 								))}
@@ -172,10 +174,13 @@ const FilterSideBar = ({
 				<h4 className="font-normal text-lg mb-2">Price Range</h4>
 				<div className="flex gap-2">
 					<div className="flex-1 flex flex-col gap-1 p-2 border border-gray-300 rounded-sm">
-						<label className="text-gray-600 text-sm">Min Price</label>
+						<label className="text-gray-600 text-sm" htmlFor="minPrice">
+							Min Price
+						</label>
 						<div className="flex items-center gap-1">
 							<span className="text-gray-600">$</span>
 							<input
+								id="minPrice"
 								type="number"
 								className="w-full rounded px-1 py-0.5 focus:outline-none focus:ring-1 focus:ring-red-500"
 								value={minPrice}
@@ -190,10 +195,13 @@ const FilterSideBar = ({
 						</div>
 					</div>
 					<div className="flex-1 flex flex-col gap-1 p-2 border border-gray-300 rounded-sm">
-						<label className="text-gray-600 text-sm">Max Price</label>
+						<label className="text-gray-600 text-sm" htmlFor="maxPrice">
+							Max Price
+						</label>
 						<div className="flex items-center gap-1">
 							<span className="text-gray-600">$</span>
 							<input
+								id="maxPrice"
 								type="number"
 								className="w-full rounded px-1 py-0.5 focus:outline-none focus:ring-1 focus:ring-red-500"
 								value={maxPrice}

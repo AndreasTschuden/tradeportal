@@ -6,10 +6,10 @@ export default function ReCaptchaProvider({
 }: {
 	children: React.ReactNode;
 }) {
+	const reCaptchaKey = process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY ?? "";
+
 	return (
-		<GoogleReCaptchaProvider
-			reCaptchaKey={process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY!}
-		>
+		<GoogleReCaptchaProvider reCaptchaKey={reCaptchaKey}>
 			{children}
 		</GoogleReCaptchaProvider>
 	);

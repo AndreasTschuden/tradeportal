@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -6,6 +7,21 @@ import { customerOrders } from "@/actions/customer-account";
 
 type Orders = {
 	id: string;
+	created_at: Date;
+	updated_at: Date;
+	orders_products: {
+		specifications: Record<string, string>;
+		products: {
+			name: string;
+			currency: string;
+		};
+		products_id: string;
+		orders_id: string;
+		product_variant: number;
+		unit_price: number;
+		quantity: number;
+		discount: number;
+	}[];
 	customers_id: string;
 	order_date: Date;
 	shipped_date: Date | null;
@@ -13,21 +29,6 @@ type Orders = {
 	tracking_number: string;
 	status: string;
 	shipped_to: string;
-	created_at: Date;
-	updated_at: Date;
-	orders_products: {
-		products_id: string;
-		orders_id: string;
-		product_variant: number;
-		unit_price: number;
-		quantity: number;
-		discount: number;
-		specifications: any;
-		products: {
-			name: string;
-			currency: string;
-		};
-	}[];
 }[];
 
 const CustomerOrders = () => {
@@ -43,8 +44,8 @@ const CustomerOrders = () => {
 				const response = await customerOrders();
 				const ordersResponse: Orders = JSON.parse(response);
 				setOrders(ordersResponse);
-			} catch (error: any) {
-				if (error.message === "NEXT_REDIRECT") return;
+			} catch (error: unknown) {
+				if (error instanceof Error && error.message === "NEXT_REDIRECT") return;
 				if (error instanceof Error) {
 					toast.error("Failed to get orders", {
 						description: error.message,
@@ -80,10 +81,10 @@ const CustomerOrders = () => {
 					: orderArrAfterStatus;
 			console.log(orderArrAfterName);
 			setTotalPrice([]);
-			orderArrAfterName.map((obj) => {
+			orderArrAfterName.forEach((obj) => {
 				let price = 0;
-				obj.orders_products.map((obj) => {
-					price += obj.quantity * obj.unit_price * (1 - obj.discount);
+				obj.orders_products.forEach((obj) => {
+					price += obj.quantity * +obj.unit_price * (1 - +obj.discount);
 				});
 				setTotalPrice((prev) => [...prev, price]);
 			});
@@ -114,18 +115,21 @@ const CustomerOrders = () => {
 					</div>
 					<div className="flex mt-2 gap-2">
 						<button
+							type="button"
 							className="bg-gray-200 rounded-xl px-4 py-2 hover:bg-gray-300"
 							onClick={() => setOrderStatusFilter(["completed"])}
 						>
 							Completed
 						</button>
 						<button
+							type="button"
 							className="bg-gray-200 rounded-xl px-4 py-2 hover:bg-gray-300"
 							onClick={() => setOrderStatusFilter(["pending", "shipped"])}
 						>
 							Pending
 						</button>
 						<button
+							type="button"
 							className="bg-gray-200 rounded-xl px-4 py-2 hover:bg-gray-300"
 							onClick={() => setOrderStatusFilter(["cancelled"])}
 						>
@@ -212,9 +216,11 @@ const CustomerOrders = () => {
 								key={item.orders_id + item.products_id + item.product_variant}
 								className="flex gap-6"
 							>
-								<img
+								<Image
 									src={item.specifications.image}
-									alt=""
+									alt={item.products.name}
+									width={128}
+									height={128}
 									className="w-32 h-32 bg-gray-200 rounded-lg object-cover"
 								/>
 
@@ -240,7 +246,7 @@ const CustomerOrders = () => {
 									</p>
 
 									<p className="text-gray-500">
-										Price : {item.unit_price * (1 - item.discount)} $
+										Price : {+item.unit_price * (1 - +item.discount)} $
 									</p>
 
 									<Link

@@ -21,7 +21,7 @@ export async function createUploadImageUrl(
 
 	if (data.error) {
 		const obj: errorArray = JSON.parse(data.error);
-		obj.map((err) => {
+		obj.forEach((err) => {
 			console.log(err.message, `at place: ${Number(err.path[0] + 1)}`);
 		});
 	} else {
@@ -52,7 +52,7 @@ export async function createImgUrl(
 
 	if (data.error) {
 		const obj: errorArray = JSON.parse(data.error);
-		obj.map((err) => {
+		obj.forEach((err) => {
 			console.log(err.message, `at place: ${Number(err.path[0] + 1)}`);
 		});
 	}

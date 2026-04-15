@@ -56,8 +56,11 @@ const PersonalInformationForm = ({
 			className="grid grid-cols-2 gap-x-10 gap-y-4 w-[50vw]"
 		>
 			<div className="flex flex-col">
-				<label className="text-sm text-gray-500 mb-1">First Name</label>
+				<label className="text-sm text-gray-500 mb-1" htmlFor="firstname">
+					First Name
+				</label>
 				<input
+					id="firstname"
 					{...register("firstname")}
 					placeholder="Enter your first name"
 					className={`bg-[#F5F7FA] rounded-sm px-4 py-3 outline placeholder:text-gray-400 ${
@@ -72,8 +75,11 @@ const PersonalInformationForm = ({
 			</div>
 
 			<div className="flex flex-col">
-				<label className="text-sm text-gray-500 mb-1">Last Name</label>
+				<label className="text-sm text-gray-500 mb-1" htmlFor="lastname">
+					Last Name
+				</label>
 				<input
+					id="lastname"
 					{...register("lastname")}
 					placeholder="Enter your last name"
 					className={`bg-[#F5F7FA] rounded-sm px-4 py-3 outline placeholder:text-gray-400 ${
@@ -88,11 +94,15 @@ const PersonalInformationForm = ({
 			</div>
 
 			<div className="flex flex-col">
-				<label className="text-sm text-gray-500 mb-1 flex gap-1 items-center">
+				<label
+					className="text-sm text-gray-500 mb-1 flex gap-1 items-center"
+					htmlFor="email"
+				>
 					Email Address
 					<strong className="text-red-700 text-xs">(not editable)</strong>
 				</label>
 				<input
+					id="email"
 					{...register("email")}
 					disabled
 					className={`bg-[#F5F7FA] rounded-sm px-4 py-3 outline placeholder:text-gray-400 ${
@@ -107,8 +117,11 @@ const PersonalInformationForm = ({
 			</div>
 
 			<div className="flex flex-col">
-				<label className="text-sm text-gray-500 mb-1">Gender</label>
+				<label className="text-sm text-gray-500 mb-1" htmlFor="gender">
+					Gender
+				</label>
 				<input
+					id="gender"
 					{...register("gender")}
 					placeholder="Enter your gender"
 					className={`bg-[#F5F7FA] rounded-sm px-4 py-3 outline placeholder:text-gray-400 ${
@@ -123,8 +136,11 @@ const PersonalInformationForm = ({
 			</div>
 
 			<div className="flex flex-col">
-				<label className="text-sm text-gray-500 mb-1">Phone Number</label>
+				<label className="text-sm text-gray-500 mb-1" htmlFor="phone">
+					Phone Number
+				</label>
 				<input
+					id="phone"
 					{...register("phone", {
 						setValueAs: (value) => (value === "" ? undefined : value),
 					})}

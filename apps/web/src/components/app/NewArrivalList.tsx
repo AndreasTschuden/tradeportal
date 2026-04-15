@@ -15,7 +15,8 @@ const NewArrivalList = ({
 		<div className="flex gap-3 w-full lg:flex-row flex-col">
 			{/* BIG LEFT */}
 			{newestProducts[0] ? (
-				<div
+				<button
+					type="button"
 					className="relative lg:w-1/2 w-full aspect-square cursor-pointer"
 					onClick={() =>
 						router.push(`/home/products/product/${newestProducts[0].id}`)
@@ -45,7 +46,7 @@ const NewArrivalList = ({
 							Shop now
 						</Link>
 					</div>
-				</div>
+				</button>
 			) : (
 				<div className="relative bg-gray-200 lg:w-1/2 w-full aspect-square"></div>
 			)}
@@ -53,7 +54,8 @@ const NewArrivalList = ({
 			{/* RIGHT SIDE */}
 			<div className="flex flex-col gap-3 lg:w-1/2 w-full">
 				{newestProducts[1] ? (
-					<div
+					<button
+						type="button"
 						className="relative w-full aspect-2/1 cursor-pointer"
 						onClick={() =>
 							router.push(`/home/products/product/${newestProducts[1].id}`)
@@ -82,7 +84,7 @@ const NewArrivalList = ({
 								Shop now
 							</Link>
 						</div>
-					</div>
+					</button>
 				) : (
 					<div className="relative w-full aspect-2/1 bg-gray-200"></div>
 				)}
@@ -90,7 +92,8 @@ const NewArrivalList = ({
 				{/* BOTTOM GRID */}
 				<div className="flex gap-3 w-full">
 					{newestProducts[2] ? (
-						<div
+						<button
+							type="button"
 							className="relative w-1/2 aspect-square cursor-pointer"
 							onClick={() =>
 								router.push(`/home/products/product/${newestProducts[2].id}`)
@@ -119,13 +122,14 @@ const NewArrivalList = ({
 									Shop now
 								</Link>
 							</div>
-						</div>
+						</button>
 					) : (
 						<div className="relative w-1/2 aspect-square bg-gray-200"></div>
 					)}
 
 					{newestProducts[3] ? (
-						<div
+						<button
+							type="button"
 							className="relative w-1/2 aspect-square cursor-pointer"
 							onClick={() =>
 								router.push(`/home/products/product/${newestProducts[3].id}`)
@@ -154,7 +158,7 @@ const NewArrivalList = ({
 									Shop now
 								</Link>
 							</div>
-						</div>
+						</button>
 					) : (
 						<div className="relative w-1/2 aspect-square bg-gray-200"></div>
 					)}

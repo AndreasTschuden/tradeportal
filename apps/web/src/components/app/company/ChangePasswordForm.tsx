@@ -51,8 +51,14 @@ const ChangePasswordForm = () => {
 			className="grid grid-cols-2 gap-x-10 gap-y-4 w-[50vw]"
 		>
 			<div className="flex flex-col col-span-2">
-				<label className="text-sm text-gray-500 mb-1">Current Password</label>
+				<label
+					className="text-sm text-gray-500 mb-1"
+					htmlFor="current_password"
+				>
+					Current Password
+				</label>
 				<input
+					id="current_password"
 					type="password"
 					{...register("current_password")}
 					placeholder="Enter your current password"
@@ -68,8 +74,11 @@ const ChangePasswordForm = () => {
 			</div>
 
 			<div className="flex flex-col">
-				<label className="text-sm text-gray-500 mb-1">New Password</label>
+				<label className="text-sm text-gray-500 mb-1" htmlFor="new_password">
+					New Password
+				</label>
 				<input
+					id="new_password"
 					type="password"
 					{...register("new_password")}
 					placeholder="Enter the companys website url"
@@ -85,10 +94,14 @@ const ChangePasswordForm = () => {
 			</div>
 
 			<div className="flex flex-col">
-				<label className="text-sm text-gray-500 mb-1 flex gap-1 items-center">
+				<label
+					className="text-sm text-gray-500 mb-1 flex gap-1 items-center"
+					htmlFor="confirm_password"
+				>
 					Confirm Password
 				</label>
 				<input
+					id="confirm_password"
 					type="password"
 					{...register("confirm_password")}
 					placeholder="Enter the companys linked in url"

@@ -9,6 +9,7 @@ const ProceedToCheckout = () => {
 
 	return (
 		<button
+			type="button"
 			onClick={() => handleOnClick()}
 			className="inline-block border bg-red-700 text-white px-10 py-3 font-light"
 		>

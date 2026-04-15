@@ -7,6 +7,7 @@ import { authClient } from "@/lib/auth-client";
 const RemoveAccount = () => {
 	return (
 		<button
+			type="button"
 			className="bg-[#FF000020] py-2 px-7 rounded-xl font-medium text-[#FF0000] flex gap-1"
 			onClick={async () => {
 				const result = await authClient.deleteUser({

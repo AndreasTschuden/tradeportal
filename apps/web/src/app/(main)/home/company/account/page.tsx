@@ -1,4 +1,5 @@
 import { LogOut } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { signOutAction } from "@/actions/auth";
 import { getBasicInformation } from "@/actions/company-account";
@@ -44,7 +45,10 @@ const page = async () => {
 						</div>
 					</div>
 					<div className="flex items-center justify-center gap-3">
-						<button className="ring-1 ring-black py-2 px-7 rounded-xl font-medium">
+						<button
+							type="button"
+							className="ring-1 ring-black py-2 px-7 rounded-xl font-medium"
+						>
 							Upload new Picture
 						</button>
 
@@ -99,7 +103,13 @@ const page = async () => {
 
 				<div className="relative w-full h-full border-2 border-gray-200 rounded-2xl flex justify-between">
 					<span className="absolute -top-4 left-10 bg-white px-2 text-2xl font-medium flex gap-2 justify-center items-center">
-						<img src="/Stripe_Logo,_revised_2016.png" alt="" className="h-8" />
+						<Image
+							src="/Stripe_Logo,_revised_2016.png"
+							alt="Stripe"
+							width={128}
+							height={32}
+							className="h-8 w-auto"
+						/>
 					</span>
 					<p className="absolute top-4 left-12 text-md text-gray-400 font-light">
 						Link your Account with stripe

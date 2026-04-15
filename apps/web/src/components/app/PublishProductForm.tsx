@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import Image from "next/image";
 import { type ChangeEvent, useState } from "react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
@@ -11,6 +12,7 @@ type FormInput = z.input<typeof fixedProductSchema>;
 type FormOutput = z.output<typeof fixedProductSchema>;
 
 type ProductFormValues = z.infer<typeof fixedProductSchema>;
+type LocalAttribute = Attribute & { id: string };
 
 export default function ProductForm({
 	categories,
@@ -25,7 +27,7 @@ export default function ProductForm({
 		resolver: zodResolver(fixedProductSchema),
 	});
 
-	const [attributes, setAttributes] = useState<Attribute[]>([]);
+	const [attributes, setAttributes] = useState<LocalAttribute[]>([]);
 	const [variants, setVariants] = useState<Variant[]>([]);
 	const [_finalJSON, setFinalJSON] = useState<string | null>(null);
 	const [zodErrors, setZodErrors] = useState<Record<string, string>>({});
@@ -33,7 +35,10 @@ export default function ProductForm({
 	const [serverErrors, setServerErrors] = useState<string>("");
 
 	const addAttribute = () => {
-		setAttributes([...attributes, { name: "", values: [], images: undefined }]);
+		setAttributes([
+			...attributes,
+			{ id: crypto.randomUUID(), name: "", values: [], images: undefined },
+		]);
 	};
 
 	const updateAttributeName = (index: number, name: string) => {
@@ -92,13 +97,13 @@ export default function ProductForm({
 			);
 		}, []);
 
-		const fullVariants: any = combinations.map((v) => ({
+		const fullVariants = combinations.map((v) => ({
 			...v,
 			available: true,
 			priceModifier: 1,
 		}));
 
-		setVariants(fullVariants);
+		setVariants(fullVariants as Variant[]);
 		setFinalJSON(null);
 	};
 
@@ -193,8 +198,11 @@ export default function ProductForm({
 						<div className="overflow-y-auto bg-white max-h-[60vh]">
 							<form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
 								<div>
-									<label className="block mb-1 font-medium">Produktname</label>
+									<label className="block mb-1 font-medium" htmlFor="title">
+										Produktname
+									</label>
 									<input
+										id="title"
 										{...register("title")}
 										className="w-full border rounded-md p-2"
 									/>
@@ -206,8 +214,11 @@ export default function ProductForm({
 								</div>
 
 								<div>
-									<label className="block mb-1 font-medium">Basispreis</label>
+									<label className="block mb-1 font-medium" htmlFor="basePrice">
+										Basispreis
+									</label>
 									<input
+										id="basePrice"
 										type="number"
 										{...register("basePrice", { valueAsNumber: true })}
 										className="w-full border rounded-md p-2"
@@ -220,8 +231,11 @@ export default function ProductForm({
 								</div>
 
 								<div>
-									<label className="block mb-1 font-medium">Currency</label>
+									<label className="block mb-1 font-medium" htmlFor="currency">
+										Currency
+									</label>
 									<input
+										id="currency"
 										type="text"
 										{...register("currency")}
 										className="w-full border rounded-md p-2"
@@ -233,7 +247,12 @@ export default function ProductForm({
 									)}
 								</div>
 								<div>
-									<label className="block mb-1 font-medium">Category</label>
+									<label
+										className="block mb-1 font-medium"
+										htmlFor="categories"
+									>
+										Category
+									</label>
 									<select
 										id="categories"
 										{...register("category", {
@@ -254,10 +273,14 @@ export default function ProductForm({
 								</div>
 
 								<div>
-									<label className="block mb-1 font-medium">
+									<label
+										className="block mb-1 font-medium"
+										htmlFor="shortDescription"
+									>
 										Short Description
 									</label>
 									<textarea
+										id="shortDescription"
 										{...register("shortDescription")}
 										className="w-full border rounded-md p-2 h-50"
 									/>
@@ -269,10 +292,14 @@ export default function ProductForm({
 								</div>
 
 								<div>
-									<label className="block mb-1 font-medium">
+									<label
+										className="block mb-1 font-medium"
+										htmlFor="longDescription"
+									>
 										Long Description
 									</label>
 									<textarea
+										id="longDescription"
 										{...register("longDescription")}
 										className="w-full border rounded-md p-2 h-96"
 									/>
@@ -285,7 +312,7 @@ export default function ProductForm({
 
 								{attributes.map((attr, i) => (
 									<div
-										key={i}
+										key={attr.id}
 										className="p-4 border rounded-xl bg-gray-50 space-y-3"
 									>
 										<div className="flex flex-col md:flex-row gap-4">
@@ -307,12 +334,16 @@ export default function ProductForm({
 
 										{i === 0 && attr.values.length > 0 && (
 											<div className="flex flex-wrap gap-4">
-												{attr.values.map((val, idx) => (
-													<div key={idx}>
-														<label className="text-sm block mb-1">
+												{attr.values.map((val) => (
+													<div key={`${attr.id}-${val}`}>
+														<label
+															className="text-sm block mb-1"
+															htmlFor={`image-${attr.id}-${val}`}
+														>
 															{val} Bild
 														</label>
 														<input
+															id={`image-${attr.id}-${val}`}
 															type="file"
 															accept="image/*"
 															onChange={(e) => handleFileChange(e, i, val)}
@@ -367,12 +398,15 @@ export default function ProductForm({
 							<div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
 								{images.map((image, index) => (
 									<div
-										key={index}
+										key={image}
 										className="aspect-square overflow-hidden rounded-xl border bg-gray-50"
 									>
-										<img
+										<Image
 											src={image}
 											alt={`Bild ${index + 1}`}
+											width={400}
+											height={400}
+											unoptimized
 											className="w-full h-full object-cover"
 										/>
 									</div>
@@ -394,8 +428,8 @@ export default function ProductForm({
 								<thead>
 									<tr className="bg-gray-200 text-left">
 										<th className="p-2 border"></th>
-										{attributes.map((a, i) => (
-											<th key={i} className="p-2 border">
+										{attributes.map((a) => (
+											<th key={a.id} className="p-2 border">
 												{a.name}
 											</th>
 										))}
@@ -404,7 +438,9 @@ export default function ProductForm({
 								</thead>
 								<tbody>
 									{variants.map((v, i) => (
-										<tr key={i}>
+										<tr
+											key={attributes.map((a) => String(v[a.name])).join("|")}
+										>
 											<td className="p-2 border w-1">
 												<input
 													type="checkbox"
@@ -422,8 +458,11 @@ export default function ProductForm({
 												/>
 											</td>
 
-											{attributes.map((a, j) => (
-												<td key={j} className="p-2 border">
+											{attributes.map((a) => (
+												<td
+													key={`${a.id}-${String(v[a.name])}`}
+													className="p-2 border"
+												>
 													{v[a.name]}
 												</td>
 											))}

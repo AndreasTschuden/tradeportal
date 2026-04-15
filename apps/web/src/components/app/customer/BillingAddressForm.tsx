@@ -52,8 +52,11 @@ const BillingAddressForm = ({
 			className="grid grid-cols-2 gap-x-10 gap-y-4 w-[50vw]"
 		>
 			<div className="flex flex-col">
-				<label className="text-sm text-gray-500 mb-1">City</label>
+				<label className="text-sm text-gray-500 mb-1" htmlFor="city">
+					City
+				</label>
 				<input
+					id="city"
 					{...register("city")}
 					placeholder="Enter your city"
 					className={`bg-[#F5F7FA] rounded-sm px-4 py-3 outline placeholder:text-gray-400 ${
@@ -68,8 +71,11 @@ const BillingAddressForm = ({
 			</div>
 
 			<div className="flex flex-col">
-				<label className="text-sm text-gray-500 mb-1">Postal Code</label>
+				<label className="text-sm text-gray-500 mb-1" htmlFor="postal_code">
+					Postal Code
+				</label>
 				<input
+					id="postal_code"
 					{...register("postal_code")}
 					placeholder="Enter your postal code"
 					className={`bg-[#F5F7FA] rounded-sm px-4 py-3 outline placeholder:text-gray-400 ${
@@ -84,8 +90,11 @@ const BillingAddressForm = ({
 			</div>
 
 			<div className="flex flex-col">
-				<label className="text-sm text-gray-500 mb-1">Region</label>
+				<label className="text-sm text-gray-500 mb-1" htmlFor="region">
+					Region
+				</label>
 				<input
+					id="region"
 					{...register("region")}
 					placeholder="Enter your Region"
 					className={`bg-[#F5F7FA] rounded-sm px-4 py-3 outline placeholder:text-gray-400 ${
@@ -100,8 +109,11 @@ const BillingAddressForm = ({
 			</div>
 
 			<div className="flex flex-col">
-				<label className="text-sm text-gray-500 mb-1">Country</label>
+				<label className="text-sm text-gray-500 mb-1" htmlFor="country">
+					Country
+				</label>
 				<input
+					id="country"
 					{...register("country")}
 					placeholder="Enter your country"
 					className={`bg-[#F5F7FA] rounded-sm px-4 py-3 outline placeholder:text-gray-400 ${

@@ -20,6 +20,7 @@ const SubNav = () => {
 			<div className="lg:block hidden">
 				<div className="flex md:gap-4">
 					<button
+						type="button"
 						className="text-white font-normal text-sm"
 						onClick={() =>
 							document
@@ -30,6 +31,7 @@ const SubNav = () => {
 						New Arrival
 					</button>
 					<button
+						type="button"
 						className="text-white font-normal text-sm"
 						onClick={() =>
 							document
@@ -40,6 +42,7 @@ const SubNav = () => {
 						Explore Products
 					</button>
 					<button
+						type="button"
 						className="text-white font-normal text-sm"
 						onClick={() =>
 							document

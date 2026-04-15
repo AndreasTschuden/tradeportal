@@ -32,6 +32,7 @@ const ProductCard = ({ prod }: { prod: productWithStatsType }) => {
 					onClick={() => router.push(`/home/products/product/${prod.id}`)}
 				/>
 				<button
+					type="button"
 					className="absolute bottom-0 left-0 w-full h-13 bg-red-700 
                 flex items-center justify-center
                 opacity-0 group-hover:opacity-100

@@ -57,8 +57,11 @@ const BasicInfoForm = ({ Information }: { Information: Companyinfos }) => {
 			className="grid grid-cols-2 gap-x-10 gap-y-4 w-[50vw]"
 		>
 			<div className="flex flex-col">
-				<label className="text-sm text-gray-500 mb-1">Company Name</label>
+				<label className="text-sm text-gray-500 mb-1" htmlFor="name">
+					Company Name
+				</label>
 				<input
+					id="name"
 					{...register("name")}
 					placeholder="Enter your company name"
 					className={`bg-[#F5F7FA] rounded-sm px-4 py-3 outline placeholder:text-gray-400 ${
@@ -73,11 +76,15 @@ const BasicInfoForm = ({ Information }: { Information: Companyinfos }) => {
 			</div>
 
 			<div className="flex flex-col">
-				<label className="text-sm text-gray-500 mb-1 flex gap-1 items-center">
+				<label
+					className="text-sm text-gray-500 mb-1 flex gap-1 items-center"
+					htmlFor="email"
+				>
 					Email Address
 					<strong className="text-red-700 text-xs">(not editable)</strong>
 				</label>
 				<input
+					id="email"
 					{...register("email")}
 					disabled
 					className={`bg-[#F5F7FA] rounded-sm px-4 py-3 outline placeholder:text-gray-400 ${
@@ -92,8 +99,11 @@ const BasicInfoForm = ({ Information }: { Information: Companyinfos }) => {
 			</div>
 
 			<div className="flex flex-col">
-				<label className="text-sm text-gray-500 mb-1">Phone Number</label>
+				<label className="text-sm text-gray-500 mb-1" htmlFor="phone">
+					Phone Number
+				</label>
 				<input
+					id="phone"
 					{...register("phone")}
 					placeholder="Enter your phone number"
 					className={`bg-[#F5F7FA] rounded-sm px-4 py-3 outline placeholder:text-gray-400 ${
@@ -108,8 +118,11 @@ const BasicInfoForm = ({ Information }: { Information: Companyinfos }) => {
 			</div>
 
 			<div className="flex flex-col">
-				<label className="text-sm text-gray-500 mb-1">Address</label>
+				<label className="text-sm text-gray-500 mb-1" htmlFor="address">
+					Address
+				</label>
 				<input
+					id="address"
 					{...register("address")}
 					placeholder="Enter your address"
 					className="bg-[#F5F7FA] rounded-sm px-4 py-3 outline placeholder:text-gray-400"
@@ -117,8 +130,11 @@ const BasicInfoForm = ({ Information }: { Information: Companyinfos }) => {
 			</div>
 
 			<div className="flex flex-col">
-				<label className="text-sm text-gray-500 mb-1">Head of Company</label>
+				<label className="text-sm text-gray-500 mb-1" htmlFor="head">
+					Head of Company
+				</label>
 				<input
+					id="head"
 					{...register("head")}
 					placeholder="Enter the head of the company"
 					className="bg-[#F5F7FA] rounded-sm px-4 py-3 outline placeholder:text-gray-400"
@@ -126,8 +142,11 @@ const BasicInfoForm = ({ Information }: { Information: Companyinfos }) => {
 			</div>
 
 			<div className="flex flex-col">
-				<label className="text-sm text-gray-500 mb-1">Employee Count</label>
+				<label className="text-sm text-gray-500 mb-1" htmlFor="employees">
+					Employee Count
+				</label>
 				<input
+					id="employees"
 					{...register("employees")}
 					placeholder="Enter employee count"
 					className="bg-[#F5F7FA] rounded-sm px-4 py-3 outline placeholder:text-gray-400"
@@ -135,8 +154,11 @@ const BasicInfoForm = ({ Information }: { Information: Companyinfos }) => {
 			</div>
 
 			<div className="flex flex-col col-span-1">
-				<label className="text-sm text-gray-500 mb-1">Founded At</label>
+				<label className="text-sm text-gray-500 mb-1" htmlFor="founded">
+					Founded At
+				</label>
 				<input
+					id="founded"
 					type="date"
 					{...register("founded")}
 					className="bg-[#F5F7FA] rounded-sm px-4 py-3 outline placeholder:text-gray-400"

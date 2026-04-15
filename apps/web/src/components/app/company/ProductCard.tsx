@@ -92,6 +92,7 @@ const ProductCard = ({ product }: { product: productWithStatsType }) => {
           <SquarePen height={18} color="blue" />
         </button> */}
 				<button
+					type="button"
 					onClick={() => handleActiveToggle()}
 					className={`w-16 h-8 flex items-center rounded-full p-1 duration-300 transition-colors ${
 						enabled ? "bg-green-500" : "bg-gray-300"

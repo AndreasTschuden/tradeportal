@@ -22,12 +22,14 @@ const CompanyCard = ({
 					<h2 className="text-xl font-medium">{company_name}</h2>
 					<div className="flex items-center gap-2">
 						<button
+							type="button"
 							className="border-2 border-black py-1 px-3 rounded-lg font-bold"
 							onClick={() => router.push(`/home/companies/${id}`)}
 						>
 							View Company
 						</button>
 						<button
+							type="button"
 							onClick={() => router.push(`/home/products?company=${id}`)}
 							className="border-2 border-red-700 py-1 px-6 rounded-lg font-bold text-red-700"
 						>

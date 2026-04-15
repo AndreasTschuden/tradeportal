@@ -91,6 +91,7 @@ const ProductCard = ({ prod }: { prod: cartItemsWithAvgStars }) => {
 			<div className="flex justify-center">
 				<div className="flex items-center border rounded-md overflow-hidden">
 					<button
+						type="button"
 						className="px-3 py-1 text-lg border-r hover:bg-gray-100"
 						onClick={() => setCurrentQuantity((prev) => Math.max(1, prev - 1))}
 					>
@@ -119,6 +120,7 @@ const ProductCard = ({ prod }: { prod: cartItemsWithAvgStars }) => {
 					/>
 
 					<button
+						type="button"
 						className="px-3 py-1 text-lg border-l hover:bg-gray-100"
 						onClick={() => setCurrentQuantity((prev) => prev + 1)}
 					>
@@ -134,6 +136,7 @@ const ProductCard = ({ prod }: { prod: cartItemsWithAvgStars }) => {
 
 			<div className="flex justify-center">
 				<button
+					type="button"
 					className="border w-8 h-8 flex items-center justify-center text-red-500"
 					onClick={async () => {
 						try {

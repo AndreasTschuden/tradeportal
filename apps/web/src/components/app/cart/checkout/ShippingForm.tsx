@@ -60,8 +60,11 @@ const ShippingForm = ({
 			noValidate
 		>
 			<div className="flex flex-col">
-				<label className="text-sm text-gray-600 mb-1">Street Address</label>
+				<label className="text-sm text-gray-600 mb-1" htmlFor="street">
+					Street Address
+				</label>
 				<input
+					id="street"
 					{...register("street")}
 					placeholder="Enter street address"
 					className={`${inputClass} ${errors.street ? "border-red-500" : ""}`}
@@ -76,8 +79,11 @@ const ShippingForm = ({
 
 			<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 				<div className="flex flex-col">
-					<label className="text-sm text-gray-600 mb-1">Postal Code</label>
+					<label className="text-sm text-gray-600 mb-1" htmlFor="postal">
+						Postal Code
+					</label>
 					<input
+						id="postal"
 						{...register("postal")}
 						placeholder="Enter ZIP code"
 						className={`${inputClass} ${errors.postal ? "border-red-500" : ""}`}
@@ -91,8 +97,11 @@ const ShippingForm = ({
 				</div>
 
 				<div className="flex flex-col">
-					<label className="text-sm text-gray-600 mb-1">City</label>
+					<label className="text-sm text-gray-600 mb-1" htmlFor="city">
+						City
+					</label>
 					<input
+						id="city"
 						{...register("city")}
 						placeholder="Enter city"
 						className={`${inputClass} ${errors.city ? "border-red-500" : ""}`}
@@ -107,8 +116,11 @@ const ShippingForm = ({
 			</div>
 
 			<div className="flex flex-col">
-				<label className="text-sm text-gray-600 mb-1">Country</label>
+				<label className="text-sm text-gray-600 mb-1" htmlFor="country">
+					Country
+				</label>
 				<input
+					id="country"
 					{...register("country")}
 					placeholder="Enter country"
 					className={`${inputClass} ${errors.country ? "border-red-500" : ""}`}

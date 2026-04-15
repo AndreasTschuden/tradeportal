@@ -47,7 +47,10 @@ const page = async () => {
 						</div>
 					</div>
 					<div className="flex items-center justify-center gap-3">
-						<button className="ring-1 ring-black py-2 px-7 rounded-xl font-medium">
+						<button
+							type="button"
+							className="ring-1 ring-black py-2 px-7 rounded-xl font-medium"
+						>
 							Upload new Picture
 						</button>
 						<RemoveAccount />

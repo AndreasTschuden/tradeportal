@@ -56,26 +56,47 @@ export async function createOrder() {
 		},
 	});
 
-	type orderProductsType = {
+	type ProductVariant = {
+		sellerId: string;
+		available: boolean;
+		priceModifier: number;
+		image?: string;
+	} & Record<string, string | number | boolean>;
+
+	type OrderProductType = {
 		products_id: string;
 		orders_id: string;
 		product_variant: number;
 		unit_price: number;
 		quantity: number;
 		discount: number;
-		specificationen: {
-			image: string;
-			available: boolean;
-			priceModifier: number;
-			sellerId: string;
-		};
+		specificationen: ProductVariant;
 	};
 
-	const orderProducts = cartItems.reduce((acc: orderProductsType[], prod) => {
-		const specs = prod.products.specifications as any;
-		const variant = specs.variants[prod.product_variant];
-		const imgVariant = Object.values(variant)[0] as string;
+	type ProductAttribute = {
+		images: Record<string, string>;
+	};
 
+	type ProductSpecifications = {
+		variants: ProductVariant[];
+		attributes: ProductAttribute[];
+	};
+
+	const orderProducts = cartItems.reduce((acc: OrderProductType[], prod) => {
+		const specs = prod.products.specifications as ProductSpecifications;
+
+		// Gewählte Variante anhand des Indexes
+		const variant = specs.variants[prod.product_variant];
+
+		// Schlüssel für das Bild (z. B. "red", "blue", etc.)
+		const imgKey = Object.values(variant).find(
+			(value) => typeof value === "string",
+		) as string;
+
+		// Bildpfad aus den Attributen
+		const image = specs.attributes?.[0]?.images?.[imgKey] ?? "";
+
+		// Preisberechnung mit priceModifier
 		const price = Number(prod.products.base_price) * variant.priceModifier;
 
 		acc.push({
@@ -87,14 +108,13 @@ export async function createOrder() {
 			discount: 0,
 			specificationen: {
 				...variant,
-				image: specs.attributes[0].images[imgVariant],
+				image,
 				sellerId: prod.products.companies.stripe_account_id,
 			},
 		});
 
 		return acc;
 	}, []);
-
 	console.log(orderProducts);
 
 	const newOrderProducts = await db.user.orders_products.createMany({

@@ -55,10 +55,14 @@ const StripeRegister = ({
 			className="grid grid-cols-2 gap-x-10 gap-y-4 w-[50vw]"
 		>
 			<div className="flex flex-col">
-				<label className="text-sm text-gray-500 mb-1 flex gap-1 items-center">
+				<label
+					className="text-sm text-gray-500 mb-1 flex gap-1 items-center"
+					htmlFor="email"
+				>
 					Email Address
 				</label>
 				<input
+					id="email"
 					{...register("email")}
 					className={`bg-[#F5F7FA] rounded-sm px-4 py-3 outline placeholder:text-gray-400 ${
 						errors.email && "outline-red-500"
@@ -75,10 +79,14 @@ const StripeRegister = ({
 			</div>
 
 			<div className="flex flex-col">
-				<label className="text-sm text-gray-500 mb-1 flex gap-1 items-center">
+				<label
+					className="text-sm text-gray-500 mb-1 flex gap-1 items-center"
+					htmlFor="countryCode"
+				>
 					Country Code
 				</label>
 				<input
+					id="countryCode"
 					{...register("countryCode")}
 					className={`bg-[#F5F7FA] rounded-sm px-4 py-3 outline placeholder:text-gray-400 ${
 						errors.countryCode && "outline-red-500"

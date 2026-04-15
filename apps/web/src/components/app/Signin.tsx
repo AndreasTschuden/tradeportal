@@ -42,9 +42,13 @@ export function Signin() {
 
 		try {
 			await signInAction(formData);
-		} catch (err: any) {
-			if (err?.message !== "NEXT_REDIRECT") {
-				setError(err?.message || "Sign in failed");
+		} catch (err: unknown) {
+			if (err instanceof Error) {
+				if (err.message !== "NEXT_REDIRECT") {
+					setError(err.message || "Sign in failed");
+				}
+			} else {
+				setError("Sign in failed");
 			}
 		} finally {
 			setLoading(false);

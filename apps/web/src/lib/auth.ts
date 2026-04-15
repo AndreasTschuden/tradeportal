@@ -11,8 +11,15 @@ import { db } from "@/lib/prisma";
 import { hashPassword, verifyPassword } from "./password";
 
 const connectionString = `${process.env.DATABASE_URL_BETTER_AUTH}`;
+const getRequiredEnv = (key: string): string => {
+	const value = process.env[key];
+	if (!value) {
+		throw new Error(`Missing required env var: ${key}`);
+	}
+	return value;
+};
 
-const resend = new Resend(process.env.RESEND_API_KEY!);
+const resend = new Resend(getRequiredEnv("RESEND_API_KEY"));
 
 const adapter = new PrismaPg({ connectionString });
 const prisma = new PrismaClient({ adapter });
@@ -47,7 +54,7 @@ export const auth = betterAuth({
 			},
 			sendDeleteAccountVerification: async ({ user, url, token }, _request) => {
 				const result = await resend.emails.send({
-					from: process.env.RESEND_FROM_EMAIL!,
+					from: getRequiredEnv("RESEND_FROM_EMAIL"),
 					to: user.email,
 					subject: `Delete account: ${user.name}`,
 					text: `Click the following link to delete your account: ${url}`,
@@ -76,7 +83,7 @@ export const auth = betterAuth({
 		sendVerificationEmail: async ({ user, url }) => {
 			console.log("Sending verification email to", user.email);
 			const result = await resend.emails.send({
-				from: process.env.RESEND_FROM_EMAIL!,
+				from: getRequiredEnv("RESEND_FROM_EMAIL"),
 				to: user.email,
 				subject: "Verify your email address",
 				text: `Click the following link to verify your email: ${url}`,

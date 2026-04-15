@@ -4,46 +4,47 @@ import { useState } from "react";
 import { LongDescription } from "@/components/app/LongDescription";
 import { Reviews } from "@/components/app/Reviews";
 
+type DescriptionReviewsSwitchProps = {
+	reviewCount: number;
+	longDescription: string;
+	reviews: ReviewType[];
+	productId: string;
+};
+
 const DescriptionReviewsSwitch = ({
 	reviewCount,
 	longDescription,
 	reviews,
 	productId,
-}: {
-	reviewCount: number;
-	longDescription: string;
-	reviews: ReviewType[];
-	productId: string;
-}) => {
-	const [toggleView, setToggleView] = useState<boolean>(true);
+}: DescriptionReviewsSwitchProps) => {
+	const [showReviews, setShowReviews] = useState(false);
 
 	return (
 		<div className="flex flex-col gap-5">
 			<div className="flex gap-10">
 				<button
-					className={`text-3xl font-bold ${!toggleView ? "underline text-black" : "text-gray-500"}`}
-					onClick={() =>
-						setToggleView((prev) => (prev === true ? false : false))
-					}
+					type="button"
+					className={`text-3xl font-bold ${
+						!showReviews ? "underline text-black" : "text-gray-500"
+					}`}
+					onClick={() => setShowReviews(false)}
 				>
 					Description
 				</button>
 				<button
-					className={`text-3xl font-bold ${toggleView ? "underline text-black" : "text-gray-500"}`}
-					onClick={() =>
-						setToggleView((prev) => (prev === false ? true : true))
-					}
+					type="button"
+					className={`text-3xl font-bold ${
+						showReviews ? "underline text-black" : "text-gray-500"
+					}`}
+					onClick={() => setShowReviews(true)}
 				>
 					Reviews ({reviewCount})
 				</button>
 			</div>
-			<div className={`${!toggleView ? "block" : "hidden"}`}>
-				<LongDescription longDescription={longDescription} />
-			</div>
 
-			<div className={`${toggleView ? "block" : "hidden"}`}>
-				<Reviews reviews={reviews} productId={productId} />
-			</div>
+			{!showReviews && <LongDescription longDescription={longDescription} />}
+
+			{showReviews && <Reviews reviews={reviews} productId={productId} />}
 		</div>
 	);
 };
