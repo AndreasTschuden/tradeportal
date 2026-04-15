@@ -5,6 +5,7 @@ import { Save } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import type { z } from "zod";
 import { updateAdditionalInformation } from "@/actions/company-account";
 import { additionalInfoSchema, type additionalInfoType } from "@/lib/zod";
 
@@ -16,7 +17,7 @@ const AdditionalInfoForm = ({ Information }: { Information: Companyinfos }) => {
 		register,
 		handleSubmit,
 		formState: { errors },
-	} = useForm({
+	} = useForm<z.input<typeof additionalInfoSchema>, unknown, additionalInfoType>({
 		resolver: zodResolver(additionalInfoSchema),
 		defaultValues: {
 			website: Information.website || "",

@@ -143,10 +143,12 @@ export async function getDetailedProduct(id: string) {
 	if (!product) {
 		throw new Error("No Product found");
 	}
+	const safeProduct = {
+		...product,
+		base_price: product.base_price.toNumber(),
+	};
 
-	product.base_price = Number(product.base_price);
-
-	const prod: detailedProductType = product;
+	const prod: detailedProductType = safeProduct;
 
 	let avg = 0;
 	let count = 0;

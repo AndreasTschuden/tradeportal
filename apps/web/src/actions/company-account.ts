@@ -4,7 +4,11 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/prisma";
-import { additionalInfoSchema, companySchema } from "@/lib/zod";
+import {
+	additionalInfoSchema,
+	type additionalInfoType,
+	companySchema,
+} from "@/lib/zod";
 
 export async function getBasicInformation() {
 	const session = await auth.api.getSession({
@@ -80,10 +84,7 @@ export async function updateInformation(data: {
 	}
 }
 
-export async function updateAdditionalInformation(data: {
-	website: string | undefined;
-	linked_in: string | undefined;
-}) {
+export async function updateAdditionalInformation(data: additionalInfoType) {
 	const validate = additionalInfoSchema.safeParse(data);
 
 	if (!validate.success) {
@@ -156,7 +157,7 @@ export async function handleCompanyDeletion(user: {
 			companies_id: company.id,
 		},
 		data: {
-			isActive: false,
+			isactive: false,
 		},
 	});
 }
