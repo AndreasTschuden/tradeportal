@@ -113,6 +113,21 @@ export async function createOrder() {
     throw new Error(variantCheck.join("\n"));
   }
 
+  const newOrder = await db.user.orders.create({
+    data: {
+      customers_id: customer.id,
+      order_date: new Date().toISOString(),
+      shipper: "Österreichische Post AG",
+      tracking_number: "#1239479494932",
+      status: "pending",
+      shipped_to: "empty",
+    },
+  });
+
+  if (!newOrder) {
+    throw new Error("Your order could not be created, please try again later!");
+  }
+
   const orderProducts = cartItems.reduce((acc: OrderProductType[], prod) => {
     const specs = prod.products.specifications as ProductSpecifications;
     const variant = specs.variants[prod.product_variant];
@@ -143,20 +158,6 @@ export async function createOrder() {
   }, []);
   console.log(orderProducts);
 
-  const newOrder = await db.user.orders.create({
-    data: {
-      customers_id: customer.id,
-      order_date: new Date().toISOString(),
-      shipper: "Österreichische Post AG",
-      tracking_number: "#1239479494932",
-      status: "pending",
-      shipped_to: "empty",
-    },
-  });
-
-  if (!newOrder) {
-    throw new Error("Your order could not be created, please try again later!");
-  }
 
   const newOrderProducts = await db.user.orders_products.createMany({
     data: orderProducts.map((order) => ({

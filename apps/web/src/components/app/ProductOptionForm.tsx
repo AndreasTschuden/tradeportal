@@ -3,44 +3,58 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Heart, ShoppingCart } from "lucide-react";
 import { redirect } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { addToCart } from "@/actions/cart";
 import { variantOptionSchema } from "@/lib/zod";
 
-const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
-	const [cartCounter, setCartCounter] = useState<number>(1);
-	const [toggleFavourite, setToggleFavourite] = useState<boolean>(false);
+const ProductOptionForm = ({
+	product,
+}: {
+	product: detailedProductType;
+}) => {
+	const [cartCounter, setCartCounter] = useState(1);
+	const [toggleFavourite, setToggleFavourite] = useState(false);
 
-	const initialObj = product.specifications.attributes.reduce(
-		(acc: Record<string, string>, attr: Record<string, string>) => {
-			acc[attr.name] = attr.values[0];
-			return acc;
-		},
-		{},
-	);
+	// ✅ stabile Initial-Attribute (wichtig!)
+	const initialObj = useMemo(() => {
+		return product.specifications.attributes.reduce(
+			(acc: Record<string, string>, attr: Attribute) => {
+				acc[attr.name] = attr.values[0];
+				return acc;
+			},
+			{},
+		);
+	}, [product]);
 
 	const [selectedAttributes, setSelectedAttributes] =
 		useState<Record<string, string>>(initialObj);
 
-	const findVariantIndex = (attributes: Record<string, string>) => {
-		return product.specifications.variants.findIndex(
-			(v: Record<string, unknown>) =>
-				Object.entries(attributes).every(([key, val]) => v[key] === val) &&
-				v.available === true,
-		);
-	};
-
 	const [currentVariant, setCurrentVariant] = useState<number | null>(null);
-	const [variantAvailable, setVariantAvailable] = useState<boolean>(true);
+	const [variantAvailable, setVariantAvailable] = useState(true);
 
+	// ✅ stabile Variant-Suche
+	const findVariantIndex = useMemo(() => {
+		return (attributes: Record<string, string>) => {
+			return product.specifications.variants.findIndex((v : Variant) =>
+				Object.entries(attributes).every(
+					([key, val]) => v[key] === val,
+				) && v.available === true,
+			);
+		};
+	}, [product]);
+
+	// ✅ initial + wenn Produkt wechselt
 	useEffect(() => {
+		setSelectedAttributes(initialObj);
+
 		const index = findVariantIndex(initialObj);
 		setCurrentVariant(index !== -1 ? index : null);
 		setVariantAvailable(index !== -1);
 	}, [initialObj, findVariantIndex]);
 
+	// react-hook-form
 	const {
 		register,
 		handleSubmit,
@@ -49,6 +63,7 @@ const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
 		resolver: zodResolver(variantOptionSchema),
 	});
 
+	// ✅ Attribute ändern → Variant neu berechnen
 	const handleSelectChange = (name: string, value: string) => {
 		const newAttributes = {
 			...selectedAttributes,
@@ -58,11 +73,11 @@ const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
 		setSelectedAttributes(newAttributes);
 
 		const index = findVariantIndex(newAttributes);
-
 		setCurrentVariant(index !== -1 ? index : null);
 		setVariantAvailable(index !== -1);
 	};
 
+	// submit
 	const onSubmit = async () => {
 		if (!variantAvailable) return;
 
@@ -85,9 +100,8 @@ const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
 			if (error instanceof Error) {
 				if (error.message === "NEXT_REDIRECT") {
 					redirect("/home");
-				} else {
-					toast.error(error.message);
 				}
+				toast.error(error.message);
 			}
 		}
 	};
@@ -99,30 +113,28 @@ const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
 				className="flex flex-col justify-between h-full"
 			>
 				<div className="flex flex-col gap-5">
-					{product.specifications.attributes.map(
-						(attr: Attribute, index: number) => (
-							<div key={attr.name}>
-								<div className="flex justify-between mb-1">
-									<p>{attr.name}</p>
+					{product.specifications.attributes.map((attr : Attribute, index : number) => (
+						<div key={attr.name}>
+							<div className="flex justify-between mb-1">
+								<p>{attr.name}</p>
 
-									<select
-										{...register(`options.${index}.value`, {
-											onChange: (e) =>
-												handleSelectChange(attr.name, e.target.value),
-										})}
-										defaultValue={attr.values[0]}
-									>
-										{attr.values.map((option: string) => (
-											<option key={option} value={option}>
-												{option}
-											</option>
-										))}
-									</select>
-								</div>
-								<div className="border border-gray-300"></div>
+								<select
+									{...register(`options.${index}.value`, {
+										onChange: (e) =>
+											handleSelectChange(attr.name, e.target.value),
+									})}
+									defaultValue={attr.values[0]}
+								>
+									{attr.values.map((option) => (
+										<option key={option} value={option}>
+											{option}
+										</option>
+									))}
+								</select>
 							</div>
-						),
-					)}
+							<div className="border border-gray-300" />
+						</div>
+					))}
 
 					{!variantAvailable && (
 						<div className="text-red-500">
@@ -132,13 +144,13 @@ const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
 
 					{errors.options && (
 						<div className="text-red-500">
-							{errors.options.message || "Please select valid options."}
+							{errors.options.message}
 						</div>
 					)}
 
 					{errors.quantity && (
 						<div className="text-red-500">
-							{errors.quantity.message || "Please enter a valid quantity."}
+							{errors.quantity.message}
 						</div>
 					)}
 				</div>
@@ -150,8 +162,8 @@ const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
 
 					<div className="flex gap-7 h-15">
 						<button
-							className="w-full bg-red-700 rounded-xl text-white font-medium flex items-center justify-center gap-2"
 							type="submit"
+							className="w-full bg-red-700 rounded-xl text-white font-medium flex items-center justify-center gap-2"
 						>
 							<ShoppingCart />
 							<p>Add to cart</p>
@@ -161,25 +173,21 @@ const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
 							<button
 								type="button"
 								className="bg-gray-200 h-full w-full rounded-l-xl text-3xl"
-								onClick={() => setCartCounter((prev) => prev + 1)}
+								onClick={() =>
+									setCartCounter((p) => p + 1)
+								}
 							>
 								+
 							</button>
 
 							<input
-								type="text"
+								type="number"
+								min={1}
 								className="w-full text-center border-y-2 border-gray-200 text-3xl h-full outline-none"
 								value={cartCounter}
 								{...register("quantity", {
 									onChange: (e) => {
-										const val = e.target.value;
-
-										if (val === "") {
-											setCartCounter(0);
-											return;
-										}
-
-										const num = Number(val);
+										const num = Number(e.target.value);
 										if (!Number.isNaN(num) && num >= 1) {
 											setCartCounter(num);
 										}
@@ -191,7 +199,7 @@ const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
 								type="button"
 								className="bg-gray-200 h-full w-full rounded-r-xl text-3xl"
 								onClick={() =>
-									setCartCounter((prev) => (prev > 1 ? prev - 1 : 1))
+									setCartCounter((p) => Math.max(1, p - 1))
 								}
 							>
 								-
@@ -201,9 +209,15 @@ const ProductOptionForm = ({ product }: { product: detailedProductType }) => {
 						<button
 							type="button"
 							className="bg-gray-200 aspect-square rounded-xl flex justify-center items-center"
-							onClick={() => setToggleFavourite((prev) => !prev)}
+							onClick={() =>
+								setToggleFavourite((p) => !p)
+							}
 						>
-							{toggleFavourite ? <Heart stroke="0" fill="red" /> : <Heart />}
+							{toggleFavourite ? (
+								<Heart strokeWidth={0} fill="red" />
+							) : (
+								<Heart />
+							)}
 						</button>
 					</div>
 				</div>

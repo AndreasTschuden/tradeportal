@@ -10,10 +10,12 @@ const ProceedToCheckout = () => {
     } catch (error) {
       if (error instanceof Error) {
         const messages = error.message.split("\n");
-
+		if (error.message === "NEXT_REDIRECT") {
+			return
+		}
         messages.forEach((msg) => {
           toast.error(
-           <span>{msg}</span>
+           <span className="text-red-500">{msg}</span>
           );
         });
       }
