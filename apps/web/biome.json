@@ -20,7 +20,7 @@
 		"indentStyle": "tab"
 	},
 	"linter": {
-		 "enabled": true,
+		"enabled": true,
 		"rules": {
 			"correctness": "off"
 		}

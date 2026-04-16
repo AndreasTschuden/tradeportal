@@ -17,7 +17,7 @@ const AdditionalInfoForm = ({ Information }: { Information: Companyinfos }) => {
 		register,
 		handleSubmit,
 		formState: { errors },
-	} = useForm<z.input<typeof additionalInfoSchema>, unknown, additionalInfoType>({
+	} = useForm({
 		resolver: zodResolver(additionalInfoSchema),
 		defaultValues: {
 			website: Information.website || "",
