@@ -2,7 +2,7 @@
 
 import { CalendarArrowDown, CalendarArrowUp, Search } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ResponsivePagination from "react-responsive-pagination";
 import { ProductCard } from "@/components/app/company/ProductCard";
 
@@ -13,47 +13,43 @@ const OwnProducts = ({
 	products: productsForCompanyType[];
 	categories: CategoryType[];
 }) => {
-	const [productsState, setProductsState] = useState(products);
-	const [allProducts] = useState(products);
-
-	const [currentOrder, setCurrentOrder] = useState<boolean>(false);
+	const [currentOrder, setCurrentOrder] = useState(false);
 	const [search, setSearch] = useState("");
 	const [selectedCategory, setSelectedCategory] = useState<number>(100);
-
 	const [currentPage, setCurrentPage] = useState(1);
+
 	const itemsPerPage = 10;
 
-	const applyFilters = () => {
-		let filtered = [...allProducts];
+
+	const filteredProducts = useMemo(() => {
+		let filtered = [...products];
 
 		if (selectedCategory !== 100) {
 			filtered = filtered.filter(
 				(prod) =>
-					prod.categories_products[0].categories_id === selectedCategory,
+					prod.categories_products[0]?.categories_id === selectedCategory
 			);
 		}
 
-		if (search !== "") {
+		if (search.trim() !== "") {
 			filtered = filtered.filter((p) =>
-				p.name.toLowerCase().includes(search.toLowerCase()),
+				p.name.toLowerCase().includes(search.toLowerCase())
 			);
 		}
 
 		filtered.sort((a, b) => {
 			const dateA = new Date(a.created_at ?? 0).getTime();
 			const dateB = new Date(b.created_at ?? 0).getTime();
-
 			return currentOrder ? dateA - dateB : dateB - dateA;
 		});
 
-		setProductsState(filtered);
-		setCurrentPage(1);
-	};
+		return filtered;
+	}, [products, selectedCategory, search, currentOrder]);
+
 
 	useEffect(() => {
-		applyFilters();
 		setCurrentPage(1);
-	}, [applyFilters]);
+	}, [selectedCategory, search, currentOrder]);
 
 	const handleDateFilter = () => {
 		setCurrentOrder((prev) => !prev);
@@ -65,13 +61,15 @@ const OwnProducts = ({
 
 	const handleSearchSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
-		applyFilters();
+		setCurrentPage(1);
 	};
 
-	const totalPages = Math.ceil(productsState.length / itemsPerPage);
-
+	const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
 	const start = (currentPage - 1) * itemsPerPage;
-	const currentProducts = productsState.slice(start, start + itemsPerPage);
+	const currentProducts = filteredProducts.slice(
+		start,
+		start + itemsPerPage
+	);
 
 	return (
 		<div>
@@ -111,6 +109,7 @@ const OwnProducts = ({
 							<div className="flex">
 								<div className="flex items-center justify-center rounded-l-sm px-2 bg-gray-100 border border-gray-200">
 									<select
+										value={selectedCategory}
 										onChange={(e) =>
 											handleCategoryFilter(Number(e.target.value))
 										}
