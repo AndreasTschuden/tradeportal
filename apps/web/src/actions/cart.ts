@@ -45,7 +45,7 @@ export async function addToCart(
 	if (!session?.user) {
 		redirect("/signin");
 	}
-	
+
 	const customer = await db.user.customers.findFirst({
 		where: {
 			id: session.user.id,

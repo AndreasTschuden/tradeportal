@@ -20,20 +20,19 @@ const OwnProducts = ({
 
 	const itemsPerPage = 10;
 
-
 	const filteredProducts = useMemo(() => {
 		let filtered = [...products];
 
 		if (selectedCategory !== 100) {
 			filtered = filtered.filter(
 				(prod) =>
-					prod.categories_products[0]?.categories_id === selectedCategory
+					prod.categories_products[0]?.categories_id === selectedCategory,
 			);
 		}
 
 		if (search.trim() !== "") {
 			filtered = filtered.filter((p) =>
-				p.name.toLowerCase().includes(search.toLowerCase())
+				p.name.toLowerCase().includes(search.toLowerCase()),
 			);
 		}
 
@@ -45,7 +44,6 @@ const OwnProducts = ({
 
 		return filtered;
 	}, [products, selectedCategory, search, currentOrder]);
-
 
 	useEffect(() => {
 		setCurrentPage(1);
@@ -66,10 +64,7 @@ const OwnProducts = ({
 
 	const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
 	const start = (currentPage - 1) * itemsPerPage;
-	const currentProducts = filteredProducts.slice(
-		start,
-		start + itemsPerPage
-	);
+	const currentProducts = filteredProducts.slice(start, start + itemsPerPage);
 
 	return (
 		<div>
