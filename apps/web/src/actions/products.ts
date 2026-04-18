@@ -141,7 +141,7 @@ export async function getDetailedProduct(id: string) {
 	});
 
 	if (!product) {
-		throw new Error("No Product found");
+		return null
 	}
 	const safeProduct = {
 		...product,

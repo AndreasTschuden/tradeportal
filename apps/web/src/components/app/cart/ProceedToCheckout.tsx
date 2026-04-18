@@ -14,7 +14,7 @@ const ProceedToCheckout = () => {
 					return;
 				}
 				messages.forEach((msg) => {
-					toast.error(<span className="text-red-500">{msg}</span>);
+					toast.error(<span>{msg}</span>);
 				});
 			}
 		}

@@ -30,7 +30,7 @@ const MainNav = async () => {
 							<ShoppingCart size={40} strokeWidth={1} />
 							<div className="relative">
 								<h2 className="font-light">Cart</h2>
-								<p className="font-bold">$ --,--</p>
+								<p className="font-bold">Items</p>
 								{cartItemsCount !== null && (
 									<div className="bg-gray-200 font-bold text-red-700 rounded-full w-5 h-5 flex items-center justify-center text-xs absolute top-0 -left-5.5 ">
 										{cartItemsCount}
