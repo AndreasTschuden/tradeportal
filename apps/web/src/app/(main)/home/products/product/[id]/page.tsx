@@ -44,7 +44,7 @@ const ProductDetailPage = async ({ params }: PageProps) => {
 				</Link>
 			</nav>
 
-			<div className="flex gap-15 lg:flex-row flex-col">
+			<div className="flex flex-col gap-8 lg:flex-row lg:gap-15">
 				{/* <PictureList product={product}/> */}
 				<div className="lg:w-1/2 w-full">
 					<PictureList images={product.specifications.attributes[0].images} />
@@ -58,7 +58,7 @@ const ProductDetailPage = async ({ params }: PageProps) => {
 				<div className="lg:w-1/2 w-full flex flex-col justify-between">
 					<div className="flex flex-col justify-between h-full">
 						<div className="flex flex-col gap-3">
-							<h1 className="text-4xl font-medium">{product.name}</h1>
+							<h1 className="text-3xl font-medium sm:text-4xl">{product.name}</h1>
 							{product._count.reviews !== 0 ? (
 								<p className="flex gap-1 items-center">
 									{[1, 2, 3, 4, 5].map(
@@ -80,7 +80,7 @@ const ProductDetailPage = async ({ params }: PageProps) => {
 							) : (
 								<span className="text-gray-500 text-sm">No Reviews yet</span>
 							)}
-							<div className="w-full wrap-break-word overflow-y-auto max-h-40">
+							<div className="max-h-40 w-full overflow-y-auto break-words">
 								{product.short_description}
 							</div>
 						</div>
@@ -95,7 +95,7 @@ const ProductDetailPage = async ({ params }: PageProps) => {
 				</div>
 			</div>
 
-			<div className="mt-20 mb-20">
+			<div className="my-12 sm:my-20">
 				<DescriptionReviewsSwitch
 					reviews={reviews}
 					reviewCount={product._count.reviews}

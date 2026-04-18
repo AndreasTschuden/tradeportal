@@ -83,16 +83,16 @@ const OwnProducts = ({
 			</nav>
 
 			<div>
-				<div className="flex flex-row justify-between">
+				<div className="flex flex-col justify-between gap-4 md:flex-row md:items-start">
 					<div>
-						<h2 className="text-3xl font-bold">Your Products</h2>
+						<h2 className="text-2xl font-bold sm:text-3xl">Your Products</h2>
 						<p className="text-gray-400">
 							Lorem ipsum dolor sit amet, consetetur sadipscing elitr
 						</p>
 					</div>
 
 					<div>
-						<div className="flex gap-1 mt-5">
+						<div className="mt-2 flex flex-wrap gap-1 md:mt-5">
 							<button
 								type="button"
 								onClick={handleDateFilter}
@@ -101,8 +101,8 @@ const OwnProducts = ({
 								{currentOrder ? <CalendarArrowUp /> : <CalendarArrowDown />}
 							</button>
 
-							<div className="flex">
-								<div className="flex items-center justify-center rounded-l-sm px-2 bg-gray-100 border border-gray-200">
+							<div className="flex w-full flex-1 sm:w-auto sm:flex-none">
+								<div className="flex items-center justify-center rounded-l-sm border border-gray-200 bg-gray-100 px-2">
 									<select
 										value={selectedCategory}
 										onChange={(e) =>
@@ -118,12 +118,15 @@ const OwnProducts = ({
 									</select>
 								</div>
 
-								<form className="flex" onSubmit={handleSearchSubmit}>
+								<form
+									className="flex min-w-0 flex-1 sm:flex-none"
+									onSubmit={handleSearchSubmit}
+								>
 									<input
 										type="text"
 										value={search}
 										onChange={(e) => setSearch(e.target.value)}
-										className="h-full border-gray-200 border-t border-b border-r pl-2 pr-30"
+										className="h-full min-w-0 flex-1 border-b border-r border-t border-gray-200 pl-2 pr-2 sm:w-64 sm:flex-none"
 										placeholder="Search your Products..."
 									/>
 									<button

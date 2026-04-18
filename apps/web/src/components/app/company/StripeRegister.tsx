@@ -52,7 +52,7 @@ const StripeRegister = ({
 		<form
 			noValidate
 			onSubmit={handleSubmit(onSubmit)}
-			className="grid grid-cols-2 gap-x-10 gap-y-4 w-[50vw]"
+			className="grid w-full max-w-4xl grid-cols-1 gap-x-6 gap-y-4 md:grid-cols-2"
 		>
 			<div className="flex flex-col">
 				<label
@@ -102,7 +102,7 @@ const StripeRegister = ({
 				)}
 			</div>
 
-			<div className="col-span-2 mt-4 flex gap-3 items-center">
+			<div className="col-span-1 mt-4 flex flex-wrap items-center gap-3 md:col-span-2">
 				<button
 					type="submit"
 					className="bg-[#635BFF] font-light text-white px-10 py-2 rounded-xl flex gap-1"
@@ -111,7 +111,9 @@ const StripeRegister = ({
 				</button>
 			</div>
 
-			{error && <div className="col-span-2 text-red-500 text-sm">{error}</div>}
+			{error && (
+				<div className="col-span-1 text-red-500 text-sm md:col-span-2">{error}</div>
+			)}
 		</form>
 	);
 };

@@ -50,37 +50,37 @@ const SuccessPage = async ({ searchParams }: Props) => {
 			<div className="flex flex-col gap-10">
 				<div className="flex flex-col gap-10">
 					<div className="h-px bg-gray-300 w-full"></div>
-					<div className="flex gap-20 items-center justify-center">
-						<div className="flex gap-5 items-center justify-center">
+					<div className="flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-8 lg:gap-20">
+						<div className="flex items-center justify-center gap-3 sm:gap-5">
 							<div className="bg-gray-200 text-black font-medium text-2xl w-13 h-13 rounded-full flex items-center justify-center">
 								1
 							</div>
-							<h1 className="text-xl font-bold">CART ITEMS</h1>
+							<h1 className="text-base font-bold sm:text-xl">CART ITEMS</h1>
 						</div>
-						<div className="flex gap-5 items-center justify-center">
+						<div className="flex items-center justify-center gap-3 sm:gap-5">
 							<div className="bg-gray-200 text-black font-medium text-2xl w-13 h-13 rounded-full flex items-center justify-center">
 								2
 							</div>
-							<h1 className="text-xl font-bold">CHECKOUT</h1>
+							<h1 className="text-base font-bold sm:text-xl">CHECKOUT</h1>
 						</div>
-						<div className="flex gap-5 items-center justify-center">
+						<div className="flex items-center justify-center gap-3 sm:gap-5">
 							<div className="bg-red-700 text-white font-medium text-2xl w-13 h-13 rounded-full flex items-center justify-center">
 								3
 							</div>
-							<h1 className="text-xl font-bold">ORDER COMPLETE</h1>
+							<h1 className="text-base font-bold sm:text-xl">ORDER COMPLETE</h1>
 						</div>
 					</div>
 					<div className="h-px bg-gray-300 w-full"></div>
 				</div>
 
 				<div className="text-center py-10">
-					<h2 className="text-3xl font-bold mb-4">
+					<h2 className="mb-4 text-2xl font-bold sm:text-3xl">
 						Vielen Dank für deine Bestellung!
 					</h2>
 					<p className="text-gray-600">
 						Die Bestellung ist erfolgreich abgeschlossen.
 					</p>
-					<div className="flex gap-3 items-center justify-center">
+					<div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
 						<Link
 							href="/home"
 							className="mt-8 inline-block bg-red-700 text-white px-8 py-3 rounded-md font-medium"

@@ -23,13 +23,13 @@ const SearchField = () => {
 
 	return (
 		<form
-			className="flex p-2 border border-[#808080] rounded-sm px-4"
+			className="flex w-full max-w-full border border-[#808080] rounded-sm p-2 px-3 sm:max-w-md sm:px-4"
 			onSubmit={handleSubmit}
 		>
 			<input
 				type="text"
 				placeholder="Search Products..."
-				className="font-light outline-none"
+				className="min-w-0 flex-1 font-light outline-none"
 				value={searchQuery}
 				onChange={(e) => setSearchQuery(e.target.value)}
 			/>

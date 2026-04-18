@@ -25,7 +25,7 @@ const Page = async ({ params }: PageProps) => {
 	}) => (
 		<div>
 			<p className="text-sm text-gray-500">{label}</p>
-			<p className="font-medium wrap-break-words">{value || "N/A"}</p>
+			<p className="break-words font-medium">{value || "N/A"}</p>
 		</div>
 	);
 
@@ -65,8 +65,10 @@ const Page = async ({ params }: PageProps) => {
 				</Link>
 			</nav>
 
-			<div className="bg-white shadow rounded-2xl p-6 mb-6">
-				<h1 className="text-3xl font-bold mb-3">{company.company_name}</h1>
+			<div className="mb-6 rounded-2xl bg-white p-6 shadow">
+				<h1 className="mb-3 text-2xl font-bold sm:text-3xl">
+					{company.company_name}
+				</h1>
 
 				<span
 					className={`px-3 py-1 text-sm rounded-full ${

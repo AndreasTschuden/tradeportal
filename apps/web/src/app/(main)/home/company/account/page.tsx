@@ -27,7 +27,7 @@ const page = async () => {
 				</Link>
 			</nav>
 			<div className="flex flex-col gap-8">
-				<div className="flex flex-row justify-between">
+				<div className="flex flex-col justify-between gap-4 md:flex-row md:items-start">
 					<div>
 						<h2 className="text-3xl font-bold">Company Profile</h2>
 						<p className="text-gray-400">
@@ -36,18 +36,18 @@ const page = async () => {
 					</div>
 					<CompanyProfileButtons />
 				</div>
-				<div className="w-full min-h-35 h-full border-2 border-gray-200 rounded-2xl flex justify-between px-20">
-					<div className="flex gap-3 justify-center items-center">
+				<div className="flex h-full min-h-35 w-full flex-col md:justify-between gap-4 rounded-2xl border-2 border-gray-200 px-4 py-4 sm:px-6 md:flex-row md:items-center md:px-10 lg:px-20 items-center justify-center">
+					<div className="flex items-center justify-center gap-3">
 						<div className="aspect-square bg-gray-100 h-20 rounded-full"></div>
 						<div className="flex flex-col">
 							<h3 className="font-bold text-md">{Information.company_name}</h3>
 							<p className="text-gray-400">Company</p>
 						</div>
 					</div>
-					<div className="flex items-center justify-center gap-3">
+					<div className="flex flex-wrap items-center justify-start gap-3 md:justify-center">
 						<button
 							type="button"
-							className="ring-1 ring-black py-2 px-7 rounded-xl font-medium"
+							className="rounded-xl px-5 py-2 font-medium ring-1 ring-black sm:px-7"
 						>
 							Upload new Picture
 						</button>
@@ -56,23 +56,23 @@ const page = async () => {
 					</div>
 				</div>
 
-				<div className="relative w-full h-full border-2 border-gray-200 rounded-2xl flex justify-between">
-					<span className="absolute -top-4 left-10 bg-white px-2 text-2xl font-medium">
+				<div className="relative h-full w-full rounded-2xl border-2 border-gray-200">
+					<span className="absolute -top-4 left-4 bg-white px-2 text-lg font-medium sm:left-10 sm:text-2xl">
 						Basic Information
 					</span>
-					<p className="absolute top-4 left-12 text-md text-gray-400 font-light">
+					<p className="absolute top-5 left-4 pr-4 text-sm font-light text-gray-400 sm:left-12 sm:text-base">
 						Update the companys basic information
 					</p>
-					<div className="mt-20 ml-12 mb-10">
+					<div className="mb-6 mt-24 px-4 sm:mb-10 sm:mt-20 sm:px-12">
 						<BasicInfoForm Information={Information} />
 					</div>
 				</div>
 
-				<div className="relative w-full h-full border-2 border-gray-200 rounded-2xl flex justify-between">
-					<span className="absolute -top-4 left-10 bg-white px-2 text-2xl font-medium flex gap-2 justify-center items-center">
+				<div className="relative h-full w-full rounded-2xl border-2 border-gray-200">
+					<span className="absolute -top-4 left-4 flex items-center justify-center gap-2 bg-white px-2 text-lg font-medium sm:left-10 sm:text-2xl">
 						Verification
 						<div
-							className={`text-sm justify-center items-center flex gap-2 px-3 py-0.5 rounded-full ${
+							className={`flex items-center justify-center gap-2 rounded-full px-3 py-0.5 text-xs sm:text-sm ${
 								Information.is_verified
 									? "bg-[#00800030] text-[#008000]"
 									: "bg-[#FF000030] text-[#FF0000]"
@@ -86,12 +86,12 @@ const page = async () => {
 							{Information.is_verified ? "Verified" : "Not Verified"}
 						</div>
 					</span>
-					<p className="absolute top-4 left-12 text-md text-gray-400 font-light">
+					<p className="absolute top-5 left-4 pr-4 text-sm font-light text-gray-400 sm:left-12 sm:text-base">
 						{Information.is_verified
 							? "The certificate was real and the company is now verified."
 							: "Your company is not verified yet."}
 					</p>
-					<div className="mt-20 ml-12 mb-10">
+					<div className="mb-6 mt-24 px-4 sm:mb-10 sm:mt-20 sm:px-12">
 						<p className="text-gray-400">Approved by</p>
 						<p className="">
 							{Information.is_verified
@@ -101,8 +101,8 @@ const page = async () => {
 					</div>
 				</div>
 
-				<div className="relative w-full h-full border-2 border-gray-200 rounded-2xl flex justify-between">
-					<span className="absolute -top-4 left-10 bg-white px-2 text-2xl font-medium flex gap-2 justify-center items-center">
+				<div className="relative h-full w-full rounded-2xl border-2 border-gray-200">
+					<span className="absolute -top-4 left-4 flex items-center justify-center gap-2 bg-white px-2 text-lg font-medium sm:left-10 sm:text-2xl">
 						<Image
 							src="/stripe-logo.png"
 							alt="Stripe"
@@ -113,10 +113,10 @@ const page = async () => {
 							unoptimized
 						/>
 					</span>
-					<p className="absolute top-4 left-12 text-md text-gray-400 font-light">
+					<p className="absolute top-5 left-4 pr-4 text-sm font-light text-gray-400 sm:left-12 sm:text-base">
 						Link your Account with stripe
 					</p>
-					<div className="mt-20 ml-12 mb-10">
+					<div className="mb-6 mt-24 px-4 sm:mb-10 sm:mt-20 sm:px-12">
 						{stripe ? (
 							<>
 								<p className="text-[#635BFF] text-xl">
@@ -138,41 +138,41 @@ const page = async () => {
 					</div>
 				</div>
 
-				<div className="relative w-full h-full border-2 border-gray-200 rounded-2xl flex justify-between">
-					<span className="absolute -top-4 left-10 bg-white px-2 text-2xl font-medium">
+				<div className="relative h-full w-full rounded-2xl border-2 border-gray-200">
+					<span className="absolute -top-4 left-4 bg-white px-2 text-lg font-medium sm:left-10 sm:text-2xl">
 						Additional Information
 					</span>
-					<p className="absolute top-4 left-12 text-md text-gray-400 font-light">
+					<p className="absolute top-5 left-4 pr-4 text-sm font-light text-gray-400 sm:left-12 sm:text-base">
 						Add or Update Additional Information
 					</p>
-					<div className="mt-20 ml-12 mb-10">
+					<div className="mb-6 mt-24 px-4 sm:mb-10 sm:mt-20 sm:px-12">
 						<AdditionalInfoForm Information={Information} />
 					</div>
 				</div>
 
-				<div className="relative w-full h-full border-2 border-gray-200 rounded-2xl flex justify-between">
-					<span className="absolute -top-4 left-10 bg-white px-2 text-2xl font-medium">
+				<div className="relative h-full w-full rounded-2xl border-2 border-gray-200">
+					<span className="absolute -top-4 left-4 bg-white px-2 text-lg font-medium sm:left-10 sm:text-2xl">
 						Change Password
 					</span>
-					<p className="absolute top-4 left-12 text-md text-gray-400 font-light">
+					<p className="absolute top-5 left-4 pr-4 text-sm font-light text-gray-400 sm:left-12 sm:text-base">
 						Update your Password
 					</p>
-					<div className="mt-20 ml-12 mb-10">
+					<div className="mb-6 mt-24 px-4 sm:mb-10 sm:mt-20 sm:px-12">
 						<ChangePasswordForm />
 					</div>
 				</div>
-				<div className="relative w-full h-full border-2 border-gray-200 rounded-2xl flex justify-between">
-					<span className="absolute -top-4 left-10 bg-white px-2 text-2xl font-medium">
+				<div className="relative h-full w-full rounded-2xl border-2 border-gray-200">
+					<span className="absolute -top-4 left-4 bg-white px-2 text-lg font-medium sm:left-10 sm:text-2xl">
 						Logout
 					</span>
-					<p className="absolute top-4 left-12 text-md text-gray-400 font-light">
+					<p className="absolute top-5 left-4 pr-4 text-sm font-light text-gray-400 sm:left-12 sm:text-base">
 						Logout of your account
 					</p>
-					<div className="mt-20 ml-12 mb-10">
+					<div className="mb-6 mt-24 px-4 sm:mb-10 sm:mt-20 sm:px-12">
 						<form action={signOutAction}>
 							<button
 								type="submit"
-								className="bg-[#FF000020] py-2 px-7 rounded-xl font-medium text-[#FF0000] flex gap-1"
+								className="flex gap-1 rounded-xl bg-[#FF000020] px-5 py-2 font-medium text-[#FF0000] sm:px-7"
 							>
 								<LogOut /> Logout
 							</button>

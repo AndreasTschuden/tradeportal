@@ -50,10 +50,10 @@ const ProductCard = ({ prod }: { prod: cartItemsWithAvgStars }) => {
 	]);
 
 	return (
-		<div className="w-full py-3 grid grid-cols-[2fr_1fr_1fr_1fr_80px] items-center">
+		<div className="grid w-full grid-cols-1 gap-4 py-3 sm:grid-cols-[2fr_1fr_1fr_1fr_80px] sm:items-center">
 			{/* PRODUCT */}
-			<div className="flex gap-6 items-center">
-				<div className="relative w-40 h-40 bg-gray-100 rounded-md overflow-hidden">
+			<div className="flex items-center gap-4 sm:gap-6">
+				<div className="relative h-24 w-24 overflow-hidden rounded-md bg-gray-100 sm:h-32 sm:w-32 lg:h-40 lg:w-40">
 					<Image
 						src={`https://minio.tschudea.de:8999/images/products/${imgName}`}
 						alt={prod.products.name}
@@ -62,8 +62,8 @@ const ProductCard = ({ prod }: { prod: cartItemsWithAvgStars }) => {
 					/>
 				</div>
 
-				<div>
-					<p className="font-bold text-xl">{prod.products.name}</p>
+				<div className="min-w-0">
+					<p className="text-lg font-bold sm:text-xl">{prod.products.name}</p>
 
 					<div className="mt-2 space-y-1 text-sm text-gray-500">
 						{prod.products.specifications.attributes.map(
@@ -84,11 +84,11 @@ const ProductCard = ({ prod }: { prod: cartItemsWithAvgStars }) => {
 				</div>
 			</div>
 
-			<p className="text-center  font-medium text-lg">
+			<p className="font-medium text-lg sm:text-center">
 				{prod.products.currency === "EUR" ? "€" : "$"} {itemPrice}
 			</p>
 
-			<div className="flex justify-center">
+			<div className="flex sm:justify-center">
 				<div className="flex items-center border rounded-md overflow-hidden">
 					<button
 						type="button"
@@ -129,12 +129,12 @@ const ProductCard = ({ prod }: { prod: cartItemsWithAvgStars }) => {
 				</div>
 			</div>
 
-			<p className="text-center font-semibold text-lg">
+			<p className="font-semibold text-lg sm:text-center">
 				{prod.products.currency === "EUR" ? "€" : "$"}{" "}
 				{currentQuantity * itemPrice}
 			</p>
 
-			<div className="flex justify-center">
+			<div className="flex sm:justify-center">
 				<button
 					type="button"
 					className="border w-8 h-8 flex items-center justify-center text-red-500"

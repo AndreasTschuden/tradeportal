@@ -21,10 +21,10 @@ const DescriptionReviewsSwitch = ({
 
 	return (
 		<div className="flex flex-col gap-5">
-			<div className="flex gap-10">
+			<div className="flex flex-wrap gap-4 sm:gap-10">
 				<button
 					type="button"
-					className={`text-3xl font-bold ${
+					className={`text-2xl font-bold sm:text-3xl ${
 						!showReviews ? "underline text-black" : "text-gray-500"
 					}`}
 					onClick={() => setShowReviews(false)}
@@ -33,7 +33,7 @@ const DescriptionReviewsSwitch = ({
 				</button>
 				<button
 					type="button"
-					className={`text-3xl font-bold ${
+					className={`text-2xl font-bold sm:text-3xl ${
 						showReviews ? "underline text-black" : "text-gray-500"
 					}`}
 					onClick={() => setShowReviews(true)}

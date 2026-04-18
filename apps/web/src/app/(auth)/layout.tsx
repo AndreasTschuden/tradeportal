@@ -14,7 +14,9 @@ export default function RootLayout({
 }>) {
 	return (
 		<div className="flex min-h-screen">
-			<div className="lg:w-1/2 w-full lg:px-40 px-10">{children}</div>
+			<div className="w-full px-4 sm:px-8 lg:w-1/2 lg:px-20 xl:px-40">
+				{children}
+			</div>
 
 			<div className="w-1/2 relative lg:block hidden">
 				<Image

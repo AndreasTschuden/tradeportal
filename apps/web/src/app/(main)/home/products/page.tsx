@@ -88,19 +88,19 @@ const ProductsPage = async ({ searchParams }: PageProps) => {
 					Products
 				</Link>
 			</nav>
-			<div className="flex gap-5">
+			<div className="flex flex-col gap-5 lg:flex-row">
 				<FilterSideBar categories={categories} companies={companies} />
 				<div className="flex flex-col w-full gap-5">
-					<div className="flex justify-between">
+					<div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
 						<div>
-							<h2 className="text-3xl font-bold">Products</h2>
+							<h2 className="text-2xl font-bold sm:text-3xl">Products</h2>
 							<p className="text-gray-400">
 								Lorem ipsum dolor sit amet, consetetur sadipscing elitr
 							</p>
 						</div>
 						<SelectFilters categories={categories} />
 					</div>
-					<div className="grid grid-cols-4 w-full gap-3">
+					<div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
 						{currentProducts.map((prod) => (
 							<ProductCard prod={prod} key={prod.id} />
 						))}

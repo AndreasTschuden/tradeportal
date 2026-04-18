@@ -57,8 +57,8 @@ const PictureList = ({ images }: { images: Record<string, string> }) => {
 	};
 
 	return (
-		<div className="flex gap-4 mb-4">
-			<div className="relative w-3/4 aspect-square">
+		<div className="mb-4 flex flex-col gap-4 sm:flex-row">
+			<div className="relative aspect-square w-full sm:w-3/4">
 				<Image
 					src={`https://minio.tschudea.de:8999/images/products/${imageNamesState[0]}`}
 					alt={optionNamesState[0]}
@@ -67,11 +67,11 @@ const PictureList = ({ images }: { images: Record<string, string> }) => {
 				/>
 			</div>
 
-			<div className="flex flex-col w-1/4 gap-4">
+			<div className="flex w-full gap-4 sm:w-1/4 sm:flex-col">
 				{imageNamesState[1] ? (
 					<button
 						type="button"
-						className="relative bg-gray-100 rounded-2xl aspect-square"
+						className="relative aspect-square flex-1 rounded-2xl bg-gray-100 sm:flex-none"
 						onClick={() => swapPictures(1)}
 					>
 						<Image
@@ -88,7 +88,7 @@ const PictureList = ({ images }: { images: Record<string, string> }) => {
 				{imageNamesState[2] ? (
 					<button
 						type="button"
-						className="relative bg-gray-100 rounded-2xl aspect-square"
+						className="relative aspect-square flex-1 rounded-2xl bg-gray-100 sm:flex-none"
 						onClick={() => swapPictures(2)}
 					>
 						<Image
@@ -105,7 +105,7 @@ const PictureList = ({ images }: { images: Record<string, string> }) => {
 				{imageNamesState.length === 4 ? (
 					<button
 						type="button"
-						className="relative bg-gray-100 rounded-2xl aspect-square"
+						className="relative aspect-square flex-1 rounded-2xl bg-gray-100 sm:flex-none"
 						onClick={() => swapPictures(3)}
 					>
 						<Image
@@ -120,7 +120,7 @@ const PictureList = ({ images }: { images: Record<string, string> }) => {
 						<DialogTrigger asChild>
 							<button
 								type="button"
-								className="aspect-square w-full flex items-center justify-center border border-gray-300 rounded-2xl font-medium"
+								className="flex aspect-square w-full flex-1 items-center justify-center rounded-2xl border border-gray-300 font-medium sm:flex-none"
 							>
 								{imageNamesState.length - 3} more...
 							</button>
@@ -131,7 +131,7 @@ const PictureList = ({ images }: { images: Record<string, string> }) => {
 								<DialogTitle>Photo Album</DialogTitle>
 							</DialogHeader>
 
-							<div className="grid grid-cols-3 gap-4">
+							<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
 								{imageNamesState.map((name, index) => (
 									<button
 										key={name}

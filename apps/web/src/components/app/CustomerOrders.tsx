@@ -94,7 +94,7 @@ const CustomerOrders = () => {
 
 	return (
 		<>
-			<div className="flex relative">
+			<div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
 				<div className="flex flex-col">
 					<nav className="flex my-2 mb-4 text-sm">
 						<Link href="/home" className="text-gray-400">
@@ -107,13 +107,13 @@ const CustomerOrders = () => {
 					</nav>
 					<div className="flex flex-row justify-between">
 						<div>
-							<h2 className="text-3xl font-bold">Your Orders</h2>
+							<h2 className="text-2xl font-bold sm:text-3xl">Your Orders</h2>
 							<p className="text-gray-400">
 								Lorem ipsum dolor sit amet, consetetur sadipscing elitr
 							</p>
 						</div>
 					</div>
-					<div className="flex mt-2 gap-2">
+					<div className="mt-2 flex flex-wrap gap-2">
 						<button
 							type="button"
 							className="bg-gray-200 rounded-xl px-4 py-2 hover:bg-gray-300"
@@ -139,7 +139,7 @@ const CustomerOrders = () => {
 				</div>
 				<input
 					type="text"
-					className="bg-gray-100 absolute inset-y-0 right-0 rounded-xl h-[25%] self-center p-4"
+					className="h-12 w-full rounded-xl bg-gray-100 p-4 md:mt-10 md:w-72 lg:w-80"
 					placeholder="Filter for Item names"
 					onChange={(event) => setNameFilter(event.target.value.trim())}
 				/>
@@ -167,9 +167,9 @@ const CustomerOrders = () => {
 				})
 				.filter((order) => order.orders_products.length > 0)
 				.map((order) => (
-					<div key={order.id} className="border rounded-2xl mt-6 p-6 ">
+					<div key={order.id} className="mt-6 rounded-2xl border p-4 sm:p-6">
 						{/* TOP BAR */}
-						<div className="grid grid-cols-5 gap-6 items-center text-sm">
+						<div className="grid grid-cols-1 items-start gap-4 text-sm md:grid-cols-5 md:items-center md:gap-6">
 							<div>
 								<p className="text-gray-400">Order Date:</p>
 								<p className="font-semibold">
@@ -186,19 +186,19 @@ const CustomerOrders = () => {
 								<p className="font-semibold">$ {order.totalPrice.toFixed(2)}</p>
 							</div>
 
-							<div className="col-span-2">
+							<div className="md:col-span-2">
 								<p className="text-gray-400">Ship to:</p>
 								<p className="font-semibold">{order.shipped_to}</p>
 							</div>
 
-							<div className="flex justify-between items-center">
+							<div className="flex items-center justify-between md:justify-end md:gap-4">
 								<div>
 									<p className="text-gray-400">Tracking Number:</p>
 									<p className="font-semibold">#{order.tracking_number}</p>
 								</div>
 
 								<span
-									className={`ml-4 px-4 py-1 rounded-lg text-sm font-medium
+									className={`rounded-lg px-4 py-1 text-sm font-medium md:ml-4
               ${
 								order.status === "completed"
 									? "bg-green-200 text-green-700"
@@ -216,8 +216,8 @@ const CustomerOrders = () => {
 						<div className="border-t my-6"></div>
 
 						{/* SHIPPING LINE */}
-						<div className="flex items-center gap-4 mb-6">
-							<h2 className="text-2xl font-bold">
+						<div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
+							<h2 className="text-xl font-bold sm:text-2xl">
 								{order.shipped_date
 									? `Shipped ${new Date(order.shipped_date).toLocaleDateString(
 											"en-US",
@@ -237,7 +237,7 @@ const CustomerOrders = () => {
 							{order.orders_products.map((item) => (
 								<div
 									key={item.orders_id + item.products_id + item.product_variant}
-									className="flex gap-6"
+									className="flex flex-col gap-4 sm:flex-row sm:gap-6"
 								>
 									<Image
 										src={
@@ -247,7 +247,7 @@ const CustomerOrders = () => {
 										alt={item.products.name}
 										width={128}
 										height={128}
-										className="w-32 h-32 bg-gray-200 rounded-lg object-cover"
+										className="h-28 w-28 rounded-lg bg-gray-200 object-cover sm:h-32 sm:w-32"
 									/>
 
 									<div className="flex flex-col">

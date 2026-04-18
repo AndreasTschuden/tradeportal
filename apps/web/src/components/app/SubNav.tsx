@@ -40,8 +40,8 @@ const SubNav = () => {
 	const router = useRouter();
 
 	return (
-		<nav className="bg-red-700 min-h-[5vh] py-2 h-full w-full md:px-30 px-5 flex items-center justify-between">
-			<div className="flex items-center gap-5">
+		<nav className="flex min-h-[5vh] h-full w-full items-center justify-between gap-4 bg-red-700 px-4 py-2 sm:px-5 md:px-30">
+			<div className="flex items-center gap-3 sm:gap-5">
 				<div className="relative">
 					{/* Trigger */}
 					<button
@@ -55,7 +55,7 @@ const SubNav = () => {
 
 					{/* Dropdown */}
 					{open && categories !== undefined && (
-						<div className="absolute left-0 mt-2 bg-white shadow-lg rounded-md overflow-hidden z-50 grid grid-cols-2 gap-2 w-96">
+						<div className="absolute left-0 z-50 mt-2 grid w-[calc(100vw-2.5rem)] max-w-md grid-cols-1 gap-2 overflow-hidden rounded-md bg-white shadow-lg sm:grid-cols-2">
 							{categories.map((cat) => (
 								<button
 									type="button"

@@ -53,7 +53,7 @@ const PersonalInformationForm = ({
 		<form
 			noValidate
 			onSubmit={handleSubmit(onSubmit)}
-			className="grid grid-cols-2 gap-x-10 gap-y-4 w-[50vw]"
+			className="grid w-full max-w-4xl grid-cols-1 gap-x-6 gap-y-4 md:grid-cols-2"
 		>
 			<div className="flex flex-col">
 				<label className="text-sm text-gray-500 mb-1" htmlFor="firstname">
@@ -156,7 +156,7 @@ const PersonalInformationForm = ({
 				)}
 			</div>
 
-			<div className="col-span-2 mt-4 flex gap-3 items-center">
+			<div className="col-span-1 mt-4 flex flex-wrap items-center gap-3 md:col-span-2">
 				{!confirm && (
 					<button
 						type="button"
@@ -187,7 +187,9 @@ const PersonalInformationForm = ({
 				)}
 			</div>
 
-			{error && <div className="col-span-2 text-red-500 text-sm">{error}</div>}
+			{error && (
+				<div className="col-span-1 text-red-500 text-sm md:col-span-2">{error}</div>
+			)}
 		</form>
 	);
 };

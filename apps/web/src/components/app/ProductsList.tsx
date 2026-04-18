@@ -4,7 +4,7 @@ import { ProductCard } from "@/components/app/ProductCard";
 const ProductsList = ({ products }: { products: productWithStatsType[] }) => {
 	return (
 		<div>
-			<div className="grid xl:grid-cols-4 grid-cols-2 gap-4">
+			<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
 				{products.map((prod) => (
 					<ProductCard prod={prod} key={prod.id} />
 				))}
@@ -12,7 +12,7 @@ const ProductsList = ({ products }: { products: productWithStatsType[] }) => {
 			<div className="flex items-center justify-center">
 				<Link
 					href="/home/products"
-					className="lg:py-5 py-4 lg:w-80 w-60 bg-red-700 text-white rounded-md mt-4 flex justify-center"
+					className="mt-4 flex w-full justify-center rounded-md bg-red-700 py-4 text-white sm:w-72 lg:w-80 lg:py-5"
 				>
 					View all Products
 				</Link>

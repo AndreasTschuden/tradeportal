@@ -3,5 +3,5 @@ export const LongDescription = ({
 }: {
 	longDescription: string;
 }) => {
-	return <div className="w-full wrap-break-word">{longDescription}</div>;
+	return <div className="w-full break-words">{longDescription}</div>;
 };

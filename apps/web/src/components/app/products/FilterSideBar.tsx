@@ -61,7 +61,7 @@ const FilterSideBar = ({
 	};
 
 	return (
-		<nav className="w-2/8 flex flex-col gap-2">
+		<nav className="flex w-full flex-col gap-2 lg:w-72 lg:shrink-0">
 			<div className="w-full border-b border-gray-500 flex justify-between items-center">
 				<h3 className="text-2xl font-bold">Filters</h3>
 				<button

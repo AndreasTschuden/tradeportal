@@ -13,21 +13,20 @@ const MainNav = async () => {
 	console.log(result);
 
 	return (
-		<nav className="bg-white border-b border-gray-300 border-t-2 h-[10vh] flex items-center justify-between md:px-30 px-5">
-			<div className="">
-				<Link href="/home" className="text-2xl font-bold">
+		<nav className="border-b border-gray-300 border-t-2 bg-white px-4 py-3 sm:px-5 md:px-30">
+			<div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+				<Link href="/home" className="text-xl font-bold sm:text-2xl">
 					TradePortal<strong className="text-red-700">.</strong>
 				</Link>
-			</div>
-			<div className="flex items-center gap-15">
-				<SearchField />
-				<div className="flex gap-5">
+				<div className="flex w-full flex-col gap-3 lg:w-auto lg:flex-row lg:items-center lg:gap-10">
+					<SearchField />
+					<div className="flex items-center justify-between gap-4 sm:justify-start sm:gap-5">
 					{result === "/home/account" ? (
 						<Link
 							href="/home/cart"
-							className="flex gap-2 items-center justify-center"
+							className="flex items-center justify-center gap-2"
 						>
-							<ShoppingCart size={40} strokeWidth={1} />
+							<ShoppingCart className="h-8 w-8 sm:h-10 sm:w-10" strokeWidth={1} />
 							<div className="relative">
 								<h2 className="font-light">Cart</h2>
 								<p className="font-bold">Items</p>
@@ -42,12 +41,12 @@ const MainNav = async () => {
 						<div className="font-light flex items-center"> No Cart</div>
 					)}
 
-					<div className="h-12 bg-gray-300 w-0.5"></div>
+						<div className="h-10 w-0.5 bg-gray-300 sm:h-12" />
 					<Link
 						href={result}
-						className="flex gap-2 items-center justify-center"
+						className="flex items-center justify-center gap-2"
 					>
-						<UserRound size={40} strokeWidth={1} />
+						<UserRound className="h-8 w-8 sm:h-10 sm:w-10" strokeWidth={1} />
 						<div className="">
 							<h2 className="font-light">
 								{result === "/home/account" ? "User" : "Company"}
@@ -55,6 +54,7 @@ const MainNav = async () => {
 							<p className="font-bold">Account</p>
 						</div>
 					</Link>
+					</div>
 				</div>
 			</div>
 		</nav>

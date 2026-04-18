@@ -24,8 +24,8 @@ const ProductCard = ({ product }: { product: productWithStatsType }) => {
 	};
 
 	return (
-		<div className="flex justify-between p-3 border-gray-400 border rounded-2xl items-center px-5">
-			<div className="relative h-20 aspect-square">
+		<div className="flex flex-col items-start justify-between gap-4 rounded-2xl border border-gray-400 p-3 px-4 md:flex-row md:items-center md:px-5">
+			<div className="relative aspect-square h-20">
 				<Image
 					src={`https://minio.tschudea.de:8999/images/products/${Object.values(product.specifications.attributes[0].images)[0]}`}
 					alt={product.name}
@@ -33,7 +33,7 @@ const ProductCard = ({ product }: { product: productWithStatsType }) => {
 					className="object-cover rounded-xl"
 				/>
 			</div>
-			<div>
+			<div className="min-w-0">
 				<h2 className="font-bold">{product.name}</h2>
 				<p className="text-gray-400">Product Name</p>
 			</div>
