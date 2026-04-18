@@ -188,7 +188,9 @@ const PersonalInformationForm = ({
 			</div>
 
 			{error && (
-				<div className="col-span-1 text-red-500 text-sm md:col-span-2">{error}</div>
+				<div className="col-span-1 text-red-500 text-sm md:col-span-2">
+					{error}
+				</div>
 			)}
 		</form>
 	);

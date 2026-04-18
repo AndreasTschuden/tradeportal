@@ -58,7 +58,9 @@ const ProductDetailPage = async ({ params }: PageProps) => {
 				<div className="lg:w-1/2 w-full flex flex-col justify-between">
 					<div className="flex flex-col justify-between h-full">
 						<div className="flex flex-col gap-3">
-							<h1 className="text-3xl font-medium sm:text-4xl">{product.name}</h1>
+							<h1 className="text-3xl font-medium sm:text-4xl">
+								{product.name}
+							</h1>
 							{product._count.reviews !== 0 ? (
 								<p className="flex gap-1 items-center">
 									{[1, 2, 3, 4, 5].map(

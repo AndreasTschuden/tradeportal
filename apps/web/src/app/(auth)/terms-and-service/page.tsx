@@ -19,7 +19,9 @@ const page = () => {
 			<div className="flex flex-col gap-10">
 				<div className="flex flex-row">
 					<div>
-						<h2 className="text-2xl font-bold sm:text-3xl">Terms and Service</h2>
+						<h2 className="text-2xl font-bold sm:text-3xl">
+							Terms and Service
+						</h2>
 						<p className="text-gray-400">
 							Lorem ipsum dolor sit amet, consetetur sadipscing elitr
 						</p>
