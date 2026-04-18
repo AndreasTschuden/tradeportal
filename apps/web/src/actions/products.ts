@@ -141,7 +141,7 @@ export async function getDetailedProduct(id: string) {
 	});
 
 	if (!product) {
-		return null
+		return null;
 	}
 	const safeProduct = {
 		...product,
