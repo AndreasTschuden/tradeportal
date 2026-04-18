@@ -138,7 +138,7 @@ export function Signin() {
 				Don’t have an account?{" "}
 				<Link
 					href="/signup"
-					className="text-red-600 hover:underline cursor-pointer"
+					className="text-red-700 hover:underline cursor-pointer"
 				>
 					Create an account
 				</Link>
@@ -153,7 +153,7 @@ export function Signin() {
 
 			<Link
 				href="/signup/company"
-				className="w-full border border-red-600 text-red-600 py-2 rounded-lg hover:bg-red-50 flex justify-center"
+				className="w-full border border-red-700 text-red-700 py-2 rounded-lg hover:bg-red-50 flex justify-center"
 			>
 				Create an Account as a Company
 			</Link>

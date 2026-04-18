@@ -11,7 +11,7 @@ const HomePage = async () => {
 		<div className="flex justify-between my-5 flex-col">
 			<div className="bg-gray-300 w-full aspect-video rounded-md relative overflow-hidden">
 				<Image
-					src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+					src="https://images.unsplash.com/photo-1763872011479-aa293bf083a8?q=80&w=2948&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
 					alt="Shop product photo"
 					fill
 					className="object-cover"
