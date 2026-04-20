@@ -1,16 +1,14 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "TradePortal | Company Account",
-  description: "See Your Companys Profile and edit them",
+	title: "TradePortal | Company Account",
+	description: "See Your Companys Profile and edit them",
 };
 
 export default function CompanyAccountLayout({
-  children,
+	children,
 }: Readonly<{
-  children: React.ReactNode;
+	children: React.ReactNode;
 }>) {
-  return (
-    <section>{children}</section>
-  );
+	return <section>{children}</section>;
 }
