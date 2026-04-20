@@ -1,0 +1,74 @@
+FROM node:24-alpine AS base
+
+# Install dependencies only when needed
+FROM base AS deps
+WORKDIR /app
+RUN corepack enable
+ENV PNPM_HOME=/pnpm
+ENV PNPM_STORE_PATH=/pnpm-store
+ENV PATH=$PNPM_HOME:$PATH
+
+COPY package.json pnpm-lock.yaml ./
+RUN --mount=type=cache,target=/pnpm-store pnpm install --frozen-lockfile
+
+# ---------- build ----------
+FROM base AS build
+WORKDIR /app
+RUN corepack enable
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+
+# Accept build args from docker-compose
+ARG NEXT_PUBLIC_URL
+ARG BETTER_AUTH_URL
+ARG BETTER_AUTH_SECRET
+ARG GOOGLE_CLIENT_ID
+ARG GOOGLE_CLIENT_SECRET
+ARG DATABASE_URL
+ARG DIRECT_URL
+ARG NEXT_RUNTIME
+ARG RESEND_FROM_EMAIL
+ARG CAPTCHA_SECRET_KEY
+ARG NEXT_PUBLIC_CAPTCHA_SITE_KEY
+ARG RESEND_API_KEY
+
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
+# Prisma client generate + Next build
+ENV NEXT_PUBLIC_URL: ${NEXT_PUBLIC_URL}
+ENV BETTER_AUTH_URL: ${BETTER_AUTH_URL}
+ENV BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
+ENV GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+ENV GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+ENV DATABASE_URL: ${DATABASE_URL}
+ENV DIRECT_URL: ${DIRECT_URL}
+ENV NEXT_RUNTIME: ${NEXT_RUNTIME}
+ENV RESEND_FROM_EMAIL: ${RESEND_FROM_EMAIL}
+ENV CAPTCHA_SECRET_KEY: ${CAPTCHA_SECRET_KEY}
+ENV NEXT_PUBLIC_CAPTCHA_SITE_KEY: ${NEXT_PUBLIC_CAPTCHA_SITE_KEY}
+ENV RESEND_API_KEY: ${RESEND_API_KEY}
+RUN npx prisma generate
+RUN pnpm build
+
+# ---------- runtime ----------
+FROM base AS runtime
+WORKDIR /app
+RUN corepack enable
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+
+RUN addgroup -S app && adduser -S app -G app
+
+COPY --from=build /app/package.json ./package.json
+COPY --from=build /app/next.config.ts ./next.config.ts
+COPY --from=build /app/public ./public
+COPY --from=build /app/.next ./.next
+COPY --from=build /app/node_modules ./node_modules
+COPY --from=build --chown=app:app /app/prisma ./prisma
+COPY --from=build --chown=app:app /app/prisma.config.ts ./prisma.config.ts
+
+USER app
+
+EXPOSE 3000
+CMD ["pnpm", "start"]
