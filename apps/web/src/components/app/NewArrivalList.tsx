@@ -23,7 +23,7 @@ const NewArrivalList = ({
 					}
 				>
 					<Image
-						src={`https://minio.tschudea.de:8999/images/products/${Object.values(newestProducts[0].specifications.attributes[0].images)[0]}`}
+						src={`${process.env.NEXT_PUBLIC_MINIO_PICTURE_BASE_URL}/images/products/${Object.values(newestProducts[0].specifications.attributes[0].images)[0]}`}
 						alt={newestProducts[0].name}
 						fill
 						className="object-cover"
@@ -62,7 +62,7 @@ const NewArrivalList = ({
 						}
 					>
 						<Image
-							src={`https://minio.tschudea.de:8999/images/products/${Object.values(newestProducts[1].specifications.attributes[0].images)[0]}`}
+							src={`${process.env.NEXT_PUBLIC_MINIO_PICTURE_BASE_URL}/images/products/${Object.values(newestProducts[1].specifications.attributes[0].images)[0]}`}
 							alt={newestProducts[1].name}
 							fill
 							className="object-cover"
@@ -100,7 +100,7 @@ const NewArrivalList = ({
 							}
 						>
 							<Image
-								src={`https://minio.tschudea.de:8999/images/products/${Object.values(newestProducts[2].specifications.attributes[0].images)[0]}`}
+								src={`${process.env.NEXT_PUBLIC_MINIO_PICTURE_BASE_URL}/images/products/${Object.values(newestProducts[2].specifications.attributes[0].images)[0]}`}
 								alt={newestProducts[2].name}
 								fill
 								className="object-cover"
@@ -136,7 +136,7 @@ const NewArrivalList = ({
 							}
 						>
 							<Image
-								src={`https://minio.tschudea.de:8999/images/products/${Object.values(newestProducts[3].specifications.attributes[0].images)[0]}`}
+								src={`${process.env.NEXT_PUBLIC_MINIO_PICTURE_BASE_URL}/images/products/${Object.values(newestProducts[3].specifications.attributes[0].images)[0]}`}
 								alt={newestProducts[3].name}
 								fill
 								className="object-cover"
