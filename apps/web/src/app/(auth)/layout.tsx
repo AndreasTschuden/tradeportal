@@ -21,9 +21,9 @@ export default function RootLayout({
 			<div className="w-1/2 relative lg:block hidden">
 				<Image
 					src="https://images.unsplash.com/photo-1773291934086-69f15a425ec4?q=80&w=1287&auto=format&fit=crop"
-					alt=""
+					alt="Auth Picture"
 					fill
-					className="object-cover"
+					className=""
 				/>
 			</div>
 		</div>

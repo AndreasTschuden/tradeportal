@@ -2,7 +2,6 @@
 
 import { Menu, ShoppingCart, UserRound } from "lucide-react";
 import Link from "next/link";
-import SearchField from "./SearchField";
 import {
 	Dialog,
 	DialogContent,
@@ -10,6 +9,7 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
+import SearchField from "./SearchField";
 
 type MainNavMobileMenuProps = {
 	userLink: string;
