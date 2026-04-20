@@ -36,7 +36,7 @@ const PictureList = ({ images }: { images: Record<string, string> }) => {
 		return (
 			<div className="relative w-full aspect-square mb-4">
 				<Image
-					src={`https://minio.tschudea.de:8999/images/products/${imageNamesState[0]}`}
+					src={`${process.env.NEXT_PUBLIC_MINIO_PICTURE_BASE_URL}/images/products/${imageNamesState[0]}`}
 					alt={optionNames[0] ?? "Product image"}
 					fill
 					className="rounded-2xl object-cover"
@@ -60,7 +60,7 @@ const PictureList = ({ images }: { images: Record<string, string> }) => {
 		<div className="mb-4 flex flex-col gap-4 sm:flex-row">
 			<div className="relative aspect-square w-full sm:w-3/4">
 				<Image
-					src={`https://minio.tschudea.de:8999/images/products/${imageNamesState[0]}`}
+					src={`${process.env.NEXT_PUBLIC_MINIO_PICTURE_BASE_URL}/images/products/${imageNamesState[0]}`}
 					alt={optionNamesState[0]}
 					fill
 					className="rounded-2xl object-cover"
@@ -75,7 +75,7 @@ const PictureList = ({ images }: { images: Record<string, string> }) => {
 						onClick={() => swapPictures(1)}
 					>
 						<Image
-							src={`https://minio.tschudea.de:8999/images/products/${imageNamesState[1]}`}
+							src={`${process.env.NEXT_PUBLIC_MINIO_PICTURE_BASE_URL}/images/products/${imageNamesState[1]}`}
 							alt={optionNamesState[1]}
 							fill
 							className="object-cover rounded-2xl"
@@ -92,7 +92,7 @@ const PictureList = ({ images }: { images: Record<string, string> }) => {
 						onClick={() => swapPictures(2)}
 					>
 						<Image
-							src={`https://minio.tschudea.de:8999/images/products/${imageNamesState[2]}`}
+							src={`${process.env.NEXT_PUBLIC_MINIO_PICTURE_BASE_URL}/images/products/${imageNamesState[2]}`}
 							alt={optionNamesState[2]}
 							fill
 							className="object-cover rounded-2xl"
@@ -109,7 +109,7 @@ const PictureList = ({ images }: { images: Record<string, string> }) => {
 						onClick={() => swapPictures(3)}
 					>
 						<Image
-							src={`https://minio.tschudea.de:8999/images/products/${imageNamesState[3]}`}
+							src={`${process.env.NEXT_PUBLIC_MINIO_PICTURE_BASE_URL}/images/products/${imageNamesState[3]}`}
 							alt={optionNamesState[3]}
 							fill
 							className="object-cover rounded-2xl"
@@ -144,7 +144,7 @@ const PictureList = ({ images }: { images: Record<string, string> }) => {
 									>
 										<div className="relative w-full aspect-square">
 											<Image
-												src={`https://minio.tschudea.de:8999/images/products/${name}`}
+												src={`${process.env.NEXT_PUBLIC_MINIO_PICTURE_BASE_URL}/images/products/${name}`}
 												alt={name}
 												fill
 												className="object-cover rounded-xl"
