@@ -110,7 +110,7 @@ export async function publishProduct(formData: ProductType) {
 		throw new Error("Something went wrong!");
 	}
 
-	redirect("company/products");
+	redirect("/home/company/account");
 }
 
 export async function getCompanies() {

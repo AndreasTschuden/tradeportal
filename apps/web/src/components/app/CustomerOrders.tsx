@@ -241,7 +241,7 @@ const CustomerOrders = () => {
 								>
 									<Image
 										src={
-											`https://minio.tschudea.de:8999/images/products/` +
+											`${process.env.NEXT_PUBLIC_MINIO_PICTURE_BASE_URL}/images/products/` +
 											item.specifications.image
 										}
 										alt={item.products.name}
