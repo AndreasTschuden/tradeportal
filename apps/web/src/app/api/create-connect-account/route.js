@@ -7,42 +7,41 @@ import { secretStripe } from "@/lib/stripe"; //pnpm install stripe --save
 // account status: check if company has the rights to receive money before every money movement, if not => create-account-link (save onboarding_completed_at into db when ok for the first time)
 
 export async function POST(request) {
-  try {
-    const { email, countryCode, companyId} =
-      await request.json();
+	try {
+		const { email, countryCode, companyId } = await request.json();
 
-    // Create a Connect account with the specified controller properties
-    const account = await secretStripe.accounts.create({
-      country: countryCode,
-      email: email,
-      metadata: {
-        companyId: companyId, // Hier speicherst du deine interne ID
-      },
-      controller: {
-        // Platform controls fee collection - connected account pays fees
-        fees: {
-          payer: "account",
-        },
-        // Stripe handles payment disputes and losses
-        losses: {
-          payments: "stripe",
-        },
-        // Connected account gets full access to Stripe dashboard
-        stripe_dashboard: {
-          type: "full",
-        },
-      },
-      capabilities: {
-        card_payments: { requested: true },
-        transfers: { requested: true },
-      },
-    });
+		// Create a Connect account with the specified controller properties
+		const account = await secretStripe.accounts.create({
+			country: countryCode,
+			email: email,
+			metadata: {
+				companyId: companyId, // Hier speicherst du deine interne ID
+			},
+			controller: {
+				// Platform controls fee collection - connected account pays fees
+				fees: {
+					payer: "account",
+				},
+				// Stripe handles payment disputes and losses
+				losses: {
+					payments: "stripe",
+				},
+				// Connected account gets full access to Stripe dashboard
+				stripe_dashboard: {
+					type: "full",
+				},
+			},
+			capabilities: {
+				card_payments: { requested: true },
+				transfers: { requested: true },
+			},
+		});
 
-    return NextResponse.json({ accountId: account.id });
-  } catch (error) {
-    return NextResponse.json(
-      { error: { message: error.message } },
-      { status: 400 },
-    );
-  }
+		return NextResponse.json({ accountId: account.id });
+	} catch (error) {
+		return NextResponse.json(
+			{ error: { message: error.message } },
+			{ status: 400 },
+		);
+	}
 }
