@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "TradePortal | Sign In",
-  description: "Access your TradePortal buyer or seller account securely.",
+	title: "TradePortal | Sign In",
+	description: "Access your TradePortal buyer or seller account securely.",
 };
 
 export default function SigninLayout({
-  children,
+	children,
 }: Readonly<{
-  children: React.ReactNode;
+	children: React.ReactNode;
 }>) {
-  return <>{children}</>;
+	return <>{children}</>;
 }

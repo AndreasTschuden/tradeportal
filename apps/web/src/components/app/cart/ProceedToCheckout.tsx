@@ -1,21 +1,34 @@
-"use client"
+"use client";
 
-import { createOrder } from "@/actions/orders" 
+import { toast } from "sonner";
+import { createOrder } from "@/actions/orders";
 
 const ProceedToCheckout = () => {
+	const handleOnClick = async () => {
+		try {
+			await createOrder();
+		} catch (error) {
+			if (error instanceof Error) {
+				const messages = error.message.split("\n");
+				if (error.message === "NEXT_REDIRECT") {
+					return;
+				}
+				messages.forEach((msg) => {
+					toast.error(<span>{msg}</span>);
+				});
+			}
+		}
+	};
 
-  const handleOnClick = async () => {
-    await createOrder()
-  };
-
-  return (
-    <button
-      onClick={() => handleOnClick()}
-      className="inline-block border bg-red-700 text-white px-10 py-3 font-light"
-    >
-      Proceed To Checkout
-    </button>
-  );
+	return (
+		<button
+			type="button"
+			onClick={handleOnClick}
+			className="inline-block border bg-red-700 text-white px-10 py-3 font-light"
+		>
+			Proceed To Checkout
+		</button>
+	);
 };
 
 export { ProceedToCheckout };

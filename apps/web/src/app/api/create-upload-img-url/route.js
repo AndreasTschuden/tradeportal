@@ -3,29 +3,35 @@ import { minioCompanyClient } from "@/lib/minio";
 import { createMinioUrl } from "@/lib/zod";
 
 export async function POST(request) {
+	const arr = await request.json();
 
-  const arr = await request.json();
+	try {
+		await createMinioUrl.parseAsync(arr);
 
-  try {
+		const resultArr = await Promise.all(
+			//Promise.all waits until all promises get resolver, if one returns an error, it instantly fails and returns that error.
+			arr.map(async ({ name, folder }) => {
+				const presignedUrl = await minioCompanyClient.presignedPutObject(
+					"images",
+					`/${folder}/${name}`,
+					10 * 60,
+				);
+				return { url: presignedUrl };
+			}),
+		);
 
-    await createMinioUrl.parseAsync(arr);
-    
-    let resultArr = await Promise.all( //Promise.all waits until all promises get resolver, if one returns an error, it instantly fails and returns that error. 
-      arr.map(async ({name, folder}) => {
-        const presignedUrl = await minioCompanyClient.presignedPutObject('images', `/${folder}/${name}`, 10 * 60)
-        return {url: presignedUrl}
-      })
-    )
-
-    return NextResponse.json(resultArr);
-
-  } catch (error) {
-    console.error("Error uploading image:", error);
-    return NextResponse.json(
-      { error: error.message ?  error.message : "Error while connecting to bucket: " + error },
-      { status: 400 },
-    );
-  }
+		return NextResponse.json(resultArr);
+	} catch (error) {
+		console.error("Error uploading image:", error);
+		return NextResponse.json(
+			{
+				error: error.message
+					? error.message
+					: `Error while connecting to bucket: ${error}`,
+			},
+			{ status: 400 },
+		);
+	}
 }
 
 // type errorArray = { message: string, path: [ number, string ] }[]
@@ -36,11 +42,10 @@ export async function POST(request) {
 //         headers: { "Content-Type": "application/json" },
 //       });
 
-
 //       const data = await presignedUrl.json()
 //       console.log(data)
 //       if(data.error){
-//         const obj : errorArray = JSON.parse(data.error); 
+//         const obj : errorArray = JSON.parse(data.error);
 //         obj.map((err) => {
 //           console.log(err.message, "at place: "+ Number(err.path[0]+1))
 //         })
